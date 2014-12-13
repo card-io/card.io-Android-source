@@ -1,0 +1,12 @@
+package io.card.payment;
+
+/* Version.java
+ * See the file "LICENSE.md" for the full license governing this code.
+ */
+
+class Version {
+    // Auto-updated values
+
+    static final String REVISION = "sdk-version-unknown";
+    static final String BUILD_DATE = "";
+}

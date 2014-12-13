@@ -1,0 +1,42 @@
+Android Image asset requirements:
+---------------------------------
+
+Summary:
+
+Android image assets now come in four sizes:
+low, medium, high and extra-high, which are abbreviated ldpi, mdpi, hdpi, and xhdpi.
+xhdpi was introduced with Android 3.0 and is optional (mostly targeted at tablets)
+
+mdpi is the baseline and will be used if no others are available. Failure to supply an mdpi image when other resolutions are present is a compile error.
+
+Icons are square and have the following sizes:
+36, 48, 72, and 96, which correspond to scaling factors of 0.75, 1.0, 1.5 and 2.0
+
+Image assets must conform to the following naming rules:
+- lowercase and underscores only.
+- stored in res/drawable-X/ where X is ldpi, mdpi, hdpi and xhdpi.
+- files for the same resource must be named identically in the various resolution directories.
+
+Buttons should at minimum supply state images for the "pressed" and "focused" states in addition to the default look.
+- This means there will be at least 9 .pngs for each button background
+- An xml file in res/drawable defines which images are used for which context.
+- LL suggested naming convention: button_foo_default.png, button_foo_pressed.png, and button_foo_focused.png (or *.9.png, if appropriate)
+- If button_foo.xml defines the button drawable, button_foo.png must NOT be present.
+
+Rescaleable buttons should be specified as 9-patch images:
+- the draw9patch tool is available as part of the sdk-tools, but a 9 patch image is just a PNG with a 1 pixel border.
+- 9patch images have the .9.png extension. It is a compile error to have a foo.png and foo.9.png in the same project.
+- Black pixels in the top or left margin indicate a stretchable region.
+- Black pixels in the bottom or right margin indicate the content area. If a button's text exceeds this region, the button will be stretched.
+ 
+
+References:
+
+Button states:
+http://developer.android.com/guide/topics/resources/drawable-resource.html#StateList
+
+Image sizes:
+http://developer.android.com/guide/practices/screens_support.html
+
+9-patch tool:
+http://developer.android.com/guide/developing/tools/draw9patch.html

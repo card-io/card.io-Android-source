@@ -1,0 +1,40 @@
+Using XML-based layout for library code:
+----------------------------------------
+
+To layout a view using xml, a couple of steps are required:
+
+- create the layout xml file
+- get a resource id for the layout file
+- load the layout file
+
+This is straight forward for general application code:
+
+- the xml file is placed under $PROJECT/res/layout
+- the id is retrieved by referencing R.layout.$NAME (where $NAME is the base name of the layout file without suffix)
+- the layout is loaded and set by the system by calling activity.setContentView(R.layout.$NAME)
+
+There are a couple of issues with this for library code.
+
+The system expects resources to sit in the application's 'res' folder. That means library layout files (and other resources) need to be copied to that folder. Consequently, to distribute the library not only is a jar file with the code needed, but also a separate archive that contains the resources. These resources need to be copied into the app's 'res' folder. To avoid name clashes, library resources should use unique names.
+
+Library code can't use the R class listed above which is gnerated dynamically at compile time, for instance because the app has its own version of that class. To get around this issue, the following code can be used:
+
+String name = "name"; // substitute resource name
+String rType = "layout";
+String package = "app.package.name"; // substitute your own package name here
+int resID = activity.getResources.getIdentifier(name, rType, pkg);
+
+After getting the resource id and making sure it's not 0, proceed as follows:
+
+activity.setContentView(resID)
+
+The view will be loaded. 
+
+To get references to components mentioned in the layout, do the following:
+
+String name = "name"; // substitute component name, assuming it is specified in the layout file with "@+id/name"
+String rType = "id";
+String package = "app.package.name"; // substitute your own package name here
+int resID = activity.getResources.getIdentifier(name, rType, pkg);
+
+View view = activity.findViewById(resID);

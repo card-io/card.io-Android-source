@@ -1,0 +1,3 @@
+[submodule "card.io/jni/card.io-dmz"]
+	path = card.io/jni/card.io-dmz
+	url = https://github.com/card-io/card.io-dmz.git

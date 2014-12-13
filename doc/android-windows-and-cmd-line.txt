@@ -1,0 +1,46 @@
+Install android USB driver under windows XP:
+--------------------------------------------
+
+The HTC device was not recognized by the laptop, and it did not show up when typing 'adb devices' at the prompt. 
+Upon closer examination, it turned out that the device was recognized as a disk drive, but not as an android device. 
+Uninstalling the devices from the windows and reinstalling it did not help, as the hardware wizard automatically 
+added it back as a disk drive. Found a post online that mentioned USBDeview utility. Downloaded and ran tool. 
+Right-clicked on HTC entry and selected uninstall. Kept tool running and with the device still connected to the 
+laptop manually started hardware wizard from control panel. This time, the wizard brought up a dialog that allowed 
+selection of a location for the driver. Chose $ANDROID_HOME/usb_driver. Rebooted after completed install. Device 
+now shows up correctly for 'adb devices'. 
+
+Android Command Line:
+---------------------
+
+start the emulator:
+emulator -avd my_avd -sdcard c:/tmp/sdcard.img
+
+create a new virtual device:
+android create avd --target 2 --name my_avd
+
+create a new project:
+android create project --package com.wildcardproductions.accelerograph --activity AcceleroActivity --target 2 --path AcceleroGraph
+
+start debug server:
+ddms.bat
+// may have to re-issue because of start-up error
+// start ddms before emulator
+
+start logcat (-e for emulator, -d for device):
+adb [-e|-d] logcat
+
+
+copy files to sd card:
+adb push <file> /sdcard/<file>
+
+
+install app to device:
+ant -Dadb.device.arg=-d install
+
+interactive shell:
+adb -s emulator-5554 shell
+
+
+list of attached devices:
+adb devices

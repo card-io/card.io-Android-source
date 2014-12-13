@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+  custom_rules.xml
+  See the file "LICENSE.md" for the full license governing this code.
+ -->
+
+<project name="card.io_CustomRules" default="help">
+    <!--
+         Imported by build.xml
+                
+        Import per project custom build rules if present at the root of the project.
+        This is the place to put custom intermediary targets such as:
+            -pre-build
+            -pre-compile
+            -post-compile (This is typically used for code obfuscation.
+                           Compiled code location: ${out.classes.absolute.dir}
+                           If this is not done in place, override ${out.dex.input.absolute.dir})
+            -post-package
+            -post-build
+            -pre-clean
+    -->
+    
+    <property name="distname" value="${ant.project.name}"/>
+    <property name="build.dir" value="build"/>
+    <property name="jar.name" value="${distname}.jar"/>
+    <property name="jar.path.unobfuscated" 
+             value="${build.dir}/unobfuscated/${jar.name}"/>
+    <property name="jar.path.obfuscated" 
+             value="${build.dir}/obfuscated/${jar.name}"/>
+    
+        
+    <!-- Copied from android build.xml to support white-label.  Ant doesn't let you extend targets. -->
+    <target name="debug" depends="-set-debug-files, -do-debug, -post-build"
+                description="Builds the application and signs it with a debug key.">
+    </target>
+    <target name="release"
+            depends="-set-release-mode, -release-obfuscation-check, -package, -post-package, -release-prompt-for-password, -release-nosign, -release-sign, -post-build"
+            description="Builds the application in release mode.">
+    </target>
+    
+	
+	<!-- Get git commit -->
+
+	<available file="../.git" type="dir" property="git.present"/>
+
+	<target name="git-details" >
+		<exec executable="git" outputproperty="git.status">
+			<arg value="status" />
+		</exec>
+		<echo message="${git.status}"/>
+		
+		<exec executable="git" outputproperty="git.str">
+		  <arg value="describe"/>
+		  <arg value='--match=sdk-*'/>
+		  <arg value="--tags"/>
+		  <arg value="--dirty"/>
+		  <arg value="--always"/>
+		</exec>
+		
+		<property name="git.details" value="${git.str}"/>
+		
+		<echo message="${git.details}" />
+	</target>
+	
+	<!-- NDK targets -->
+
+	<target name="ndk-build">
+		<echo message='Building native dependencies'/>
+		<exec executable='${ndk.dir}/ndk-build' failonerror='yes'>
+		    <arg line="-j" />
+		</exec>
+	</target>
+
+	<target name="ndk-clean">
+	    <echo message='Cleaning native dependencies'/>
+	    <exec executable='${ndk.dir}/ndk-build' failonerror='no'>
+	        <arg line="clean"/>
+	    </exec>
+	</target>
+	
+	<target name="-pre-clean" depends="ndk-clean">
+         <!-- Clean old src/ files so that anyone with old builds don't have to do manual cleanup -->
+		<delete file="src/io/card/payment/Version.java" failonerror='no'/>
+		<delete file="${jar.path.unobfuscated}" failonerror='no'/>
+		<delete file="${jar.path.obfuscated}" failonerror='no'/>
+        
+        <delete file="libs/*.jar" failonerror='no' />
+        <delete dir="obj" failonerror='no'/>
+        <delete dir="javadoc" failonerror='no'/>
+        
+        <!-- clean out debug builds -->
+        <delete quiet="false" includeemptydirs="true" failonerror='no'>
+            <fileset dir="${build.dir}" defaultexcludes="false"><include name="*DEBUG/**"/></fileset>
+            <fileset dir="dist"><include name="*DEBUG.zip"/></fileset>
+        </delete>
+        
+        
+        <delete dir="${build.dir}"/>
+	</target>
+    
+	<!-- Update version numbers in Version.java -->
+	
+	<target name="update-version" depends="git-details">
+    	<tstamp>
+            <format property="current.time" pattern="MM/dd/yyyy HH:mm:ss Z" />
+      	</tstamp>
+		<copy file="src/Version.java.template" tofile="gen/io/card/payment/Version.java" />
+		<replaceregexp file="gen/io/card/payment/Version.java"
+		               match='REVISION\s*=\s*"\S*"' replace='REVISION = "${git.details}"' />
+		<replaceregexp file="gen/io/card/payment/Version.java"
+		    					 match='BUILD_DATE\s*=\s*""' replace='BUILD_DATE = "${current.time}"' />
+	</target>
+ 
+	<target name="-pre-compile" depends="ndk-build,update-version" />
+    
+	<!-- Javadoc -->
+
+	<target name="doc">
+		<javadoc 
+			access="public"
+			destdir="javadoc"
+			author="true"
+			version="true"
+			use="true"
+			classpath="${sdk.dir}/platforms/android-8/android.jar:bin/classes"
+			linkoffline="http://d.android.com/reference ${sdk.dir}/docs/reference"
+			windowtitle="card.io">
+		    <fileset dir="src" defaultexcludes="yes">
+		      <include name="io/card/payment/**"/>
+		      <exclude name="io/card/payment/i18n/**"/>
+		      <exclude name="io/card/payment/*Tester.java"/>
+		    </fileset>
+			<doctitle><![CDATA[<h1>card.io</h1>]]></doctitle>
+			<bottom><![CDATA[<i>Copyright &#169; 2011-2015 PayPal, Inc. All Rights Reserved.</i>]]></bottom>
+			<tag name="todo" scope="all" description="To do:"/>
+			<link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
+		</javadoc>
+	</target>
+   
+
+  <!-- RELEASE BUILDS -->
+	<!-- Build a jar -->
+
+	<target name="jar" depends='git-details,release'>
+        <mkdir dir="${build.dir}" />
+		<delete file="${build.dir}/MANIFEST.MF" />
+        <manifest file="${build.dir}/MANIFEST.MF">
+            <attribute name="Built-By" value="${user.name}" />
+            <attribute name="Implementation-Version" value="${git.details}"/>
+        </manifest>
+
+		<jar destfile="${jar.path.unobfuscated}" manifest="${build.dir}/MANIFEST.MF" whenmanifestonly="fail">
+			<fileset dir="bin/classes" includes="**/*.class" excludes="**/development/**/*.class" />
+		</jar>
+	</target>
+	
+	<target name="strip-test-classes" depends="jar">
+	    <echo message="stripping test classes" />
+	    <property name="jar.path.prestrip" value="${build.dir}/unobfuscated/tester-${jar.name}" />
+	    <move file="${jar.path.unobfuscated}" tofile="${jar.path.prestrip}" />
+	    <jar destfile="${jar.path.unobfuscated}">
+			    <zipfileset src="${jar.path.prestrip}" excludes="**/*Tester*.class"/>
+			</jar>
+	</target>
+	
+	<!-- Proguard -->
+	<property name="proguard.jar" value="${sdk.dir}/tools/proguard/lib/proguard.jar"/>	
+	<taskdef name="proguard" 
+			 classname="proguard.ant.ProGuardTask" 
+			 classpath="${proguard.jar}" />
+    <!-- Override the default obfuscation, because we're doing it ourselves -->
+    <target name="-obfuscate" />
+	<target name="obfuscate" depends='jar,bundlename'>
+		<property name="proguard.data.dir" value="proguard-data/${bundle.name}" />
+		<delete dir="${proguard.data.dir}" />
+		<mkdir dir="${proguard.data.dir}" />
+		<proguard>
+			-injars       ${jar.path.unobfuscated}
+			-outjars      ${jar.path.obfuscated}
+			-libraryjars  ${sdk.dir}/platforms/${target}/android.jar
+            -dump         "${proguard.data.dir}/dump.txt"
+            -printseeds   "${proguard.data.dir}/seeds.txt"
+            -printusage   "${proguard.data.dir}/usage.txt"
+            -printmapping "${proguard.data.dir}/mapping.txt"
+			@proguard.cfg
+		</proguard>
+	</target>
+	
+	
+	<!-- Create a properly named distribution -->
+	<target name='bundlename' depends='git-details'>
+		<property name="bundle.name" value="${distname}-android-${git.details}"/>
+		<echo message="${bundle.name}"/>
+	</target>
+
+    <target name="dist" depends='clean,dist-build'/>
+    
+	<target name="dist-build" depends='strip-test-classes,bundlename,obfuscate'>
+		<delete file="dist/${bundle.name}.zip" quiet="true"/>
+		<delete dir="${build.dir}/${bundle.name}/" quiet="true"/>
+		<copy file="${jar.path.obfuscated}" tofile="${build.dir}/${bundle.name}/libs/${jar.name}" overwrite="true" />
+		<copy file="../sdk/release_notes.md" tofile="${build.dir}/${bundle.name}/release_notes.md" overwrite="true" />
+		<copy file="../sdk/acknowledgements.md" tofile="${build.dir}/${bundle.name}/acknowledgements.md" overwrite="true" />
+		<copy todir="${build.dir}/${bundle.name}/libs/" overwrite="true">
+			<fileset dir="libs/" includes="*/libcardio*.so" />
+			<fileset dir="libs/" includes="*/libopencv*.so" />
+		</copy>
+		<echo message='Created ${bundle.name}'/>
+		<zip destfile="dist/${bundle.name}.zip" basedir="${build.dir}/${bundle.name}" />
+		<echo message='Created ${bundle.name}.zip'/>
+	</target>
+</project>
