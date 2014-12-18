@@ -27,3 +27,6 @@ recording_*.zip
 public/
 /SampleApp/build/
 /SampleApp/.gradle/
+.idea
+*.iml
+/out/
