@@ -81,7 +81,6 @@
 	
 	<target name="-pre-clean" depends="ndk-clean">
          <!-- Clean old src/ files so that anyone with old builds don't have to do manual cleanup -->
-		<delete file="src/io/card/payment/Version.java" failonerror='no'/>
 		<delete file="${jar.path.unobfuscated}" failonerror='no'/>
 		<delete file="${jar.path.obfuscated}" failonerror='no'/>
         
