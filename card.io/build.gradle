@@ -1,0 +1,102 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.0.0'
+    }
+}
+
+ext {
+    libsSrcDir = new File("${projectDir}/libs")
+}
+
+apply plugin: 'com.android.library'
+
+def getBuildVersion = { ->
+    "git describe --match=*[0-9]*.[0-9]*.*[0-9] --tags --dirty --always".execute().text.trim()
+}
+
+ext {
+    //TODO replace this with the build-in gradle values.  Tried this once, but it wouldn't recognize the right dir
+    sdkDir = "$System.env.ANDROID_HOME"
+    adb = sdkDir + "/platform-tools/adb"
+
+    build_time = new Date().format("MM/dd/yyyy HH:mm:ss Z")
+    build_year = new Date().format("yyyy")
+    product_name = "card.io-Android-SDK"
+
+    jar_name = product_name.replaceAll("-", "")
+    product_version = getBuildVersion()
+    bundle_name = jar_name + "-" + product_version
+
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion '21.1.1'
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 21
+
+        buildConfigField "String", "PRODUCT_NAME", "\"${product_name}\""
+        buildConfigField "String", "PRODUCT_VERSION", "\"${product_version}\""
+        buildConfigField "String", "BUILD_TIME", "\"${build_time}\""
+    }
+
+    signingConfigs {
+        myConfig {
+            storeFile file("example.keystore")
+            storePassword "abc123"
+            keyAlias "example-alias"
+            keyPassword "abc123"
+        }
+    }
+
+    buildTypes {
+
+        debug {
+
+            buildConfigField "String", "PRODUCT_NAME", "\"${product_name}\""
+            buildConfigField "String", "PRODUCT_VERSION", "\"${product_version}\""
+            buildConfigField "String", "BUILD_TIME", "\"${build_time}\""
+        }
+
+        release{
+            minifyEnabled true
+            proguardFile file('proguard.cfg')
+            signingConfig signingConfigs.myConfig
+
+            buildConfigField "String", "PRODUCT_NAME", "\"${product_name}\""
+            buildConfigField "String", "PRODUCT_VERSION", "\"${product_version}\""
+            buildConfigField "String", "BUILD_TIME", "\"${build_time}\""
+        }
+
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: libsSrcDir, include: '*.jar')
+    compile files("${buildDir}/native-libs/native-libs.jar")
+}
+
+task nativeLibsToJar(
+        type: Jar,
+        description: 'create a jar archive of the native libs') {
+    destinationDir file("${buildDir}/native-libs")
+    baseName 'native-libs'
+    from fileTree(dir: libsSrcDir, include: '**/*.so')
+    into 'lib/'
+}
