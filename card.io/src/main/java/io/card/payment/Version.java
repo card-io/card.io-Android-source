@@ -4,7 +4,6 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import io.card.development.BuildConfig;
 
 public class Version {
     public static final String REVISION = BuildConfig.PRODUCT_VERSION;
