@@ -43,6 +43,8 @@ android {
         buildConfigField "String", "PRODUCT_NAME", "\"${product_name}\""
         buildConfigField "String", "PRODUCT_VERSION", "\"${product_version}\""
         buildConfigField "String", "BUILD_TIME", "\"${build_time}\""
+
+        testApplicationId 'io.card.development'
     }
 
     signingConfigs {
