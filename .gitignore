@@ -23,7 +23,7 @@ opencv/OpenCV-*
 /card.io-test/bin/
 recording_*.zip
 /card.io/javadoc/
-/card.io/libs/
+/card.io/src/main/libs/
 public/
 /SampleApp/build/
 /SampleApp/.gradle/
