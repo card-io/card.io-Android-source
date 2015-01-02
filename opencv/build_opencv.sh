@@ -54,7 +54,7 @@ cd $BUILD_DIR
 
 cmake -C ../CMakeCache.android.initial.cmake -DANDROID_ABI="armeabi-v7a" \
   -DCMAKE_TOOLCHAIN_FILE=$CV_SRC/android/android.toolchain.cmake \
-  -DLIBRARY_OUTPUT_PATH="$WD/../../card.io/jni/lib" \
+  -DLIBRARY_OUTPUT_PATH="$WD/../../card.io/src/main/jni/lib" \
   $CV_SRC || exit -1
 
 # we could specify which libs to make in the cmake args, or we could just build them manually.

@@ -24,9 +24,7 @@ Dev Setup
 ### Prerequisites
 
 - Current version of the Android SDK. (obviously)
-- Ant. (We'll move to Gradle soon)
 - Android NDK. We've tested with r10d. At minimum, the Clang toolchain is required.
-
 
 ### First build
 
@@ -35,7 +33,7 @@ There are a few bugs in the build process, so these steps are required for the f
 1. `$ cd card.io-Android-source/card.io`
 2. `$ android update project -p .`
 3. Assuming you've defined `$ANDROID_NDK` correctly, `$ echo "ndk.dir=$ANDROID_NDK" >>local.properties`
-4. `$ ant debug` 
+4. `$ ./gradelw build` 
 
 #### Hints & tricks.
 - Get ant going before Eclipse.

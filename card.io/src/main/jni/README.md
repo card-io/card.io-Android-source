@@ -10,7 +10,7 @@ For the ARM architecture we support ARMv7a processors, both with NEON and VFPv3-
 
 ## OpenCV
 
-Compiled OpenCV libs (libopencv_core.so and libopencv_imgproc.so) are kept in git, so rebuilding OpenCV is not strictly necessary. However, should you wish to do so, simply run 'card.io-Android-source/opencv/build_opencv.sh'. The script will, if necessary, download, build, install the libs into their place in 'card.io-Android-source/card.io/jni'.
+Compiled OpenCV libs (libopencv_core.so and libopencv_imgproc.so) are kept in git, so rebuilding OpenCV is not strictly necessary. However, should you wish to do so, simply run 'card.io-Android-source/opencv/build_opencv.sh'. The script will, if necessary, download, build, install the libs into their place in 'card.io-Android-source/card.io/src/main/jni'.
 
 ## Building
 
@@ -21,4 +21,4 @@ Compiled OpenCV libs (libopencv_core.so and libopencv_imgproc.so) are kept in gi
 
 ### Compile
 
-If everything is set up properly, the NDK build will be invoked by ant when card.io is built. But for debugging, use `ndk-build` to kick off just this portion of the build.
+If everything is set up properly, the NDK build will be invoked by gradle when card.io is built. But for debugging, you can use `ndk-build` to kick off just this portion of the build.
