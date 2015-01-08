@@ -36,7 +36,7 @@ There are a few bugs in the build process, so these steps are required for the f
 4. `$ ./gradlew build` 
 
 #### Hints & tricks.
-- See [card.io/jni](card.io/jni/) for native layer (NDK) discussion.
+- See [card.io/src/main/jni](card.io/src/main/jni) for native layer (NDK) discussion.
 
 ### Testing
 
