@@ -31,13 +31,11 @@ Dev Setup
 There are a few bugs in the build process, so these steps are required for the first build:
 
 1. `$ cd card.io-Android-source/card.io`
-2. `$ android update project -p .`
-3. Assuming you've defined `$ANDROID_NDK` correctly, `$ echo "ndk.dir=$ANDROID_NDK" >>local.properties`
-4. `$ ./gradelw build` 
+2. `$ cp local.properties.example local.properties`
+3. Edit `local.properties with your env (Assuming you've defined `$ANDROID_NDK` correctly, run `$ echo "$ANDROID_NDK" "$ANDROID_SDK"`
+4. `$ ./gradlew build` 
 
 #### Hints & tricks.
-- Get ant going before Eclipse.
-- Make sure that you do not have Eclipse auto-building while an Ant build is running. (You can also close the project within Eclipse to avoid this.)
 - See [card.io/jni](card.io/jni/) for native layer (NDK) discussion.
 
 ### Testing
