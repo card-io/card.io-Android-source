@@ -455,7 +455,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                 else
                     advanceToNextEmptyField();
             } else
-                numberEdit.setTextColor(CardInfoStyle.editTextColor);
+                numberEdit.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
 
             if (cvvEdit != null) {
                 CardType type = CardType.fromCardNumber(numberValidator.getValue().toString());
@@ -473,7 +473,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                 else
                     advanceToNextEmptyField();
             } else
-                expiryEdit.setTextColor(CardInfoStyle.editTextColor);
+                expiryEdit.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
         }
 
         else if (cvvEdit != null && et == cvvEdit.getText()) {
@@ -483,7 +483,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                 else
                     advanceToNextEmptyField();
             } else
-                cvvEdit.setTextColor(CardInfoStyle.editTextColor);
+                cvvEdit.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
         }
 
         else if (postalCodeEdit != null && et == postalCodeEdit.getText()) {
@@ -493,7 +493,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                 else
                     advanceToNextEmptyField();
             } else
-                postalCodeEdit.setTextColor(CardInfoStyle.editTextColor);
+                postalCodeEdit.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
         }
 
         this.validateAndEnableDoneButtonIfValid();

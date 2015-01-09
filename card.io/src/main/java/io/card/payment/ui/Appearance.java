@@ -1,6 +1,6 @@
 package io.card.payment.ui;
 
-/* Apperance.java
+/* Appearance.java
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
@@ -29,7 +29,6 @@ public class Appearance {
 
     public static final String BASE_SPACING = "4dip";
     public static final String VERTICAL_SPACING = "8dip";
-    public static final String LIST_PADDING = "12dip";
 
     public static final String BUTTON_HEIGHT = "54dip";
     public static final String SMALL_BUTTON_HEIGHT = "42dip";
@@ -45,7 +44,6 @@ public class Appearance {
     // Colors
 
     public static final int PAY_BLUE_COLOR = Color.parseColor("#003087");
-    public static final int PAY_BLUE_COLOR_OPACITY_66 = Color.parseColor("#aa003087");
     public static final int PAL_BLUE_COLOR = Color.parseColor("#009CDE");
     public static final int PAL_BLUE_COLOR_OPACITY_66 = Color.parseColor("#aa009CDE");
 
@@ -65,48 +63,25 @@ public class Appearance {
     public static final int BUTTON_SECONDARY_PRESSED_COLOR = Color.parseColor("#5a5a5d");
     public static final int BUTTON_SECONDARY_DISABLED_COLOR = Color.parseColor("#f5f5f5");
 
-    public static final int SEPARATOR_LINE_COLOR = Color.parseColor("#e5e5e5");
-
     // Text colors
 
-    public static final int TEXT_COLOR_NORMAL = Color.parseColor("#333333");
     public static final int TEXT_COLOR_LIGHT = Color.parseColor("#515151"); // Style guide says
                                                                             // #5e5e5d, but seems
                                                                             // inconsistent
-    public static final int TEXT_COLOR_LIGHTER = Color.parseColor("#797979");
+    public static final int TEXT_COLOR_EDIT_TEXT = Color.DKGRAY;
     public static final int TEXT_COLOR_ERROR = Color.parseColor("#b32317");
 
-    public static final int TEXT_COLOR_CONTENT = TEXT_COLOR_LIGHT;
     public static final int TEXT_COLOR_LABEL = TEXT_COLOR_LIGHT;
-    public static final int TEXT_COLOR_VALUE = TEXT_COLOR_LIGHT;
     public static final int TEXT_COLOR_BUTTON = Color.WHITE;
-    public static final int TEXT_COLOR_TITLE = PAY_BLUE_COLOR;
-    public static final int TEXT_COLOR_EDIT = TEXT_COLOR_LIGHT;
-    public static final int TEXT_COLOR_FINE_PRINT = TEXT_COLOR_LIGHTER;
 
     // Text sizes
 
     public static final float TEXT_SIZE_BUTTON = 20.0f;
-    public static final float TEXT_SIZE_MARKETING = 18.0f;
-    public static final float TEXT_SIZE_TABLE = 18.0f;
-    public static final float TEXT_SIZE_MEDIUM = 16.0f;
-    public static final float TEXT_SIZE_SMALL = 14.0f;
-    public static final float TEXT_SIZE_FINE_PRINT = 14.0f;
-    public static final float TEXT_SIZE_LINK = 14.0f;
     public static final float TEXT_SIZE_MEDIUM_BUTTON = 16.0f;
     public static final float TEXT_SIZE_SMALL_BUTTON = 14.0f;
-    public static final float TEXT_SIZE_TINY = 13.0f;
 
     // Typefaces
-
-    public static final Typeface TYPEFACE_CONTENT = typefaceLight();
     public static final Typeface TYPEFACE_BUTTON = typefaceLight();
-    public static final Typeface TYPEFACE_LINK = typefaceLight();
-    public static final Typeface TYPEFACE_HEADER = typefaceBold();
-    public static final Typeface TYPEFACE_SUB_HEADER = typefaceBoldItalic();
-    public static final Typeface TYPEFACE_TABLE_LABEL = typefaceLight();
-    public static final Typeface TYPEFACE_TABLE_VALUE = typefaceNormal();
-    public static final Typeface TYPEFACE_EDIT = typefaceLight();
 
     // Focus: For console support, focus is indicated by a box around clickable elements. Other
     // elements must be padded by this amount for proper alignment. The width of the focus box is
@@ -116,6 +91,7 @@ public class Appearance {
     public static final ColorStateList TEXT_COLOR_LINK = new ColorStateList(new int[][] {
             BUTTON_STATE_PRESSED, BUTTON_STATE_NORMAL }, new int[] {
             BUTTON_PRIMARY_PRESSED_COLOR, BUTTON_PRIMARY_NORMAL_COLOR });
+
 
     public static Drawable buttonBackgroundPrimary(Context context) {
         StateListDrawable d = new StateListDrawable();
@@ -163,18 +139,6 @@ public class Appearance {
                 getFocusBorderWidthPixels(context));
     }
 
-    protected static Drawable linkStates(Context context) {
-        StateListDrawable d = new StateListDrawable();
-        d.addState(BUTTON_STATE_FOCUSED, linkFocused(context));
-        d.addState(BUTTON_STATE_NORMAL, new ColorDrawable(Color.TRANSPARENT));
-        return d;
-    }
-
-    private static Drawable linkFocused(Context context) {
-        return buttonFocused(
-                Color.TRANSPARENT, BUTTON_PRIMARY_FOCUS_COLOR, getFocusBorderWidthPixels(context));
-    }
-
     private static Drawable buttonNormal(int color, float width) {
         Drawable[] layers = new Drawable[2];
         layers[0] = new ColorDrawable(color);
@@ -211,17 +175,4 @@ public class Appearance {
     private static Typeface typefaceLight() {
         return Typeface.create("sans-serif-light", Typeface.NORMAL);
     }
-
-    private static Typeface typefaceNormal() {
-        return Typeface.create("sans-serif", Typeface.NORMAL);
-    }
-
-    private static Typeface typefaceBold() {
-        return Typeface.create("sans-serif-bold", Typeface.NORMAL);
-    }
-
-    private static Typeface typefaceBoldItalic() {
-        return Typeface.create("sans-serif", Typeface.ITALIC);
-    }
-
 }
