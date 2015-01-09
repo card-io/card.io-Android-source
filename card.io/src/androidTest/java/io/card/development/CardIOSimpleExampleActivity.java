@@ -4,17 +4,6 @@ package io.card.development;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import io.card.development.recording.Recording;
-import io.card.payment.CardIOActivity;
-import io.card.payment.CardScannerTester;
-import io.card.payment.CardType;
-import io.card.payment.CreditCard;
-import io.card.payment.i18n.StringKey;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -35,9 +24,19 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.paypal.android.i18n.SupportedLocale;
-import com.paypal.android.i18n.locales.LocalizedStringsList;
-import com.paypal.android.sdk.common.ui.UICommonIntentExtras;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.card.development.recording.Recording;
+import io.card.payment.CardIOActivity;
+import io.card.payment.CardScannerTester;
+import io.card.payment.CardType;
+import io.card.payment.CreditCard;
+import io.card.payment.i18n.StringKey;
+import io.card.payment.i18n.SupportedLocale;
+import io.card.payment.i18n.locales.LocalizedStringsList;
+import io.card.payment.ui.UICommonIntentExtras;
 
 public class CardIOSimpleExampleActivity extends Activity {
     protected static final String TAG = CardIOSimpleExampleActivity.class.getSimpleName();

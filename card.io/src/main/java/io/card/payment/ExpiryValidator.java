@@ -4,11 +4,11 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import java.util.Date;
-
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+
+import java.util.Date;
 
 class ExpiryValidator implements Validator {
     @SuppressWarnings("unused")

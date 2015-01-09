@@ -4,19 +4,18 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import io.card.payment.i18n.LocalizedStrings;
-import io.card.payment.i18n.StringKey;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map.Entry;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.Pair;
 
-import com.paypal.android.sdk.common.ui.ViewUtil;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
+
+import io.card.payment.i18n.LocalizedStrings;
+import io.card.payment.i18n.StringKey;
+import io.card.payment.ui.ViewUtil;
 
 /**
  * Enumerates each supported card type. see http://en.wikipedia.org/wiki/Bank_card_number for more

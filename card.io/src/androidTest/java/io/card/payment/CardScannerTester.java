@@ -4,11 +4,11 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import java.util.Iterator;
-
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
+
+import java.util.Iterator;
 
 /**
  * This class is used for Robotium testing ONLY!

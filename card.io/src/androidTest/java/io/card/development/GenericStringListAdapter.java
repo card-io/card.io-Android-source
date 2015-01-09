@@ -4,13 +4,13 @@ package io.card.development;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import java.util.List;
-
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import java.util.List;
 
 /**
  * TODO document this class

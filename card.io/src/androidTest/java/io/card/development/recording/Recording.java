@@ -4,6 +4,12 @@ package io.card.development.recording;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -16,12 +22,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.util.Log;
 
 /** 
  * Represents captured recording sequences. 

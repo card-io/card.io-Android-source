@@ -12,7 +12,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.DisplayMetrics;
 
-import com.paypal.android.sdk.common.ui.ViewUtil;
+import io.card.payment.ui.ViewUtil;
 
 // TODO - cache logo drawing as a bitmap and just draw that
 // TODO - get alpha overlay computation working properly with whites. should not look gray.

@@ -4,8 +4,6 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import java.util.Arrays;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;

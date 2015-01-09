@@ -4,11 +4,6 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import io.card.payment.i18n.LocalizedStrings;
-import io.card.payment.i18n.StringKey;
-
-import java.lang.ref.WeakReference;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,6 +22,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.lang.ref.WeakReference;
+
+import io.card.payment.i18n.LocalizedStrings;
+import io.card.payment.i18n.StringKey;
 
 /**
  * This class implements a transparent overlay that is drawn over the raw camera capture frames.

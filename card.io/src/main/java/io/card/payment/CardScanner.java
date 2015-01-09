@@ -4,12 +4,6 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
@@ -17,9 +11,14 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.SurfaceHolder;
+
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Encapsulates the core image scanning.

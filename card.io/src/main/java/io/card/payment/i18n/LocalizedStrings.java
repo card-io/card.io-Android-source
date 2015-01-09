@@ -4,16 +4,12 @@ package io.card.payment.i18n;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import io.card.payment.CardIOActivity;
+import android.content.Intent;
 
 import java.util.Collection;
 
-import android.content.Intent;
-
-
-import com.paypal.android.i18n.I18nManager;
-import com.paypal.android.i18n.SupportedLocale;
-import com.paypal.android.i18n.locales.LocalizedStringsList;
+import io.card.payment.CardIOActivity;
+import io.card.payment.i18n.locales.LocalizedStringsList;
 
 /**
  * String constants available for localizing. Public class because of tests.

@@ -4,14 +4,6 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import io.card.payment.i18n.LocalizedStrings;
-import io.card.payment.i18n.StringKey;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Constructor;
-import java.util.Date;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -45,8 +37,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.paypal.android.sdk.common.ui.Appearance;
-import com.paypal.android.sdk.common.ui.ViewUtil;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Constructor;
+import java.util.Date;
+
+import io.card.payment.i18n.LocalizedStrings;
+import io.card.payment.i18n.StringKey;
+import io.card.payment.ui.Appearance;
+import io.card.payment.ui.ViewUtil;
 
 /**
  * This is the entry point activity for a Card.IO client to use the Card.IO service.

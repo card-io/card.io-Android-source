@@ -4,18 +4,18 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Describes a credit card within the Card.IO system.

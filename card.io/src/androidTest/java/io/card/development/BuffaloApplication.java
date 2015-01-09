@@ -4,12 +4,12 @@ package io.card.development;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
+import android.app.Application;
+import android.util.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.lang.Thread.UncaughtExceptionHandler;
-
-import android.app.Application;
-import android.util.Log;
 
 public class BuffaloApplication extends Application implements UncaughtExceptionHandler {
 

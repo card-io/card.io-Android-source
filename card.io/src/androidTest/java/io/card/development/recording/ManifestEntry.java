@@ -4,17 +4,17 @@ package io.card.development.recording;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import java.nio.ByteBuffer;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
+import java.nio.ByteBuffer;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 /** 
  * Describes metadata about test recordings.

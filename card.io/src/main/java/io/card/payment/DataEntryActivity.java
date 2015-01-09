@@ -4,8 +4,6 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import io.card.payment.i18n.LocalizedStrings;
-import io.card.payment.i18n.StringKey;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,11 +31,13 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.paypal.android.sdk.common.ui.ActivityHelper;
-import com.paypal.android.sdk.common.ui.Appearance;
-import com.paypal.android.sdk.common.ui.Images;
-import com.paypal.android.sdk.common.ui.UICommonIntentExtras;
-import com.paypal.android.sdk.common.ui.ViewUtil;
+import io.card.payment.i18n.LocalizedStrings;
+import io.card.payment.i18n.StringKey;
+import io.card.payment.ui.ActivityHelper;
+import io.card.payment.ui.Appearance;
+import io.card.payment.ui.Images;
+import io.card.payment.ui.UICommonIntentExtras;
+import io.card.payment.ui.ViewUtil;
 
 /**
  * Activity responsible for entry of Expiry, CVV, Postal Code (and card number in manual case).
