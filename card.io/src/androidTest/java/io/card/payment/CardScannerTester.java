@@ -17,7 +17,7 @@ import android.view.SurfaceHolder;
  * accessed by reflection.
  */
 public class CardScannerTester extends CardScanner {
-    private static final String TAG = "CardScannerTester";
+    private static final String TAG = CardScannerTester.class.getSimpleName();
     private static Iterator<byte[]> recording = null;
 
     static final long FRAME_INTERVAL = (long) (1000.0 / 30);

@@ -40,7 +40,7 @@ import com.paypal.android.i18n.locales.LocalizedStringsList;
 import com.paypal.android.sdk.common.ui.UICommonIntentExtras;
 
 public class CardIOSimpleExampleActivity extends Activity {
-    protected static final String TAG = "CardIOSimpleExampleActivity";
+    protected static final String TAG = CardIOSimpleExampleActivity.class.getSimpleName();
 
     private static final String RECORDING_DIR = Environment.getExternalStorageDirectory().getPath()
             + "/card_recordings";

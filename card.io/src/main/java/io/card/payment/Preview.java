@@ -22,7 +22,7 @@ import android.view.ViewGroup;
  * valid surface view to draw on.
  */
 class Preview extends ViewGroup {
-    private static final String TAG = "Preview";
+    private static final String TAG = Preview.class.getSimpleName();
 
     private boolean isSurfaceValid;
     private int mPreviewWidth;

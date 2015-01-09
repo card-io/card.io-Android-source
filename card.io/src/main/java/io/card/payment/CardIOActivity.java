@@ -217,7 +217,7 @@ public final class CardIOActivity extends Activity {
      */
     public static final int RESULT_CONFIRMATION_SUPPRESSED = lastResult++;
 
-    private static final String TAG = "CardIOActivity";
+    private static final String TAG = CardIOActivity.class.getSimpleName();
 
     private static final int DEGREE_DELTA = 15;
 

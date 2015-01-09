@@ -37,7 +37,7 @@ import android.view.SurfaceHolder;
  */
 class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         SurfaceHolder.Callback {
-    private static final String TAG = "CardScanner";
+    private static final String TAG = CardScanner.class.getSimpleName();
 
     private static final float MIN_FOCUS_SCORE = 6; // TODO - parameterize this
                                                     // value based on phone? or

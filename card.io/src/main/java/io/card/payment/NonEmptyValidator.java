@@ -11,8 +11,6 @@ import android.text.Spanned;
  * Accepts all nonempty (after trimming) values.
  */
 class NonEmptyValidator implements Validator {
-    // private final String TAG = this.getClass().getName();
-
     private String value;
 
     @Override

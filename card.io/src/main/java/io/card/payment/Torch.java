@@ -15,8 +15,10 @@ import android.graphics.Path;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.util.Log;
 
+import java.util.Arrays;
+
 class Torch {
-    private static final String TAG = "Torch";
+    private static final String TAG = Torch.class.getSimpleName();
 
     private static final float CORNER_RADIUS = 5f;
     private static final int BG_ALPHA = 96;

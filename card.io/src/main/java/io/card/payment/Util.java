@@ -30,7 +30,7 @@ import android.util.Log;
  */
 
 class Util {
-    private static final String TAG = "Util";
+    private static final String TAG = Util.class.getSimpleName();
     private static final boolean TORCH_BLACK_LISTED = (Build.MODEL.equals("DROID2"));
 
     public static final String PUBLIC_LOG_TAG = "card.io";

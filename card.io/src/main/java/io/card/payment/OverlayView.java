@@ -66,7 +66,7 @@ import android.view.View;
  * <p>
  */
 class OverlayView extends View {
-    private static final String TAG = "OverlayView";
+    private static final String TAG = OverlayView.class.getSimpleName();
 
     private static final float GUIDE_FONT_SIZE = 26.0f;
     private static final float GUIDE_LINE_PADDING = 8.0f;

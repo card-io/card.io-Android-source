@@ -41,7 +41,7 @@ public class ManifestEntry {
     private int currentOrientation;
     private double timestamp;
 
-    private static final String TAG = "ManifestEntry";
+    private static final String TAG = ManifestEntry.class.getSimpleName();
 
     public static ManifestEntry[] getManifest(Hashtable<String, byte[]> recordingData) {
 

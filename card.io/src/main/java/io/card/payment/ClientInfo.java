@@ -13,7 +13,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 class ClientInfo {
-    static final String TAG = "ClientInfo";
+    static final String TAG = ClientInfo.class.getSimpleName();
 
     public static String clientVersion(Context context) {
         ApplicationInfo appInfo = context.getApplicationInfo();
