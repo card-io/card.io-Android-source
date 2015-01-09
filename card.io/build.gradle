@@ -20,7 +20,7 @@ def getBuildVersion = { ->
 ext {
     sdkDir = android.plugin.sdkFolder
     ndkDir = android.plugin.ndkFolder
-    adb = new File(sdkDir, "platform-tools/adb")
+    adb = new File("${sdkDir}/platform-tools/adb")
 
     build_time = new Date().format("MM/dd/yyyy HH:mm:ss Z")
     build_year = new Date().format("yyyy")
@@ -31,7 +31,6 @@ ext {
     bundle_name = jar_name + "-" + product_version
 
     libsSrcDir = new File("${projectDir}/libs")
-    jniSrcDir = new File("${projectDir}/src/main/jni")
 }
 
 android {
@@ -51,6 +50,7 @@ android {
 
     sourceSets.main {
         jni.srcDirs = []
+        jniLibs.srcDir 'src/main/libs'
     }
 
     buildTypes {
@@ -65,14 +65,14 @@ android {
 
     task cleanNative(type: Exec, description: 'Clean JNI object files') {
         commandLine "$ndkDir/ndk-build",
-                '-C', jniSrcDir.absolutePath,
+                '-C', file('src/main/jni').absolutePath,
                 'clean'
     }
     clean.dependsOn cleanNative
 
     task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
         commandLine "$ndkDir/ndk-build",
-                '-C', jniSrcDir.absolutePath,
+                '-C', file('src/main/jni').absolutePath,
                 '-j', Runtime.runtime.availableProcessors(),
                 'all'
     }
