@@ -550,7 +550,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     /**
      * Tell Preview's camera to trigger autofocus.
      * 
-     * @param c
+     * @param isManual
      *            callback for when autofocus is complete
      */
     void triggerAutoFocus(boolean isManual) {
