@@ -30,7 +30,7 @@ Dev Setup
 
 There are a few bugs in the build process, so these steps are required for the first build:
 
-1. `$ cd card.io-Android-source/card.io`
+1. `$ cd card.io-Android-source`
 2. `$ cp local.properties.example local.properties`
 3. Edit `local.properties with your env (Assuming you've defined `$ANDROID_NDK` correctly, run `$ echo "$ANDROID_NDK" "$ANDROID_SDK"`
 4. `$ ./gradlew build` 
