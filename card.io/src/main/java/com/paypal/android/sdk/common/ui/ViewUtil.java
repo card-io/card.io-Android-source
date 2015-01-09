@@ -44,7 +44,6 @@ import java.util.regex.Pattern;
  *
  */
 public class ViewUtil {
-
     /**
      * Wrapper to only use the deprecated {@link #setBackgroundDrawable} on
      * older systems.
@@ -128,20 +127,6 @@ public class ViewUtil {
                 typedDimensionValueToPixelsInt(bottom, context));
     }
 
-    /*
-     * Pads left and right with proper amount to align with fill width buttons that have focus box
-     * support.
-     */
-    public static void setMarginsForFocusBoxAlignment(View v) {
-        ViewUtil.setMargins(
-                v, Appearance.FOCUS_BORDER_PADDING, null, Appearance.FOCUS_BORDER_PADDING, null);
-    }
-
-    public static void setMarginsForFocusBoxAlignment(View v, String top, String bottom) {
-        ViewUtil.setMargins(
-                v, Appearance.FOCUS_BORDER_PADDING, top, Appearance.FOCUS_BORDER_PADDING, bottom);
-    }
-
     // LAYOUT PARAM HELPERS
 
     /**
@@ -164,43 +149,6 @@ public class ViewUtil {
                     typedDimensionValueToPixelsInt(right, context),
                     typedDimensionValueToPixelsInt(bottom, context));
         }
-    }
-
-    public static void setLayoutGravity(View view, int gravity, float weight) {
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-        if (params instanceof LinearLayout.LayoutParams) {
-            LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) params;
-            linearParams.gravity = gravity;
-            linearParams.weight = weight;
-        }
-    }
-
-    /**
-     * Alter the view's layout dimensions using String values Should be used
-     * after the view is already added to a layout.
-     *
-     * @param view
-     * @param width String of dimension + unit, e.g. "2dip"
-     * @param height String of dimension + unit, e.g. "2dip"
-     *
-     * @category layout
-     */
-
-    public static void setDimensions(View view, String width, String height) {
-        Context context = view.getContext();
-        setDimensions(
-                view, typedDimensionValueToPixelsInt(width, context),
-                typedDimensionValueToPixelsInt(height, context));
-    }
-
-    public static void setDimensions(View view, int width, String height) {
-        Context context = view.getContext();
-        setDimensions(view, width, typedDimensionValueToPixelsInt(height, context));
-    }
-
-    public static void setDimensions(View view, String width, int height) {
-        Context context = view.getContext();
-        setDimensions(view, typedDimensionValueToPixelsInt(width, context), height);
     }
 
     public static void setDimensions(View view, int width, int height) {
@@ -236,36 +184,6 @@ public class ViewUtil {
         v.setTypeface(Appearance.TYPEFACE_BUTTON);
     }
 
-    public static void styleAsComplianceText(TextView v) {
-        v.setTextColor(Appearance.TEXT_COLOR_EDIT);
-        v.setLinkTextColor(Appearance.TEXT_COLOR_LINK);
-        v.setTypeface(Appearance.TYPEFACE_EDIT);
-        v.setTextSize(Appearance.TEXT_SIZE_TINY);
-        v.setSingleLine(false);
-        v.setMovementMethod(LinkMovementMethod.getInstance());
-    }
-
-    public static void styleAsLink(Button b) {
-        styleAsLink(b, Gravity.CENTER);
-    }
-
-    @SuppressWarnings("deprecation")
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public static void styleAsLink(Button b, int gravity) {
-        setPadding(b, "2dip", "2dip", "2dip", "2dip");
-        b.setTypeface(Appearance.TYPEFACE_LINK);
-        b.setTextColor(Appearance.TEXT_COLOR_LINK);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            b.setBackgroundDrawable(Appearance.linkStates(b.getContext()));
-        } else {
-            b.setBackground(Appearance.linkStates(b.getContext()));
-        }
-        b.setAutoLinkMask(Linkify.ALL);
-        b.setTextSize(Appearance.TEXT_SIZE_LINK);
-        b.setTextColor(Appearance.TEXT_COLOR_LINK);
-        b.setGravity(gravity);
-    }
-
     public static Bitmap base64ToBitmap(String base64Data, Context context) {
         return base64ToBitmap(base64Data, context, DisplayMetrics.DENSITY_HIGH);
     }
@@ -285,179 +203,4 @@ public class ViewUtil {
         byte[] imageBytes = Base64.decode(base64Data, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length, options);
     }
-
-    /**
-     * Returns a {@linkplain SpannableString} with all text underlined.
-     *
-     * @param text
-     * @return
-     */
-    public static SpannableString underlinedString(String text) {
-        SpannableString content = new SpannableString(text);
-        content.setSpan(new UnderlineSpan(), 0, text.length(), 0);
-        return content;
-    }
-
-    public static void setContainerMargins(View view) {
-        setMargins(
-                view, Appearance.CONTAINER_MARGIN_HORIZONTAL, Appearance.CONTAINER_MARGIN_VERTICAL,
-                Appearance.CONTAINER_MARGIN_HORIZONTAL, Appearance.CONTAINER_MARGIN_VERTICAL);
-    }
-
-    public static View addHorizontalSeparatorLine(LinearLayout layoutView) {
-        return addHorizontalSeparatorLine(
-                layoutView, Appearance.LIST_PADDING, Appearance.LIST_PADDING);
-    }
-
-    public static View addHorizontalSeparatorLine(LinearLayout layoutView, String marginTop,
-            String marginBottom) {
-        View v = new View(layoutView.getContext());
-        layoutView.addView(v);
-        ViewUtil.setBackground(v, new ColorDrawable(Appearance.SEPARATOR_LINE_COLOR));
-        ViewUtil.setDimensions(v, LayoutParams.MATCH_PARENT, "1dip");
-        ViewUtil.setMargins(v, null, marginTop, null, marginBottom);
-        return v;
-    }
-
-    public static LinearLayout getLinearLayoutAsButton(Context context, boolean isPrimary, int id,
-            LinearLayout parent) {
-        LinearLayout ret;
-        ret = new LinearLayout(context);
-
-        if (id != 0) {
-            ret.setId(id);
-        }
-        parent.addView(ret);
-        ret.setGravity(Gravity.CENTER);
-        ret.setOrientation(LinearLayout.HORIZONTAL);
-        ViewUtil.styleAsButton(ret, isPrimary, context);
-        ViewUtil.setDimensions(ret, LayoutParams.MATCH_PARENT, "58dip");
-        ViewUtil.setMargins(ret, null, null, null, "4dip");
-
-        return ret;
-    }
-    
-    // CREATORS
-    public static ViewGroup createScrollView(Context context) {
-        ScrollView ret = new ScrollView(context);
-        ret.setBackgroundColor(Appearance.DEFAULT_BACKGROUND_COLOR);
-        return ret;
-    }
-    
-    public static LinearLayout createMainLayout(ViewGroup parent) {
-        LinearLayout mainLayout = new LinearLayout(parent.getContext());
-        mainLayout.setOrientation(LinearLayout.VERTICAL);
-        mainLayout.setBackgroundColor(Appearance.DEFAULT_BACKGROUND_COLOR);
-        parent.addView(mainLayout);
-        ViewUtil.setDimensions(mainLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        return mainLayout;
-    }
-
-    /**
-     * TODO remove this when 2fa branch is merged - it will no longer be used.
-     */
-    @Deprecated
-    public static LinearLayout createLinearLayout(Context context) {
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        //linearLayout.setBackgroundColor(Appearance.DEFAULT_BACKGROUND_COLOR2);
-        ViewUtil.setPadding(linearLayout, "10dip", "14dip", "10dip", "14dip");
-        return linearLayout;
-    }
-
-    public static LinearLayout createLinearLayout(ViewGroup mainLayout) {
-        LinearLayout linearLayout = new LinearLayout(mainLayout.getContext());
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        //linearLayout.setBackgroundColor(Appearance.DEFAULT_BACKGROUND_COLOR2);
-        ViewUtil.setPadding(linearLayout, "10dip", "14dip", "10dip", "14dip");
-        mainLayout.addView(linearLayout, ViewUtil.getLayoutParams());
-        return linearLayout;
-    }
-
-    public static TextView createTextAsLink(ViewGroup v) {
-        TextView link = new TextView(v.getContext());
-        v.addView(link);
-        ViewUtil.setDimensions(link, "0dp", LayoutParams.WRAP_CONTENT);
-        link.setGravity(Gravity.END);
-        link.setTextColor(Appearance.PAL_BLUE_COLOR);
-        link.setPaintFlags(link.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        //ViewUtil.setLayoutGravity(logoutText, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 1.0f);
-        //ViewUtil.setPadding(logoutText, "2dip", "4dip", "2dip", "0dip");
-        link.setClickable(true);
-        return link;
-    }
-    
-    public static ImageView createIconView(Context context, String encodedImage, String description) {
-        ImageView imageView = new ImageView(context);
-        imageView.setScaleType(ScaleType.CENTER_INSIDE);
-        imageView.setImageBitmap(ViewUtil.base64ToBitmap(encodedImage, context));
-        imageView.setAdjustViewBounds(true);
-        imageView.setContentDescription(description);
-        return imageView;
-    }
-    
-    //--- TEXT STYLE
-    public static void styleAsPrimaryText(TextView textView, int gravity) {
-        textView.setTextSize(Appearance.TEXT_SIZE_TABLE);
-        textView.setTypeface(Appearance.TYPEFACE_HEADER);
-        textView.setSingleLine(true);
-        textView.setGravity(gravity);
-        textView.setTextColor(Appearance.TEXT_COLOR_LIGHT);
-    }
-
-    public static void styleAsSubPrimaryText(TextView textView, int gravity) {
-        textView.setTextSize(Appearance.TEXT_SIZE_MEDIUM);
-        textView.setTypeface(Appearance.TYPEFACE_SUB_HEADER);
-        textView.setSingleLine(true);
-        textView.setGravity(gravity);
-        textView.setTextColor(Appearance.TEXT_COLOR_LIGHT);
-    }
-
-    public static void styleAsMinorText(TextView textView, int gravity) {
-        textView.setTextSize(Appearance.TEXT_SIZE_SMALL);
-        textView.setTypeface(Appearance.TYPEFACE_TABLE_LABEL);
-        textView.setSingleLine(true);
-        textView.setGravity(gravity);
-        textView.setTextColor(Appearance.TEXT_COLOR_LIGHT);
-    }
-    
-    public static void styleAsSubMinorText(TextView textView, int gravity) {
-        textView.setTextSize(Appearance.TEXT_SIZE_TINY);
-        textView.setTypeface(Appearance.TYPEFACE_TABLE_LABEL);
-        textView.setSingleLine(true);
-        textView.setGravity(gravity);
-        textView.setTextColor(Appearance.TEXT_COLOR_LIGHT);
-    }
-    
-    // HELPER
-    public static LayoutParams getLayoutParams() {
-        return new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT);
-    }
-    
-    //--- RELATIVE LAYOUT HELPERS
-    
-    public static RelativeLayout.LayoutParams makeRLParams(int w, int h, int rule, int id) {
-        RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(w, h);
-        rlParams.addRule(rule, id);
-        return rlParams;
-    }
-    
-    public static RelativeLayout.LayoutParams makeRLParams(Context context, String w, String h, int rule) {
-        RelativeLayout.LayoutParams rlParams =
-                new RelativeLayout.LayoutParams(typedDimensionValueToPixelsInt(w, context),
-                        typedDimensionValueToPixelsInt(h, context));
-        rlParams.addRule(rule);
-        return rlParams;
-    }
-    
-    public static RelativeLayout.LayoutParams makeRLParams(Context context, String w, String h, int rule, int id) {
-        RelativeLayout.LayoutParams rlParams =
-                new RelativeLayout.LayoutParams(typedDimensionValueToPixelsInt(w, context),
-                        typedDimensionValueToPixelsInt(h, context));
-        rlParams.addRule(rule, id);
-        return rlParams;
-    }
-    
-
 }

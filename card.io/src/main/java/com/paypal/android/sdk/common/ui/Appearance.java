@@ -29,16 +29,10 @@ public class Appearance {
 
     public static final String BASE_SPACING = "4dip";
     public static final String VERTICAL_SPACING = "8dip";
-    public static final String BUTTON_GUTTER = "8dip";
     public static final String LIST_PADDING = "12dip";
-    
-    public static final String CHECKMARK_SIZE = "20dip";
-    public static final String CHECKMARK_PADDING = "8dip";
 
     public static final String BUTTON_HEIGHT = "54dip";
     public static final String SMALL_BUTTON_HEIGHT = "42dip";
-
-    public static final String LABEL_MARGIN = "10dip";
 
     // States
 
@@ -60,7 +54,6 @@ public class Appearance {
     public static final Drawable ACTIONBAR_BACKGROUND = new ColorDrawable(
             Color.parseColor("#717074"));
     public static final int DEFAULT_BACKGROUND_COLOR = Color.parseColor("#f5f5f5");
-    public static final int ENVIRONMENT_LABEL_COLOR = Color.parseColor("#c4dceb");
 
     public static final int BUTTON_PRIMARY_NORMAL_COLOR = PAL_BLUE_COLOR;
     public static final int BUTTON_PRIMARY_FOCUS_COLOR = PAL_BLUE_COLOR_OPACITY_66;

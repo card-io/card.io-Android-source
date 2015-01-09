@@ -17,16 +17,6 @@ import android.view.Window;
 import android.widget.TextView;
 
 public class ActivityHelper {
-
-    public static void animateActivityStart(Activity activity, Intent intent, int requestCode) {
-        activity.startActivityForResult(intent, requestCode);
-        // TODO - animate via overridePendingTransition if possible
-    }
-
-    public static void animateActivityBack(Activity activity) {
-        // TODO - animate via overridePendingTransition if possible
-    }
-
     /**
      * Request the ActionBar window feature if we are on a supported Android
      * version. This should be called before the activity's setContentView. See

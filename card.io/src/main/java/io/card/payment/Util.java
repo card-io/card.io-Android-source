@@ -4,10 +4,6 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.List;
-
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -18,12 +14,11 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.hardware.Camera;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.NetworkInfo.State;
 import android.os.Build;
 import android.os.Debug;
 import android.util.Log;
+
+import java.util.List;
 
 /**
  * This class has various static utility methods.
@@ -37,91 +32,10 @@ class Util {
 
     private static Boolean sHardwareSupported;
 
-    public static String urlEncode(String s) {
-        try {
-            return URLEncoder.encode(s, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static String dump(byte[] buf, int offset, int length) {
-        StringBuffer sb = new StringBuffer();
-
-        for (int i = 0; i < length; i++) {
-            sb.append(String.format("%02x", buf[i + offset]));
-            sb.append(i % 16 == 15 ? '\n' : ' ');
-        }
-
-        return sb.toString();
-    }
-
-    public static String dump(int[] buf, int offset, int length) {
-        StringBuffer sb = new StringBuffer();
-
-        for (int i = 0; i < length; i++) {
-            sb.append(String.format("%08x", buf[i + offset]));
-            sb.append(i % 8 == 7 ? '\n' : ' ');
-        }
-
-        return sb.toString();
-    }
-
     public static boolean deviceSupportsTorch(Context context) {
         return !TORCH_BLACK_LISTED
                 && context.getPackageManager()
                         .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-    }
-
-    private static NetworkInfo getNetworkInfo(Context context) {
-        ConnectivityManager conMan;
-        if (context != null) {
-            conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        } else {
-            Log.e(TAG,
-                    "No Context for retrieving Connectivity Manager System Service: pass non-null context");
-            return null;
-        }
-        return conMan.getActiveNetworkInfo();
-    }
-
-    public static String getConnectionType(Context context) {
-        NetworkInfo info = getNetworkInfo(context);
-        if (info == null) {
-            Log.w(TAG, "Network type string is NULL!");
-            return null;
-        }
-        String connectionType = info.getTypeName();
-        Log.d(TAG, "Network type string is: " + connectionType);
-        return connectionType;
-    }
-
-    public static boolean isNetworkConnectionAvailable(Context context) {
-        NetworkInfo info = getNetworkInfo(context);
-        if (info == null) {
-            Log.w(TAG, "Network type is NULL!");
-            return false;
-        }
-        Log.d(TAG, "Network type is: " + info.getTypeName());
-        State network = info.getState();
-        return (network == NetworkInfo.State.CONNECTED || network == NetworkInfo.State.CONNECTING);
-    }
-
-    public static float clamp(long start, float v1, long stop, float v2) {
-        long now = System.currentTimeMillis();
-
-        if (now < start)
-            return v1;
-        else if (now > stop)
-            return v2;
-        else {
-            long mt = stop - start;
-            long dt = now - start;
-            float dv = v2 - v1;
-            float pct = (float) dt / mt;
-
-            return v1 + dv * pct;
-        }
     }
 
     @SuppressWarnings("rawtypes")
@@ -142,21 +56,6 @@ class Util {
 
     public static boolean hasConfigFlag(int config, int configFlag) {
         return ((config & configFlag) == configFlag);
-    }
-
-    @SuppressWarnings("rawtypes")
-    public static String manifestHasPortriatOrientation(ResolveInfo resolveInfo, Class activityClass) {
-        String error = null;
-        if (resolveInfo == null) {
-            error = String.format("Didn't find %s in the AndroidManifest.xml",
-                    activityClass.getName());
-        } else if (resolveInfo.activityInfo.screenOrientation != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-            error = activityClass.getName()
-                    + " requires attribute android:screenOrientation=\"portrait\"";
-        }
-        if (error != null)
-            Log.e(Util.PUBLIC_LOG_TAG, error);
-        return error;
     }
 
     /* --- HARDWARE SUPPORT --- */
@@ -213,15 +112,6 @@ class Util {
             }
         }
         return true;
-    }
-
-    public static String getRuntimeMemoryStats() {
-        Runtime runtime = Runtime.getRuntime();
-        float megaBytes = 1024 * 1024;
-        return String.format("used: %.2f  free: %.2f  total: %.2f  max: %.2f",
-                (runtime.totalMemory() - runtime.freeMemory()) / megaBytes, runtime.freeMemory()
-                        / megaBytes, runtime.totalMemory() / megaBytes, runtime.maxMemory()
-                        / megaBytes);
     }
 
     public static String getNativeMemoryStats() {

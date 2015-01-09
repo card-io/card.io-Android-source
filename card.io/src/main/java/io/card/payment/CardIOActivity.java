@@ -13,9 +13,7 @@ import java.lang.reflect.Constructor;
 import java.util.Date;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -26,8 +24,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.hardware.SensorManager;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -261,9 +257,6 @@ public final class CardIOActivity extends Activity {
     private CardScanner mCardScanner;
 
     private boolean manualEntryFallbackOrForced = false;
-
-    private LocationManager locationManager;
-    private LocationListener locationListener;
 
     private static boolean scanAuthorized = true;
 
@@ -541,10 +534,6 @@ public final class CardIOActivity extends Activity {
         Log.d(TAG, "onDestroy()");
         mOverlay = null;
         numActivityAllocations--;
-
-        if (locationManager != null) {
-            locationManager.removeUpdates(locationListener);
-        }
 
         if (mCardScanner != null) {
             mCardScanner.endScanning();
