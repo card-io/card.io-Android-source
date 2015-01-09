@@ -633,12 +633,12 @@ public final class CardIOActivity extends Activity {
      * @return An string describing the version of the card.io library.
      */
     public static String sdkVersion() {
-        return io.card.payment.Version.REVISION;
+        return BuildConfig.PRODUCT_VERSION;
     }
 
     @SuppressWarnings("deprecation")
     public static Date sdkBuildDate() {
-        return new Date(io.card.payment.Version.BUILD_DATE);
+        return new Date(BuildConfig.BUILD_TIME);
     }
     
     /**

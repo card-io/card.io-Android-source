@@ -119,7 +119,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     // ------------------------------------------------------------------------
 
     static {
-        Log.i(Util.PUBLIC_LOG_TAG, "card.io " + Version.REVISION + " " + Version.BUILD_DATE);
+        Log.i(Util.PUBLIC_LOG_TAG, "card.io " + BuildConfig.PRODUCT_VERSION + " " + BuildConfig.BUILD_TIME);
 
         try {
             System.loadLibrary("cardioDecider");
