@@ -7,6 +7,13 @@ buildscript {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+
 ext {
     libsSrcDir = new File("${projectDir}/libs")
 }
@@ -15,7 +22,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion '21.1.1'
+    buildToolsVersion '21.1.2'
 
     signingConfigs {
         myConfig {
@@ -33,7 +40,7 @@ android {
 
         release{
             minifyEnabled true
-            proguardFile file('paypal-proguard.cnf')
+            proguardFile file('proguard.cfg')
             signingConfig signingConfigs.myConfig
         }
     }
@@ -42,7 +49,7 @@ android {
         variant.outputs.each { output ->
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                output.outputFile = new File(outputFile.parent, "paypal-sample-app-${variant.name}.apk")
+                output.outputFile = new File(outputFile.parent, "card.io-sample-app-${variant.name}.apk")
             }
         }
     }
@@ -60,8 +67,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: libsSrcDir, include: '*.jar')
-    compile files("${buildDir}/native-libs/native-libs.jar")
+    compile(name:'card.io-release', ext:'aar')
 }
 
 task nativeLibsToJar(
