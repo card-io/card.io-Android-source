@@ -7,6 +7,12 @@ buildscript {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'aars'
+    }
+}
+
 apply plugin: 'com.android.application'
 
 android {
@@ -45,6 +51,9 @@ android {
 }
 
 dependencies {
-    compile project (':card.io')
+    compile project (':card.io') /* REMOVE_THIS_LINE_TO_RELEASE */
+    /* REMOVE_THIS_LINE_TO_RELEASE
+    compile(name:'card.io-version', ext:'aar')
+    /* REMOVE_THIS_LINE_TO_RELEASE */
 }
 

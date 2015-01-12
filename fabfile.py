@@ -83,16 +83,16 @@ def sdk_release():
         with lcd(env.public_repo_path):
             # remove old everything
             local("rm -rf * .gitignore")
-            local("mkdir libs")
-            local("cp {release_path} libs/{dest_file_name}".format(**locals()))
+            local("mkdir aars")
+            local("cp {release_path} aars/{dest_file_name}".format(**locals()))
 
             # update .md files with those in repo
             local("cp " + os.path.join(env.top_root, "sdk") + "/*.md .")
 
             # update sample app
             local("cp -R " + os.path.join(env.top_root, "SampleApp") + " .")
-            local("mkdir SampleApp/libs")
-            local(("cp libs/{dest_file_name} SampleApp/libs/").format(**locals()))
+            local("mkdir SampleApp/aars")
+            local(("cp aars/{dest_file_name} SampleApp/aars/").format(**locals()))
 
             # TODO replace this line in SampleApp build.gradle
             # compile project (':card.io')
