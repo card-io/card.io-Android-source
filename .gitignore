@@ -32,7 +32,6 @@ local.properties
 .DS_Store
 
 # Custom card.io files
-dist/
 card.io/doc/all
 card.io/doc/apidist/
 card.io/doc/api
@@ -48,3 +47,6 @@ recording_*.zip
 /card.io/javadoc/
 /card.io/src/main/libs/
 /out/
+
+*.pyc
+public/

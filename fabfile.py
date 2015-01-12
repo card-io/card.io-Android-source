@@ -8,13 +8,11 @@ from fabric.api import env, local, hide
 from fabric.context_managers import lcd, settings
 from fabric.utils import abort
 from fabric.tasks import execute
-
-from ll.fab import io
+from fabric import colors
 
 env.verbose = False
 env.dirty = False
 env.test = False
-env.whitelabel = False
 env.to_hide = ["stdout", "stderr", "running"]
 
 # repos
@@ -26,12 +24,6 @@ env.public_repo_sample_app_path = os.path.join(env.public_repo_path, "SampleApp"
 
 
 # --- tasks ----
-
-
-def whitelabel(whitelabel=True):
-    env.whitelabel = whitelabel
-
-
 def verbose(verbose=True):
     env.verbose = verbose
 
@@ -41,29 +33,25 @@ def build():
     build dist for card.io
     """
     cmd = "ant dist"
-    if env.whitelabel:
-        cmd = "ant dist-whitelabel"
 
     with lcd(os.path.join(env.top_root, "card.io")):
         local(cmd)
 
 
 def sdk_setup():
-
     env.top_root = local("git rev-parse --show-toplevel", capture=True)
 
     if not os.path.isdir("public"):
         local("mkdir -p public")
 
     if not os.path.isdir(env.public_repo_path):
-        io.info("Creating public SDK repo")
+        print(colors.blue("Creating public SDK repo"))
         local("git clone --origin public {public_repo_url} {public_repo_path}".format(**env))
 
 
 def sdk_reset(warn_opt='warn'):
-
     if warn_opt != 'nowarn':
-        io.warn("This step will fetch and reset the public repo to the latest version.")
+        print(colors.yellow("This step will fetch and reset the public repo to the latest version."))
         if not confirm("Proceed?"):
             abort("OK, fine. I understand. :(")
 
@@ -93,9 +81,6 @@ def sdk_release():
     print "Verify and merge back to master"
     print
 
-# stage a build (don't tag or rely on a release branch)
-def sdk_stage():
-    dist("stage")
 
 def dist(version_str):
 
@@ -105,10 +90,10 @@ def dist(version_str):
     # Add version
     with settings(hide(*env.to_hide)):
 
-        io.info("building sdk {version_str} ".format(**locals()))
+        print(colors.blue("building sdk {version_str} ".format(**locals())))
         # execute build
         execute(build)
-        io.info("extracting sdk {version_str} to public repo".format(**locals()))
+        print(colors.blue("extracting sdk {version_str} to public repo".format(**locals())))
         # card.io-android-sdk-
         release_path = os.path.join(env.top_root, "card.io", "dist")
         zip_file = local("ls -t " + release_path + " | head -n 1", capture=True)
