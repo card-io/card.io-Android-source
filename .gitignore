@@ -49,4 +49,4 @@ recording_*.zip
 /out/
 
 *.pyc
-public/
+distribution-repo/
