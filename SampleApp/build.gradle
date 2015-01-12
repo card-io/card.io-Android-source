@@ -7,17 +7,6 @@ buildscript {
     }
 }
 
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-}
-
-
-ext {
-    libsSrcDir = new File("${projectDir}/libs")
-}
-
 apply plugin: 'com.android.application'
 
 android {
@@ -61,20 +50,11 @@ android {
             resources.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
-            jniLibs.srcDirs = ['libs']
         }
     }
 }
 
 dependencies {
-    compile(name:'card.io-release', ext:'aar')
+    compile project (':card.io')
 }
 
-task nativeLibsToJar(
-        type: Jar,
-        description: 'create a jar archive of the native libs') {
-    destinationDir file("${buildDir}/native-libs")
-    baseName 'native-libs'
-    from fileTree(dir: libsSrcDir, include: '**/*.so')
-    into 'lib/'
-}
