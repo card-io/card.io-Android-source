@@ -25,10 +25,7 @@ ext {
     build_time = new Date().format("MM/dd/yyyy HH:mm:ss Z")
     build_year = new Date().format("yyyy")
     product_name = "card.io-Android-SDK"
-
-    jar_name = product_name.replaceAll("-", "")
     product_version = getBuildVersion()
-    bundle_name = jar_name + "-" + product_version
 }
 
 android {
