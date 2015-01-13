@@ -29,8 +29,6 @@ ext {
     jar_name = product_name.replaceAll("-", "")
     product_version = getBuildVersion()
     bundle_name = jar_name + "-" + product_version
-
-    libsSrcDir = new File("${projectDir}/libs")
 }
 
 android {
@@ -58,9 +56,8 @@ android {
         }
 
         release{
-            // TODO this strips out the jni dir - why?
             minifyEnabled true
-            proguardFile file('proguard-build.cfg')
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-build.cfg'
         }
     }
 
@@ -80,19 +77,17 @@ android {
     tasks.withType(JavaCompile) {
         compileTask -> compileTask.dependsOn buildNative
     }
+
+    tasks.whenTaskAdded { theTask ->
+        if (theTask.name == "packageReleaseJniLibs"
+         || theTask.name == "packageDebugJniLibs") {
+            theTask.dependsOn(buildNative)
+        }
+    }
 }
 
 dependencies {
-    compile fileTree(dir: libsSrcDir, include: '*.jar')
     compile files("${buildDir}/native-libs/native-libs.jar")
 
     androidTestCompile "com.jayway.android.robotium:robotium-solo:5.2.1"
-}
-
-task nativeLibsToJar(type: Jar,
-        description: 'create a jar archive of the native libs') {
-    destinationDir file("${buildDir}/native-libs")
-    baseName 'native-libs'
-    from fileTree(dir: libsSrcDir, include: '**/*.so')
-    into 'lib/'
 }
