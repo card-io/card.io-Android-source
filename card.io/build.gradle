@@ -87,7 +87,5 @@ android {
 }
 
 dependencies {
-    compile files("${buildDir}/native-libs/native-libs.jar")
-
     androidTestCompile "com.jayway.android.robotium:robotium-solo:5.2.1"
 }
