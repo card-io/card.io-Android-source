@@ -59,8 +59,8 @@ android {
 
         release{
             // TODO this strips out the jni dir - why?
-            //minifyEnabled true
-            //proguardFile file('proguard.cfg')
+            minifyEnabled true
+            proguardFile file('proguard-build.cfg')
         }
     }
 
