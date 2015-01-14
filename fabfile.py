@@ -27,7 +27,7 @@ def verbose(verbose=True):
 
 
 def build():
-    cmd = "./gradlew clean :card.io:assembleRelease"
+    cmd = "./gradlew clean :card.io:assembleRelease releaseDoc"
 
     with lcd(env.top_root):
         local(cmd)

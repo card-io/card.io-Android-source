@@ -85,7 +85,6 @@ public enum CardType {
      * 
      * @param languageOrLocale
      *            See {@link CardIOActivity#EXTRA_LANGUAGE_OR_LOCALE}.
-     * @return
      */
     public String getDisplayName(String languageOrLocale) {
         switch (this) {
@@ -169,7 +168,6 @@ public enum CardType {
      * 
      * @param context
      *            For retrieving the image density
-     * @return
      */
     public Bitmap imageBitmap(Context context) {
         String cardImageData = null;

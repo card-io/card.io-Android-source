@@ -32,9 +32,6 @@ local.properties
 .DS_Store
 
 # Custom card.io files
-card.io/doc/all
-card.io/doc/apidist/
-card.io/doc/api
 gdb.setup
 gdbserver
 .cproject
@@ -44,7 +41,6 @@ card.io/proguard-data/card.io-android-WL*
 opencv/build-*
 opencv/OpenCV-*
 recording_*.zip
-/card.io/javadoc/
 /out/
 
 *.pyc
