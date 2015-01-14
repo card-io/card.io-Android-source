@@ -45,7 +45,6 @@ opencv/build-*
 opencv/OpenCV-*
 recording_*.zip
 /card.io/javadoc/
-/card.io/src/main/libs/
 /out/
 
 *.pyc
