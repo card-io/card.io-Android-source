@@ -40,7 +40,6 @@ card.io/proguard-data/card.io-android-*-dirty
 card.io/proguard-data/card.io-android-WL*
 opencv/build-*
 opencv/OpenCV-*
-recording_*.zip
 /out/
 
 *.pyc
