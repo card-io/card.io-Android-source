@@ -49,14 +49,14 @@ Requires a recording of a capture session.
 
 #### Running
 
-1. `$ cd card.io-Android-source/card.io-test`
-2. `$ ant debug && ant installd test`
+1. `$ cd card.io-Android-source`
+2. `$ ./gradlew connectedAndroidTest`
 
 That's it! You should see the app open and run through some tests.
 
 ### Un-official Release
 
-`$ ant dist` Cleans and builds a zip for distribution
+`$ ./gradlew clean :card.io:assembleRelease` Cleans and builds an aar file for distribution.
 
 The [official release process](official-release-process.md) is described separately.
 

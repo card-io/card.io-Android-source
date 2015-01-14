@@ -8,7 +8,7 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 
 1. Sanity check the develop branch.  
 
-1. Run `ant dist doc`, and review the obfuscated jar and javadocs for any anomalies.  
+1. Run `./gradlew :card.io:assembleRelease releaseDoc`, and review the unobfuscated aar and javadocs for any anomalies.
  
 1. Deploy to a device and run a few sanity checks  (don't forget to do a release build!)
 
@@ -18,7 +18,7 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 
 1. Run `fab sdk_reset`, it will reset the branches
 
-1. Run `fab sdk_release` it will build the sdk and prepare `public` folder, it will also tag the release with a version you have created in step 0. 
+1. Run `fab sdk_release` it will build the sdk and prepare `distribution-repo` folder, it will also tag the release with a version you have created in step 0.
 ```
 1. Switch to master and merge release branch
 ```bash
@@ -38,7 +38,7 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 1. Wait for tests to complete and let's release to public, check the diffs to verify all is good
 	1. Check the changes
 	```bash
-	    cd public/card.io-Android-SDK
+	    cd distribution-repo
 	    git diff
 	```
 	2. Commit the changes
@@ -56,8 +56,8 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 		2. `git checkout gh-pages`
 		2. Remove all files except README.md, so they can be replaced with new files.
 	1. On private sdk rep, build javadoc and copy to public repo:
-		2. `ant doc`
-		2. `cp -a javadoc/* <public repo dir>`
+		2. `./gradlew releaseDoc`
+		2. `cp -a card.io/build/docs/javadoc/release/* <public repo dir>`
 	1. On public repo, push the changes:
 		2. `git push` 
 
