@@ -94,7 +94,6 @@ dependencies {
 // More info here: http://www.gradle.org/docs/current/dsl/org.gradle.api.tasks.javadoc.Javadoc.html
 android.libraryVariants.all { variant ->
     def buildType = variant.buildType.name
-    def flavorName = variant.flavorName
     def variantName = variant.baseName
 
 
