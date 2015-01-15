@@ -164,8 +164,8 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     }
 
     /**
-     * Connect or reconnect to camera. If fails, sleeps and tries again. Returns true if successful,
-     * false if maxTimeout passes.
+     * Connect or reconnect to camera. If fails, sleeps and tries again. Returns <code>true</code> if successful,
+     * <code>false</code> if maxTimeout passes.
      */
     private Camera connectToCamera(int checkInterval, int maxTimeout) {
         long start = System.currentTimeMillis();
@@ -585,7 +585,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
      * 
      * @param b
      *            desired flash state
-     * @return true if successful
+     * @return <code>true</code> if successful
      */
 
     public boolean setFlashOn(boolean b) {

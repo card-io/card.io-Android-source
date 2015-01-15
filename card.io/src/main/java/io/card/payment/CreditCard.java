@@ -241,7 +241,7 @@ public class CreditCard implements Parcelable {
     }
 
     /**
-     * @return true indicates a current, valid date.
+     * @return <code>true</code> indicates a current, valid date.
      */
     public boolean isExpiryValid() {
         return CreditCardNumber.isDateValid(expiryMonth, expiryYear);

@@ -48,7 +48,7 @@ import io.card.payment.ui.Appearance;
 import io.card.payment.ui.ViewUtil;
 
 /**
- * This is the entry point activity for a Card.IO client to use the Card.IO service.
+ * This is the entry point {@link android.app.Activity} for a card.io client to use the <a href="https://card.io">card.io</a> service.
  * 
  * @version 1.0
  */
@@ -79,7 +79,7 @@ public final class CardIOActivity extends Activity {
     public static final String EXTRA_REQUIRE_POSTAL_CODE = "io.card.payment.requirePostalCode";
     
     /**
-     * Equivalent to EXTRA_REQUIRE_POSTAL_CODE
+     * Equivalent to {@link #EXTRA_REQUIRE_POSTAL_CODE}
      */
     @Deprecated
     public static final String EXTRA_REQUIRE_ZIP = EXTRA_REQUIRE_POSTAL_CODE;
@@ -91,8 +91,9 @@ public final class CardIOActivity extends Activity {
     public static final String EXTRA_USE_CARDIO_LOGO = "io.card.payment.useCardIOLogo";
 
     /**
-     * Parcelable extra containing {@link CreditCard}. The data intent returned to your activity's
-     * onActivityResult() will contain this extra if the resultCode is RESULT_CARD_INFO.
+     * Parcelable extra containing {@link CreditCard}. The data intent returned to your {@link android.app.Activity}'s
+     * {@link Activity#onActivityResult(int, int, Intent)} will contain this extra if the resultCode is
+     * {@link #RESULT_CARD_INFO}.
      */
     public static final String EXTRA_SCAN_RESULT = "io.card.payment.scanResult";
 
@@ -100,7 +101,7 @@ public final class CardIOActivity extends Activity {
      * Boolean extra. Optional. Defaults to <code>false</code>. Removes the keyboard button from the
      * scan screen.
      * 
-     * If scanning is unavailable, the activity result will be RESULT_SCAN_NOT_AVAILABLE.
+     * If scanning is unavailable, the {@link android.app.Activity} result will be {@link #RESULT_SCAN_NOT_AVAILABLE}.
      */
     public static final String EXTRA_SUPPRESS_MANUAL_ENTRY = "io.card.payment.suppressManual";
 
@@ -128,20 +129,20 @@ public final class CardIOActivity extends Activity {
     public static final String EXTRA_LANGUAGE_OR_LOCALE = "io.card.payment.languageOrLocale";
 
     /**
-     * Integer extra. Optional. Defaults to Green. Changes the color of the guide overlay on the
+     * Integer extra. Optional. Defaults to {@link Color#GREEN}. Changes the color of the guide overlay on the
      * camera.
      */
     public static final String EXTRA_GUIDE_COLOR = "io.card.payment.guideColor";
 
     /**
-     * Boolean extra. Optional. If this value is set to true the user will not be prompted to
+     * Boolean extra. Optional. If this value is set to <code>true</code> the user will not be prompted to
      * confirm their card number after processing.
      */
     public static final String EXTRA_SUPPRESS_CONFIRMATION = "io.card.payment.suppressConfirmation";
 
     /**
-     * Boolean extra. Optional. Defaults to <code>false</code>. When set to true the Card IO logo
-     * will not be shown overlayed on the camera.
+     * Boolean extra. Optional. Defaults to <code>false</code>. When set to <code>true</code> the card.io logo
+     * will not be shown overlaid on the camera.
      */
     public static final String EXTRA_HIDE_CARDIO_LOGO = "io.card.payment.hideLogo";
 
@@ -154,20 +155,20 @@ public final class CardIOActivity extends Activity {
     /**
      * Boolean extra. Optional. Once a card image has been captured but before it has been
      * processed, this value will determine whether to continue processing as usual. If the value is
-     * true the CardIOActivity will finish with a RESULT_SCAN_SUPPRESSED result code.
+     * <code>true</code> the {@link CardIOActivity} will finish with a {@link #RESULT_SCAN_SUPPRESSED} result code.
      */
     public static final String EXTRA_SUPPRESS_SCAN = "io.card.payment.suppressScan";
 
     /**
-     * String extra. If EXTRA_RETURN_CARD_IMAGE is set to true, the data intent passed to your
-     * Activity will have the card image stored as a JPEG formatted byte array in this extra.
+     * String extra. If {@link #EXTRA_RETURN_CARD_IMAGE} is set to <code>true</code>, the data intent passed to your
+     * {@link android.app.Activity} will have the card image stored as a JPEG formatted byte array in this extra.
      */
     public static final String EXTRA_CAPTURED_CARD_IMAGE = "io.card.payment.capturedCardImage";
 
     /**
-     * Boolean extra. Optional. If this value is set to true the card image will be passed as an
-     * extra in the data intent that is returned to your Activity using the
-     * EXTRA_CAPTURED_CARD_IMAGE key.
+     * Boolean extra. Optional. If this value is set to <code>true</code> the card image will be passed as an
+     * extra in the data intent that is returned to your {@link android.app.Activity} using the
+     * {@link #EXTRA_CAPTURED_CARD_IMAGE} key.
      */
     public static final String EXTRA_RETURN_CARD_IMAGE = "io.card.payment.returnCardImage";
 
@@ -184,21 +185,21 @@ public final class CardIOActivity extends Activity {
     private static int lastResult = 0xca8d10; // arbitrary. chosen to be well above
                                               // Activity.RESULT_FIRST_USER.
     /**
-     * result code supplied to onActivityResult() when a scan request completes.
+     * result code supplied to {@link Activity#onActivityResult(int, int, Intent)} when a scan request completes.
      */
     public static final int RESULT_CARD_INFO = lastResult++;
 
     /**
-     * result code supplied to onActivityResult() when the user presses the cancel button.
+     * result code supplied to {@link Activity#onActivityResult(int, int, Intent)} when the user presses the cancel button.
      */
     public static final int RESULT_ENTRY_CANCELED = lastResult++;
 
     /**
      * result code indicating that scan is not available. Only returned when
-     * EXTRA_SUPPRESS_MANUAL_ENTRY is set and scanning is not available.
+     * {@link #EXTRA_SUPPRESS_MANUAL_ENTRY} is set and scanning is not available.
      * 
      * This error can be avoided in normal situations by checking
-     * {@code CardIOActivity.canReadCardWithCamera()}.
+     * {@link #canReadCardWithCamera()}.
      */
     public static final int RESULT_SCAN_NOT_AVAILABLE = lastResult++;
 
@@ -261,7 +262,7 @@ public final class CardIOActivity extends Activity {
 
     /**
      * Static variable for the decorated card image. This is ugly, but works. Parceling and
-     * unparceling card image data to pass to the next activity does not work because the image data
+     * unparceling card image data to pass to the next {@link android.app.Activity} does not work because the image data
      * is too big and causes a somewhat misleading exception. Compressing the image data yields a
      * reduction to 30% of the original size, but still gives the same exception. An alternative
      * would be to persist the image data in a file. That seems like a pretty horrible idea, as we
@@ -472,7 +473,7 @@ public final class CardIOActivity extends Activity {
     }
 
     /**
-     * Suspend/resume camera preview as part of the activity life cycle (side note: we reuse the
+     * Suspend/resume camera preview as part of the {@link android.app.Activity} life cycle (side note: we reuse the
      * same buffer for preview callbacks to greatly reduce the amount of required GC).
      */
     @Override
@@ -562,8 +563,8 @@ public final class CardIOActivity extends Activity {
     }
 
     /**
-     * This activity overrides back button handling to handle back presses properly given the
-     * various states this activity can be in.
+     * This {@link android.app.Activity} overrides back button handling to handle back presses properly given the
+     * various states this {@link android.app.Activity} can be in.
      * 
      * This method is called by Android, never directly by application code.
      */
@@ -592,7 +593,7 @@ public final class CardIOActivity extends Activity {
      * An ARM7 processor and Android SDK 8 or later are required. Additional checks for specific
      * misbehaving devices may also be added.
      * 
-     * @return True if camera is supported. False otherwise.
+     * @return <code>true</code> if camera is supported. <code>false</code> otherwise.
      */
     public static boolean canReadCardWithCamera() {
         try {
@@ -608,7 +609,7 @@ public final class CardIOActivity extends Activity {
     /**
      * @param context
      *            ignored
-     * @return canReadCardWithCamera();
+     * @return {@link #canReadCardWithCamera()}
      */
     @Deprecated
     public static boolean canReadCardWithCamera(@SuppressWarnings("unused") Context context) {
@@ -633,7 +634,7 @@ public final class CardIOActivity extends Activity {
      * Utility method for decoding card bitmap
      * 
      * @param intent
-     *            - intent received in onActivityResult()
+     *            - intent received in {@link Activity#onActivityResult(int, int, Intent)}
      * @return decoded bitmap or null
      */
     public static Bitmap getCapturedCardImage(Intent intent) {
@@ -833,7 +834,7 @@ public final class CardIOActivity extends Activity {
     }
 
     /**
-     * Manually set up the layout for this activity. It may be possible to use the standard xml
+     * Manually set up the layout for this {@link android.app.Activity}. It may be possible to use the standard xml
      * layout mechanism instead, but to know for sure would require more work
      */
     private void setPreviewLayout() {
