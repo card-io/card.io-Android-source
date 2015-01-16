@@ -1,15 +1,37 @@
-*~
-.metadata
-.DS_Store
-dist/
-*.pyc
+# Built application files
+*.apk
+*.ap_
+
+# Files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
 local.properties
-card.io/doc/all
-card.io/doc/apidist/
-card.io/doc/api
-.externalToolBuilders
-.project
-.classpath
+
+# Eclipse settings files
+.settings/
+
+# IntelliJ project files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Misc
+.DS_Store
+
+# Custom card.io files
 gdb.setup
 gdbserver
 .cproject
@@ -18,15 +40,7 @@ card.io/proguard-data/card.io-android-*-dirty
 card.io/proguard-data/card.io-android-WL*
 opencv/build-*
 opencv/OpenCV-*
-/card.io-test/gen/
-/card.io-test/build/
-/card.io-test/bin/
-recording_*.zip
-/card.io/javadoc/
-/card.io/libs/
-public/
-/SampleApp/build/
-/SampleApp/.gradle/
-.idea
-*.iml
 /out/
+
+*.pyc
+distribution-repo/

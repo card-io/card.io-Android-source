@@ -1,6 +1,18 @@
 card.io Android SDK change log and release notes
 ================================================
 
+4.0.0
+-----
+* Distribute .aar file
+* New extras on CardIOActivity
+  - `EXTRA_SCAN_INSTRUCTIONS`
+  - `EXTRA_HIDE_CARDIO_LOGO`
+  - `EXTRA_SCAN_OVERLAY_LAYOUT_ID`
+  - `EXTRA_SUPPRESS_SCAN`
+  - `EXTRA_RETURN_CARD_IMAGE`
+* New extra `EXTRA_CAPTURED_CARD_IMAGE` returned to calling Activity 
+* New class `BuildConfig`
+
 3.2.0
 -----
 * Eliminate App Token. Developers no longer need to sign up on the card.io site before using card.io.

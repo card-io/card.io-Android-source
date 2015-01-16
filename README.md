@@ -24,23 +24,19 @@ Dev Setup
 ### Prerequisites
 
 - Current version of the Android SDK. (obviously)
-- Ant. (We'll move to Gradle soon)
 - Android NDK. We've tested with r10d. At minimum, the Clang toolchain is required.
-
 
 ### First build
 
 There are a few bugs in the build process, so these steps are required for the first build:
 
-1. `$ cd card.io-Android-source/card.io`
-2. `$ android update project -p .`
-3. Assuming you've defined `$ANDROID_NDK` correctly, `$ echo "ndk.dir=$ANDROID_NDK" >>local.properties`
-4. `$ ant debug` 
+1. `$ cd card.io-Android-source`
+2. `$ cp local.properties.example local.properties`
+3. Edit `local.properties with your env (Assuming you've defined `$ANDROID_NDK` correctly, run `$ echo "$ANDROID_NDK" "$ANDROID_SDK"`
+4. `$ ./gradlew build` 
 
 #### Hints & tricks.
-- Get ant going before Eclipse.
-- Make sure that you do not have Eclipse auto-building while an Ant build is running. (You can also close the project within Eclipse to avoid this.)
-- See [card.io/jni](card.io/jni/) for native layer (NDK) discussion.
+- See [card.io/src/main/jni](card.io/src/main/jni) for native layer (NDK) discussion.
 
 ### Testing
 
@@ -53,14 +49,14 @@ Requires a recording of a capture session.
 
 #### Running
 
-1. `$ cd card.io-Android-source/card.io-test`
-2. `$ ant debug && ant installd test`
+1. `$ cd card.io-Android-source`
+2. `$ ./gradlew connectedAndroidTest`
 
 That's it! You should see the app open and run through some tests.
 
 ### Un-official Release
 
-`$ ant dist` Cleans and builds a zip for distribution
+`$ ./gradlew clean :card.io:assembleRelease` Cleans and builds an aar file for distribution.
 
 The [official release process](official-release-process.md) is described separately.
 

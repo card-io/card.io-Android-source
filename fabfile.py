@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import shutil
 import zipfile
 
 from fabric.contrib.console import confirm
@@ -8,62 +9,41 @@ from fabric.api import env, local, hide
 from fabric.context_managers import lcd, settings
 from fabric.utils import abort
 from fabric.tasks import execute
-
-from ll.fab import io
+from fabric import colors
 
 env.verbose = False
 env.dirty = False
 env.test = False
-env.whitelabel = False
 env.to_hide = ["stdout", "stderr", "running"]
 
 # repos
 env.public_repo_url = "git@github.com:card-io/card.io-Android-SDK.git"
-env.public_repo_path = os.path.join("public", "card.io-Android-SDK")
-
-# other important paths
-env.public_repo_sample_app_path = os.path.join(env.public_repo_path, "SampleApp")
+env.public_repo_path = "distribution-repo"
 
 
 # --- tasks ----
-
-
-def whitelabel(whitelabel=True):
-    env.whitelabel = whitelabel
-
-
 def verbose(verbose=True):
     env.verbose = verbose
 
 
 def build():
-    """
-    build dist for card.io
-    """
-    cmd = "ant dist"
-    if env.whitelabel:
-        cmd = "ant dist-whitelabel"
+    cmd = "./gradlew clean :card.io:assembleRelease releaseDoc"
 
-    with lcd(os.path.join(env.top_root, "card.io")):
+    with lcd(env.top_root):
         local(cmd)
 
 
 def sdk_setup():
-
     env.top_root = local("git rev-parse --show-toplevel", capture=True)
 
-    if not os.path.isdir("public"):
-        local("mkdir -p public")
-
     if not os.path.isdir(env.public_repo_path):
-        io.info("Creating public SDK repo")
+        print(colors.blue("Creating public SDK repo"))
         local("git clone --origin public {public_repo_url} {public_repo_path}".format(**env))
 
 
 def sdk_reset(warn_opt='warn'):
-
     if warn_opt != 'nowarn':
-        io.warn("This step will fetch and reset the public repo to the latest version.")
+        print(colors.yellow("This step will fetch and reset the public repo to the latest version."))
         if not confirm("Proceed?"):
             abort("OK, fine. I understand. :(")
 
@@ -80,60 +60,58 @@ def sdk_reset(warn_opt='warn'):
 
 def sdk_release():
     """
-    Build library and header files into public/card.io-Android-SDK.
+    Build library into public/card.io-Android-SDK.
     """
-    version_str = _get_release_version()
-    cmd = "git tag sdk-{0}".format(version_str)
-    # tag the build
-    local(cmd)
-    
-    dist(version_str)
 
-    print "Commit proguard-data"
-    print "Verify and merge back to master"
-    print
-
-# stage a build (don't tag or rely on a release branch)
-def sdk_stage():
-    dist("stage")
-
-def dist(version_str):
-
-    # execute setup
     execute(sdk_setup)
 
-    # Add version
+    version_str = _get_release_version()
+
+    _confirm_tag_overwrite(env.top_root, version_str)
+    local("git tag -f {0}".format(version_str))
+
+
     with settings(hide(*env.to_hide)):
+        print(colors.blue("building sdk {version_str} ".format(**locals())))
 
-        io.info("building sdk {version_str} ".format(**locals()))
-        # execute build
         execute(build)
-        io.info("extracting sdk {version_str} to public repo".format(**locals()))
-        # card.io-android-sdk-
-        release_path = os.path.join(env.top_root, "card.io", "dist")
-        zip_file = local("ls -t " + release_path + " | head -n 1", capture=True)
-        zip_path = os.path.join(release_path, zip_file)
+        print(colors.blue("extracting sdk {version_str} to public repo".format(**locals())))
 
-        dist_zip = zipfile.ZipFile(zip_path, 'r')
-        dist_zip.extractall(path=env.public_repo_path)
+        release_path = os.path.join(env.top_root, "card.io", "build", "outputs", "aar", "card.io-release.aar")
+        dest_file_name = "card.io-{version_str}.aar".format(**locals())
 
         with lcd(env.public_repo_path):
+            # remove old everything
+            local("rm -rf * .gitignore")
+            local("mkdir aars")
+            local("cp {release_path} aars/{dest_file_name}".format(**locals()))
+
             # update .md files with those in repo
-            local("rm *.md")
             local("cp " + os.path.join(env.top_root, "sdk") + "/*.md .")
 
             # update sample app
-            local("rm -rf SampleApp")
             local("cp -R " + os.path.join(env.top_root, "SampleApp") + " .")
-            dist_zip.extractall(path=env.public_repo_sample_app_path)
+            local("mkdir SampleApp/aars")
+            local(("cp aars/{dest_file_name} SampleApp/aars/").format(**locals()))
+            
+            local("sed -i '' '/REMOVE_THIS_LINE_TO_RELEASE/d' ./SampleApp/build.gradle")
+            local("sed -i '' 's/card.io-version/card.io-{version_str}/g' ./SampleApp/build.gradle".format(**locals()))
 
-            #add everything to git
+            # add everything to git
             local("git add .")
             local("git add -u .")
 
+        _confirm_tag_overwrite(env.public_repo_path, version_str)
+
+        with lcd(env.public_repo_path):
+            local("git tag -f {0}".format(version_str))
+
     print
-    io.success("Success!")
+    print(colors.white("Success!"))
     print "The distribution files are now available in {public_repo_path}".format(**env)
+    print
+    print "Commit proguard-data"
+    print "Verify and merge back to master"
     print
 
 
@@ -148,3 +126,15 @@ def _get_release_version():
             abort("cannot extract release version from branch.  Be sure you're on a branch with format \"release/1.1.1\"")
         version_str = describe_results.rsplit("/", 1)[1]
         return version_str
+
+
+def _confirm_tag_overwrite(repo, tag):
+    with settings(hide(*env.to_hide)):
+        git_list_tag_command = 'git tag -l'
+        with lcd(repo):
+            tag_results = local(git_list_tag_command, capture=True)
+            for row in tag_results.split('\n'):
+                if tag == row:
+                    print(colors.yellow("Tag {tag} already present in {repo}.".format(**locals())))
+                    if not confirm("Proceed with overwriting tag?"):
+                        abort("Tag not overwritten, aborted. ")
