@@ -9,7 +9,7 @@ android:
     - build-tools-21.1.2
 
 before_install:
-  - export ANDROID_HOME=/usr/local/android-sdk/tools/android
+  - export ANDROID_HOME=/usr/local/android-sdk
   # newest Android NDK
   - if [ `uname -m` = x86_64]; then wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86_64.bin -O ndk.bin; else wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86.bin -O ndk.bin; fi
   - sudo apt-get install -y p7zip-full
