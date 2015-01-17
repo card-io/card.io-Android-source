@@ -19,5 +19,6 @@ before_install:
   # manually set sdk.dir variable, according to local paths
   - echo "sdk.dir=$ANDROID_HOME" > local.properties
   - echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties
+  - sudo apt-get install -y libncurses5-dbg #this may fix a problem running clang++
 
 script: ./gradlew clean :card.io:assembleRelease releaseDoc
