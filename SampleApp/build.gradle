@@ -51,9 +51,10 @@ android {
 }
 
 dependencies {
-    compile project (':card.io') /* REMOVE_THIS_LINE_TO_RELEASE */
-    /* REMOVE_THIS_LINE_TO_RELEASE
-    compile(name:'card.io-version', ext:'aar')
-    /* REMOVE_THIS_LINE_TO_RELEASE */
+    if (parent != null) {
+        compile project (':card.io')
+    } else {
+        compile(name: 'card.io-REPLACE_VERSION', ext: 'aar')
+    }
 }
 

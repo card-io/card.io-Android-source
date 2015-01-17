@@ -93,9 +93,8 @@ def sdk_release():
             local("cp -R " + os.path.join(env.top_root, "SampleApp") + " .")
             local("mkdir SampleApp/aars")
             local(("cp aars/{dest_file_name} SampleApp/aars/").format(**locals()))
-            
-            local("sed -i '' '/REMOVE_THIS_LINE_TO_RELEASE/d' ./SampleApp/build.gradle")
-            local("sed -i '' 's/card.io-version/card.io-{version_str}/g' ./SampleApp/build.gradle".format(**locals()))
+
+            local("sed -i '' 's/card.io-REPLACE_VERSION/card.io-{version_str}/g' ./SampleApp/build.gradle".format(**locals()))
 
             # add everything to git
             local("git add .")
