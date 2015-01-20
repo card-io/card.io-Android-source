@@ -178,6 +178,13 @@ public final class CardIOActivity extends Activity {
      */
     public static final String EXTRA_SCAN_OVERLAY_LAYOUT_ID = "io.card.payment.scanOverlayLayoutId";
 
+    /**
+     * Boolean extra. Optional. Use the PayPal icon in the ActionBar.
+     */
+    public static final String EXTRA_USE_PAYPAL_ACTIONBAR_ICON =
+            "io.card.payment.intentSenderIsPayPal";
+
+
     /** Boolean extra. Used for testing only. */
     static final String PRIVATE_EXTRA_CAMERA_BYPASS_TEST_MODE = "io.card.payment.cameraBypassTestMode";
 

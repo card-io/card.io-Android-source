@@ -36,7 +36,6 @@ import io.card.payment.CreditCard;
 import io.card.payment.i18n.StringKey;
 import io.card.payment.i18n.SupportedLocale;
 import io.card.payment.i18n.locales.LocalizedStringsList;
-import io.card.payment.ui.UICommonIntentExtras;
 
 public class CardIOSimpleExampleActivity extends Activity {
     protected static final String TAG = CardIOSimpleExampleActivity.class.getSimpleName();
@@ -213,7 +212,7 @@ public class CardIOSimpleExampleActivity extends Activity {
 
         intent.putExtra(CardIOActivity.EXTRA_LANGUAGE_OR_LOCALE,
                 null == selectedLanguageOrLocale ? null : selectedLanguageOrLocale.toString());
-        intent.putExtra(UICommonIntentExtras.EXTRA_USE_PAYPAL_ACTIONBAR_ICON,
+        intent.putExtra(CardIOActivity.EXTRA_USE_PAYPAL_ACTIONBAR_ICON,
                 mShowPayPalActionBarIconToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_GUIDE_COLOR, guideColor);
         intent.putExtra(CardIOActivity.EXTRA_SUPPRESS_CONFIRMATION,

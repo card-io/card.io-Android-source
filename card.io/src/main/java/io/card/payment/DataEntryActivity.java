@@ -36,7 +36,6 @@ import io.card.payment.i18n.StringKey;
 import io.card.payment.ui.ActivityHelper;
 import io.card.payment.ui.Appearance;
 import io.card.payment.ui.Images;
-import io.card.payment.ui.UICommonIntentExtras;
 import io.card.payment.ui.ViewUtil;
 
 /**
@@ -80,7 +79,6 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
     private String labelLeftPadding;
 
     private final String TAG = this.getClass().getName();
-    private boolean usePayPalActionBarIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +94,8 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             throw new IllegalStateException("Didn't find any extras!");
 
         LocalizedStrings.setLanguage(getIntent());
-        usePayPalActionBarIcon = extras
-                .getBoolean(UICommonIntentExtras.EXTRA_USE_PAYPAL_ACTIONBAR_ICON);
+        boolean usePayPalActionBarIcon = extras
+                .getBoolean(CardIOActivity.EXTRA_USE_PAYPAL_ACTIONBAR_ICON);
 
         int paddingPx = ViewUtil.typedDimensionValueToPixelsInt(PADDING_DIP, this);
 
