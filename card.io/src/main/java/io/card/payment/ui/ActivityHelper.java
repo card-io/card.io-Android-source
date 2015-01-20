@@ -103,15 +103,18 @@ public class ActivityHelper {
      * Theme_Holo_Light or Theme_Light, depending on OS support.
      *
      * @param activity
+     * @param useApplicationTheme
      */
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static void setActivityTheme(Activity activity) {
-        if (holoSupported()) {
+    public static void setActivityTheme(Activity activity, boolean useApplicationTheme) {
+
+        if(useApplicationTheme && 0 != activity.getApplicationInfo().theme) {
+            activity.setTheme(activity.getApplicationInfo().theme);
+        } else if (holoSupported()) {
             activity.setTheme(android.R.style.Theme_Holo_Light);
         } else {
             activity.setTheme(android.R.style.Theme_Light);
         }
     }
-
 }

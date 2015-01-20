@@ -59,6 +59,9 @@ public class MyScanActivity extends Activity
 		// if set, developers should provide their own manual entry mechanism in the app
 		scanIntent.putExtra(CardIOActivity.EXTRA_SUPPRESS_MANUAL_ENTRY, false); // default: false
 
+        // matches the theme of your application
+        scanIntent.putExtra(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME, true); // default: false
+
 		// MY_SCAN_REQUEST_CODE is arbitrary and is only used within this activity.
 		startActivityForResult(scanIntent, MY_SCAN_REQUEST_CODE);
 	}

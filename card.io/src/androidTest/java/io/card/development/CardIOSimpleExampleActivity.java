@@ -67,6 +67,7 @@ public class CardIOSimpleExampleActivity extends Activity {
     private int numAutotestsPassed;
     private CheckBox mUseCardIOLogoToggle;
     private CheckBox mShowPayPalActionBarIconToggle;
+    private CheckBox mKeepApplicationThemeToggle;
     private Spinner mLanguageSpinner;
 
     @Override
@@ -98,6 +99,7 @@ public class CardIOSimpleExampleActivity extends Activity {
 
         mUseCardIOLogoToggle = (CheckBox) findViewById(R.id.useCardIOLogo);
         mShowPayPalActionBarIconToggle = (CheckBox) findViewById(R.id.showPayPalActionBarIcon);
+        mKeepApplicationThemeToggle = (CheckBox) findViewById(R.id.keepApplicationTheme);
 
         mLanguageSpinner = (Spinner) findViewById(R.id.languageSpinner);
 
@@ -211,6 +213,8 @@ public class CardIOSimpleExampleActivity extends Activity {
                 null == selectedLanguageOrLocale ? null : selectedLanguageOrLocale.toString());
         intent.putExtra(CardIOActivity.EXTRA_USE_PAYPAL_ACTIONBAR_ICON,
                 mShowPayPalActionBarIconToggle.isChecked());
+        intent.putExtra(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME,
+                mKeepApplicationThemeToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_GUIDE_COLOR, guideColor);
         intent.putExtra(CardIOActivity.EXTRA_SUPPRESS_CONFIRMATION,
                 mSuppressConfirmationToggle.isChecked());

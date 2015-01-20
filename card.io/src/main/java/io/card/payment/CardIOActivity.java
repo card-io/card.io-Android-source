@@ -184,6 +184,12 @@ public final class CardIOActivity extends Activity {
     public static final String EXTRA_USE_PAYPAL_ACTIONBAR_ICON =
             "io.card.payment.intentSenderIsPayPal";
 
+    /**
+     * Boolean extra. Optional. If this value is set to <code>true</code>, and the application has a theme,
+     * the theme for the card.io {@link android.app.Activity}s will be set to the theme of the application.
+     */
+    public static final String EXTRA_KEEP_APPLICATION_THEME = "io.card.payment.keepApplicationTheme";
+
 
     /** Boolean extra. Used for testing only. */
     static final String PRIVATE_EXTRA_CAMERA_BYPASS_TEST_MODE = "io.card.payment.cameraBypassTestMode";
