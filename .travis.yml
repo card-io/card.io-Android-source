@@ -20,4 +20,4 @@ before_install:
   - echo "sdk.dir=$ANDROID_HOME" > local.properties
   - echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties
 
-script: ./gradlew clean :card.io:assembleRelease releaseDoc
+script: ./gradlew clean assembleDebug assembleDebugTest :card.io:assembleRelease releaseDoc
