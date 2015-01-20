@@ -46,7 +46,6 @@ public class CardIOSimpleExampleActivity extends Activity {
     private static int unique = 10; // bigger than known Android statuses
     static final int REQUEST_SCAN = unique++;
     static final int REQUEST_AUTOTEST = unique++;
-    static final int REQUEST_PLAYBACK_TEST = unique++;
 
     // UI elements
     private CheckBox mManualToggle;
@@ -57,9 +56,7 @@ public class CardIOSimpleExampleActivity extends Activity {
     private CheckBox mSuppressConfirmationToggle;
     private CheckBox mSuppressScanToggle;
     private int guideColor = Color.GREEN;
-    private View colorPickerDemoView;
 
-    // private ArrayList<CharSequence> mRecordingList;
     private Spinner mRecordingListSpinner;
 
     private TextView mResultLabel;
