@@ -55,26 +55,25 @@ import io.card.payment.ui.ViewUtil;
 public final class CardIOActivity extends Activity {
      /**
      * Boolean extra. Optional. Defaults to <code>false</code>. If set, the card will not be scanned
-     * with the camera. Does not apply to charge requests.
+     * with the camera.
      */
     public static final String EXTRA_NO_CAMERA = "io.card.payment.noCamera";
 
     /**
-     * Boolean extra. Optional. Defaults to <code>true</code>. Ignored for charge requests. If
+     * Boolean extra. Optional. Defaults to <code>true</code>. If
      * unset, expiry information will not be required.
      */
     public static final String EXTRA_REQUIRE_EXPIRY = "io.card.payment.requireExpiry";
 
     /**
      * Boolean extra. Optional. Defaults to <code>false</code>. If set, the user will be prompted
-     * for the card CVV. For charge requests with manual entry, the user is always prompted.
+     * for the card CVV.
      */
     public static final String EXTRA_REQUIRE_CVV = "io.card.payment.requireCVV";
 
     /**
      * Boolean extra. Optional. Defaults to <code>false</code>. If set, the user will be prompted
-     * for the card billing postal code. For charge requests with manual entry, the user is always
-     * prompted. 
+     * for the card billing postal code.
      */
     public static final String EXTRA_REQUIRE_POSTAL_CODE = "io.card.payment.requirePostalCode";
     
