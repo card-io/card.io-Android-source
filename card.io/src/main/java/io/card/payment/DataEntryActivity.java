@@ -35,7 +35,6 @@ import io.card.payment.i18n.LocalizedStrings;
 import io.card.payment.i18n.StringKey;
 import io.card.payment.ui.ActivityHelper;
 import io.card.payment.ui.Appearance;
-import io.card.payment.ui.Images;
 import io.card.payment.ui.ViewUtil;
 
 /**
@@ -370,7 +369,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
 
         Drawable icon = null;
         if (usePayPalActionBarIcon) {
-            Bitmap bitmap = ViewUtil.base64ToBitmap(Images.paypal_monogram_actionbar_icon, this,
+            Bitmap bitmap = ViewUtil.base64ToBitmap(Base64EncodedImages.paypal_monogram_actionbar_icon, this,
                     DisplayMetrics.DENSITY_HIGH);
             icon = new BitmapDrawable(this.getResources(), bitmap);
         }
