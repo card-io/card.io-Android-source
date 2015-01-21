@@ -96,9 +96,10 @@ def sdk_release():
 
             local("sed -i '' 's/card.io-REPLACE_VERSION/card.io-{version_str}/g' ./SampleApp/build.gradle".format(**locals()))
 
-            # add everything to git
+            # add everything to git and commit
             local("git add .")
             local("git add -u .")
+            local("git commit -am \"Update library to {version_str}\"".format(**locals()))
 
         _confirm_tag_overwrite(env.public_repo_path, version_str)
 

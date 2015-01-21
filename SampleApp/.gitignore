@@ -30,3 +30,5 @@ local.properties
 
 # Misc
 .DS_Store
+
+example.keystore
