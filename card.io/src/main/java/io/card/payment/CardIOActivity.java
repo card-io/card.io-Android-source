@@ -48,7 +48,7 @@ import io.card.payment.ui.Appearance;
 import io.card.payment.ui.ViewUtil;
 
 /**
- * This is the entry point {@link android.app.Activity} for a card.io client to use the <a href="https://card.io">card.io</a> service.
+ * This is the entry point {@link android.app.Activity} for a card.io client to use <a href="https://card.io">card.io</a>.
  * 
  * @version 1.0
  */
@@ -76,12 +76,6 @@ public final class CardIOActivity extends Activity {
      * for the card billing postal code.
      */
     public static final String EXTRA_REQUIRE_POSTAL_CODE = "io.card.payment.requirePostalCode";
-    
-    /**
-     * Equivalent to {@link #EXTRA_REQUIRE_POSTAL_CODE}
-     */
-    @Deprecated
-    public static final String EXTRA_REQUIRE_ZIP = EXTRA_REQUIRE_POSTAL_CODE;
 
     /**
      * Boolean extra. Optional. Defaults to <code>false</code>. If set, the card.io logo will be
@@ -616,16 +610,6 @@ public final class CardIOActivity extends Activity {
             Log.w(TAG, "RuntimeException accessing Util.hardwareSupported()");
             return false;
         }
-    }
-
-    /**
-     * @param context
-     *            ignored
-     * @return {@link #canReadCardWithCamera()}
-     */
-    @Deprecated
-    public static boolean canReadCardWithCamera(@SuppressWarnings("unused") Context context) {
-        return canReadCardWithCamera();
     }
 
     /**
