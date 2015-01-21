@@ -18,9 +18,7 @@ import android.widget.TextView;
 public class ActivityHelper {
     /**
      * Request the ActionBar window feature if we are on a supported Android
-     * version. This should be called before the activity's setContentView. See
-     * also {@link #setupActionBarIfSupported(Activity, int)}, which sets the
-     * ActionBar appearance.
+     * version. This should be called before the activity's setContentView.
      *
      * @param activity
      */

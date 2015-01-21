@@ -6,19 +6,11 @@ package io.card.payment;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
- * Describes a credit card within the Card.IO system.
+ * Describes a credit card.
  * 
  * @version 2.0
  */
@@ -66,60 +58,6 @@ public class CreditCard implements Parcelable {
     public CreditCard() {
         xoff = new int[16];
         scanId = UUID.randomUUID().toString();
-    }
-
-    CreditCard(String json) {
-        // Note that we ignore offset results returned from the server since we don't really use
-        // them.
-
-        // don't log JSON unless necessary -- contains card numbers
-        // Log.d(TAG,"parsing JSON: " + json);
-
-        if (json == null || json.length() == 0)
-            return;
-
-        try {
-            JSONObject jo = new JSONObject(json);
-
-            cardNumber = jo.optString("numbers");
-            Log.d(TAG, "- number: " + getRedactedCardNumber());
-
-            JSONArray expo = jo.optJSONArray("expiry");
-
-            if (expo != null && expo.length() == 2) {
-                expiryYear = expo.getInt(0);
-                Log.d(TAG, "- year: " + expiryYear);
-
-                expiryMonth = expo.getInt(1);
-                Log.d(TAG, "- month: " + expiryMonth);
-            }
-
-            flipped = jo.optBoolean("is_flipped");
-            Log.d(TAG, "- isFlipped: " + flipped);
-
-            scanId = jo.optString("scan_id");
-            Log.d(TAG, "- scanId: " + scanId);
-
-            yoff = jo.optInt("y_offset");
-
-            JSONArray ja = jo.optJSONArray("x_offsets");
-
-            xoff = new int[ja.length()];
-
-            for (int i = 0; i < ja.length(); i++) {
-                xoff[i] = ja.getInt(i);
-            }
-
-        } catch (Exception e) {
-            Log.w(TAG, "error parsing credit card response: ", e);
-            // the info is read in order of importance, so if something is missing, we're probably
-            // ok, but we should check the card number
-            if (cardNumber != null
-                    && (cardNumber.length() < 15 || !CreditCardNumber
-                            .passesLuhnChecksum(cardNumber))) {
-                cardNumber = null;
-            }
-        }
     }
 
     public CreditCard(String number, int month, int year, String code, String postalCode) {
@@ -218,37 +156,10 @@ public class CreditCard implements Parcelable {
     }
 
     /**
-     * @return A list of {@link NameValuePair}s for submitting to the charge server.
-     */
-    List<NameValuePair> toNameValueList() {
-        List<NameValuePair> result = new ArrayList<NameValuePair>();
-        result.add(new BasicNameValuePair("card_number", cardNumber));
-        if (expiryMonth > 0 && expiryYear > 0) {
-            result.add(new BasicNameValuePair("card_exp_month", String.valueOf(expiryMonth)));
-            result.add(new BasicNameValuePair("card_exp_year", String.valueOf(expiryYear)));
-        }
-        if (cvv != null) {
-            result.add(new BasicNameValuePair("card_cvv", cvv));
-        }
-        if (postalCode != null) {
-            result.add(new BasicNameValuePair("card_postal_code", postalCode));
-        }
-        if (scanId != null) {
-            result.add(new BasicNameValuePair("scan_id", scanId));
-        }
-
-        return result;
-    }
-
-    /**
      * @return <code>true</code> indicates a current, valid date.
      */
     public boolean isExpiryValid() {
         return CreditCardNumber.isDateValid(expiryMonth, expiryYear);
-    }
-
-    boolean failed() {
-        return (cardNumber == null || cardNumber.length() == 0);
     }
 
     /**

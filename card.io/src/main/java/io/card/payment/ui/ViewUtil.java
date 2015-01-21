@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  */
 public class ViewUtil {
     /**
-     * Wrapper to only use the deprecated {@link #setBackgroundDrawable} on
+     * Wrapper to only use the deprecated {@link View#setBackgroundDrawable} on
      * older systems.
      *
      * @param v

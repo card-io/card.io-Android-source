@@ -5,7 +5,6 @@ package io.card.payment.ui;
  */
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
@@ -87,10 +86,6 @@ public class Appearance {
     // elements must be padded by this amount for proper alignment. The width of the focus box is
     // calculated at half of this padding amount.
     public static final String FOCUS_BORDER_PADDING = "4dip";
-
-    public static final ColorStateList TEXT_COLOR_LINK = new ColorStateList(new int[][] {
-            BUTTON_STATE_PRESSED, BUTTON_STATE_NORMAL }, new int[] {
-            BUTTON_PRIMARY_PRESSED_COLOR, BUTTON_PRIMARY_NORMAL_COLOR });
 
 
     public static Drawable buttonBackgroundPrimary(Context context) {

@@ -268,24 +268,6 @@ public class I18nManager<E extends Enum<?>> {
         return s;
     }
 
-    /**
-     * Returns the localized string of this error.
-     *
-     * @param errorCode The code with which to check
-     * @param defaultStringKey The Key to use if the errorCode is not found
-     * within the list of known codes.
-     * @return
-     */
-    public String getErrorString(String errorCode, E defaultStringKey) {
-        String err = currentLocale.getError(errorCode);
-        if (err != null) {
-            return err;
-        } else {
-            // just tell the user the code
-            return String.format(getString(defaultStringKey), errorCode);
-        }
-    }
-
     public List<String> getSupportedLocales() {
         return new ArrayList<String>(supportedLocales.keySet());
     }
