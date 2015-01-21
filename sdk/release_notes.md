@@ -3,13 +3,15 @@ card.io Android SDK change log and release notes
 
 4.0.0
 -----
-* Distribute .aar file
+* Distribute .aar file instead of .jar and .so files
 * New extras on CardIOActivity
   - `EXTRA_SCAN_INSTRUCTIONS`
   - `EXTRA_HIDE_CARDIO_LOGO`
   - `EXTRA_SCAN_OVERLAY_LAYOUT_ID`
   - `EXTRA_SUPPRESS_SCAN`
   - `EXTRA_RETURN_CARD_IMAGE`
+  - `EXTRA_KEEP_APPLICATION_THEME`
+  - `EXTRA_USE_PAYPAL_ACTIONBAR_ICON`
 * New extra `EXTRA_CAPTURED_CARD_IMAGE` returned to calling Activity 
 * New class `BuildConfig`
 
