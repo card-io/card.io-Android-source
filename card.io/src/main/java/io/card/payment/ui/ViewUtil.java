@@ -36,16 +36,16 @@ public class ViewUtil {
      * Wrapper to only use the deprecated {@link View#setBackgroundDrawable} on
      * older systems.
      *
-     * @param v
-     * @param d
+     * @param view
+     * @param drawable
      */
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public static void setBackground(View v, Drawable d) {
+    public static void setBackground(View view, Drawable drawable) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            v.setBackground(d);
+            view.setBackground(drawable);
         } else {
-            v.setBackgroundDrawable(d);
+            view.setBackgroundDrawable(drawable);
         }
     }
 
@@ -145,31 +145,31 @@ public class ViewUtil {
         params.height = height;
     }
 
-    public static void styleAsButton(View v, boolean primary, Context context) {
-        setDimensions(v, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        setPadding(v, "10dip", "0dip", "10dip", "0dip");
+    public static void styleAsButton(View view, boolean primary, Context context) {
+        setDimensions(view, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        setPadding(view, "10dip", "0dip", "10dip", "0dip");
         setBackground(
-                v,
+                view,
                 primary ? Appearance.buttonBackgroundPrimary(context) : Appearance
                         .buttonBackgroundSecondary(context));
 
-        v.setFocusable(true);
+        view.setFocusable(true);
 
-        v.setMinimumHeight(ViewUtil.typedDimensionValueToPixelsInt(
+        view.setMinimumHeight(ViewUtil.typedDimensionValueToPixelsInt(
                 Appearance.BUTTON_HEIGHT, context));
-        if (v instanceof TextView) {
-            styleAsButtonText((TextView) v);
+        if (view instanceof TextView) {
+            styleAsButtonText((TextView) view);
         }
-        if (!(v instanceof Button)) {
-            v.setClickable(true);
+        if (!(view instanceof Button)) {
+            view.setClickable(true);
         }
     }
 
-    public static void styleAsButtonText(TextView v) {
-        v.setGravity(Gravity.CENTER);
-        v.setTextColor(Appearance.TEXT_COLOR_BUTTON);
-        v.setTextSize(Appearance.TEXT_SIZE_BUTTON);
-        v.setTypeface(Appearance.TYPEFACE_BUTTON);
+    public static void styleAsButtonText(TextView textView) {
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(Appearance.TEXT_COLOR_BUTTON);
+        textView.setTextSize(Appearance.TEXT_SIZE_BUTTON);
+        textView.setTypeface(Appearance.TYPEFACE_BUTTON);
     }
 
     public static Bitmap base64ToBitmap(String base64Data, Context context) {
