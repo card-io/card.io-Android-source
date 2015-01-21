@@ -74,6 +74,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="PayPal icon in action bar" />
+
+        <CheckBox
+                android:id="@+id/keepApplicationTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Keep application theme" />
             
         <LinearLayout
             android:layout_width="match_parent"

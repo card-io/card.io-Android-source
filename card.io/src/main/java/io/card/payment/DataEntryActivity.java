@@ -84,14 +84,15 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(TAG, "onCreate");
 
-        ActivityHelper.setActivityTheme(this);
-        labelLeftPadding = ActivityHelper.holoSupported() ? LABEL_LEFT_PADDING_HOLO
-                : LABEL_LEFT_PADDING_DEFAULT;
-        super.onCreate(savedInstanceState);
-
         Bundle extras = getIntent().getExtras();
         if (extras == null)
             throw new IllegalStateException("Didn't find any extras!");
+
+        ActivityHelper.setActivityTheme(this, extras.getBoolean(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME));
+
+        labelLeftPadding = ActivityHelper.holoSupported() ? LABEL_LEFT_PADDING_HOLO
+                : LABEL_LEFT_PADDING_DEFAULT;
+        super.onCreate(savedInstanceState);
 
         LocalizedStrings.setLanguage(getIntent());
         boolean usePayPalActionBarIcon = extras
