@@ -36,7 +36,7 @@ public class MyScanActivity extends Activity
 	protected void onResume() {
 		super.onResume();
 
-		if (CardIOActivity.canReadCardWithCamera(this)) {
+		if (CardIOActivity.canReadCardWithCamera()) {
 			scanButton.setText("Scan a credit card with card.io");
 		}
 		else {
