@@ -6,13 +6,13 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 
 1. Make sure you're using NDK r10d!  Ndk 8 is broken for some devices.  
 
-1. Sanity check the develop branch.  
+1. Sanity check the master branch.  
 
-1. Run `./gradlew :card.io:assembleRelease releaseDoc`, and review the unobfuscated aar and javadocs for any anomalies.
+1. Run `./gradlew clean :card.io:assembleRelease releaseDoc`, and review the unobfuscated aar and javadocs for any anomalies.
  
-1. Deploy to a device and run a few sanity checks  (don't forget to do a release build!)
+1. Deploy release version of SampleApp with `./gradlew installRelease` to a device and run a few sanity checks.  You will have to generate keystores to do this.
 
-1. Run `git checkout -b release/1.2.3 develop` with a release version
+1. Run `git checkout -b release/1.2.3 master` with a release version
 
 1. Update `release_notes.md` and commit.
 
@@ -28,12 +28,6 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 1. Now push the changes to origin repo
 ```bash
     git push origin master --tags
-```
-1. Merge master to develop and push
-```bash
-    git checkout develop
-    git merge master
-    git push origin develop --tags
 ```
 1. Wait for tests to complete and let's release to public, check the diffs to verify all is good
 	1. Check the changes
