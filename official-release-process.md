@@ -16,9 +16,7 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 
 1. Update `release_notes.md` and commit.
 
-1. Run `fab sdk_reset`, it will reset the branches
-
-1. Run `fab sdk_release` it will build the sdk and prepare `distribution-repo` folder, it will also tag the release with a version you have created in step 0.
+1. Run `fab sdk_reset sdk_release`, it will reset the branches and build the sdk in the `distribution-repo` folder.  It will also tag the release.
 ```
 1. Switch to master and merge release branch
 ```bash
@@ -33,22 +31,17 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 	1. Check the changes
 	```bash
 	    cd distribution-repo
-	    git diff
+	    git show
 	```
-	2. Commit the changes
+	2. Push
 	```bash
-	    git commit -am "Update library to 1.2.3"
-	```
-	3. Tag commit and push
-	```bash
-	    git tag 1.2.3
 	    git push public master --tags
 	```
 
 1. Update javadocs
 	1. On public repo, checkout special gh branch called gh-pages:
 		2. `git checkout gh-pages`
-		2. Remove all files except README.md, so they can be replaced with new files.
+		2. ``` rm -rf `ls | grep -v *.md` ```
 	1. On private sdk rep, build javadoc and copy to public repo:
 		2. `./gradlew releaseDoc`
 		2. `cp -a card.io/build/docs/javadoc/release/* <public repo dir>`
@@ -58,5 +51,6 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 1. Check github that all is good.
 
 1. Post that a new release is available using the same format previously used to:
-	1. Twitter (username=cardio/password=_ask for password_)
-	2. Google Groups (send email to card-io-sdk-announce@googlegroups.com) 
+	1. https://github.com/card-io/card.io-Android-SDK/releases
+	2. Twitter (username=cardio/password=_ask for password_)
+	3. Google Groups (send email to card-io-sdk-announce@googlegroups.com) 
