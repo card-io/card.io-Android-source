@@ -8,9 +8,7 @@ buildscript {
 }
 
 repositories {
-    flatDir {
-        dirs 'aars'
-    }
+    mavenCentral()
 }
 
 apply plugin: 'com.android.application'
@@ -54,7 +52,7 @@ dependencies {
     if (parent != null) {
         compile project (':card.io')
     } else {
-        compile(name: 'card.io-REPLACE_VERSION', ext: 'aar')
+        compile 'io.card:android-sdk:REPLACE_VERSION'
     }
 }
 
