@@ -93,6 +93,7 @@ def sdk_release():
             local("cp -R " + os.path.join(env.top_root, "SampleApp") + " .")
 
             local("sed -i '' 's/io.card:android-sdk:REPLACE_VERSION/io.card:android-sdk:{version_str}/g' ./SampleApp/build.gradle".format(**locals()))
+            local("sed -i '' 's/io.card:android-sdk:REPLACE_VERSION/io.card:android-sdk:{version_str}/g' ./README.md".format(**locals()))
 
             # add everything to git and commit
             local("git add .")
