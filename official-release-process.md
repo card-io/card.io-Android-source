@@ -17,26 +17,31 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 1. Update `release_notes.md` and commit.
 
 1. Run `fab sdk_reset sdk_release`, it will reset the branches and build the sdk in the `distribution-repo` folder.  It will also tag the release.
-```
+
 1. Switch to master and merge release branch
-```bash
-    git checkout master
-    git merge --no-ff release/1.2.3
-```
+	```bash
+	    git checkout master
+	    git merge --no-ff release/1.2.3
+	```
+
 1. Now push the changes to origin repo
-```bash
-    git push origin master --tags
-```
+	```bash
+	    git push origin master --tags
+	```
+
 1. Wait for tests to complete and let's release to public, check the diffs to verify all is good
 	1. Check the changes
-	```bash
-	    cd distribution-repo
-	    git show
-	```
-	2. Push
-	```bash
-	    git push public master --tags
-	```
+		```
+		    cd distribution-repo;
+		    git show
+		```
+	2. Promote the repo in maven central
+	    2. Open [Sonatype](https://oss.sonatype.org/), and
+	    2. follow [these instructions](http://central.sonatype.org/pages/releasing-the-deployment.html)
+	3. Push
+		```
+		    git push public master --tags
+		```
 
 1. Update javadocs
 	1. On public repo, checkout special gh branch called gh-pages:
