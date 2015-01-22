@@ -27,7 +27,7 @@ def verbose(verbose=True):
 
 
 def build():
-    cmd = "./gradlew clean :card.io:assembleRelease releaseDoc"
+    cmd = "./gradlew clean :card.io:assembleRelease releaseDoc :card.io:uploadArchives"
 
     with lcd(env.top_root):
         local(cmd)
@@ -109,6 +109,7 @@ def sdk_release():
     print
     print(colors.white("Success!"))
     print "The distribution files are now available in {public_repo_path}".format(**env)
+    print "The aar file has been published to sonatype's mavenCentral staging repo.  Promote it!"
     print
     print "Commit proguard-data"
     print "Verify and merge back to master"
