@@ -179,6 +179,13 @@ android.libraryVariants.all { variant ->
                         developerConnection 'scm:git@github.com:card-io/card.io-Android-source.git'
                     }
 
+                    developers {
+                        developer {
+                            id 'brateman'
+                            name 'Jeff Brateman'
+                        }
+                    }
+
                     licenses {
                         license {
                             name 'MIT'
