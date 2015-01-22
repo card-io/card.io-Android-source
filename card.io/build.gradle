@@ -8,6 +8,9 @@ buildscript {
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
 
 repositories {
     mavenCentral()
@@ -88,6 +91,7 @@ dependencies {
 }
 
 
+// TODO remove the variant specific stuff from below - card.io doesn't have flavors
 
 // ----------------  Javadocs ---------------
 
@@ -128,5 +132,62 @@ android.libraryVariants.all { variant ->
         options.links("http://docs.oracle.com/javase/7/docs/api/")
         // enables links to Android docs.
         options.linksOffline("http://d.android.com/reference", "${sdkDir}/docs/reference")
+    }
+
+    task javadocJar(type: Jar, dependsOn: "${variantName}Doc") {
+        classifier = 'javadoc'
+        from releaseDoc.destinationDir
+    }
+
+    // ------- MavenCentral publishing
+
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+
+    artifacts {
+        archives javadocJar, sourcesJar
+    }
+
+    signing {
+        sign configurations.archives
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+                    authentication(userName: sonatypeUsername, password: sonatypePassword)
+                }
+
+                pom.setArtifactId 'android-sdk'
+
+                pom.project {
+                    name 'android-sdk'
+                    groupId = 'io.card'
+                    version = "${product_version}"
+                    packaging 'aar'
+                    description 'This is card.io\'s SDK for Android.'
+                    url 'https://github.com/card-io/card.io-Android-source/'
+
+                    scm {
+                        url 'scm:git@github.com:card-io/card.io-Android-source.git'
+                        connection 'scm:git@github.com:card-io/card.io-Android-source.git'
+                        developerConnection 'scm:git@github.com:card-io/card.io-Android-source.git'
+                    }
+
+                    licenses {
+                        license {
+                            name 'MIT'
+                            url 'http://opensource.org/licenses/MIT'
+                            distribution 'repo'
+                        }
+                    }
+                }
+            }
+        }
     }
 }
