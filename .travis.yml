@@ -23,5 +23,7 @@ before_install:
   # manually set sdk.dir variable, according to local paths
   - echo "sdk.dir=$ANDROID_HOME" > local.properties
   - echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties
+  - echo "sonatypeUsername=" > gradle.properties
+  - echo "sonatypePassword=" >> gradle.properties
 
 script: ./gradlew clean assembleDebug assembleDebugTest :card.io:assembleRelease releaseDoc

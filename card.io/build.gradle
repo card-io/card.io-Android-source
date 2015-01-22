@@ -160,6 +160,7 @@ android.libraryVariants.all { variant ->
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
                 repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+                    // these should be specified in the gradle.properties file
                     authentication(userName: sonatypeUsername, password: sonatypePassword)
                 }
 
@@ -196,5 +197,6 @@ android.libraryVariants.all { variant ->
                 }
             }
         }
+
     }
 }
