@@ -114,7 +114,9 @@ def sdk_release(is_upload_archives=True):
     print
     print(colors.white("Success!"))
     print "The distribution files are now available in {public_repo_path}".format(**env)
-    print "The aar file has been published to sonatype's mavenCentral staging repo.  Promote it!"
+    print 
+    if is_upload_archives == True:
+        print "The aar file has been published to sonatype's mavenCentral staging repo.  Promote it!"
     print
     print "Commit proguard-data"
     print "Verify and merge back to master"
