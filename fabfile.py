@@ -26,10 +26,16 @@ def verbose(verbose=True):
     env.verbose = verbose
 
 
-def build():
-    cmd = "./gradlew clean :card.io:assembleRelease releaseDoc :card.io:uploadArchives"
+def build(is_upload_archives):
+    cmd = "./gradlew clean :card.io:assembleRelease releaseDoc"
+
+    print is_upload_archives
+
+    if is_upload_archives == True:
+        cmd += " :card.io:uploadArchives"
 
     with lcd(env.top_root):
+        print "running " + cmd
         local(cmd)
 
 
@@ -58,7 +64,7 @@ def sdk_reset(warn_opt='warn'):
         local("git clean -x -d -f")
 
 
-def sdk_release():
+def sdk_release(is_upload_archives=True):
     """
     Build library into public/card.io-Android-SDK.
     """
@@ -74,7 +80,7 @@ def sdk_release():
     with settings(hide(*env.to_hide)):
         print(colors.blue("building sdk {version_str} ".format(**locals())))
 
-        execute(build)
+        build(is_upload_archives)
         print(colors.blue("extracting sdk {version_str} to public repo".format(**locals())))
 
         release_path = os.path.join(env.top_root, "card.io", "build", "outputs", "aar", "card.io-release.aar")
