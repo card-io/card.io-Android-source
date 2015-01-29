@@ -29,8 +29,6 @@ def verbose(verbose=True):
 def build(is_upload_archives):
     cmd = "./gradlew clean :card.io:assembleRelease releaseDoc"
 
-    print is_upload_archives
-
     if is_upload_archives == True:
         cmd += " :card.io:uploadArchives"
 
@@ -88,12 +86,13 @@ def sdk_release(is_upload_archives=True):
 
         with lcd(env.public_repo_path):
             # remove old everything
-            local("rm -rf * .gitignore")
+            local("rm -rf *")
             local("mkdir aars")
             local("cp {release_path} aars/{dest_file_name}".format(**locals()))
 
-            # update .md files with those in repo
-            local("cp " + os.path.join(env.top_root, "sdk") + "/*.md .")
+            # update all sdk files
+            local("cp -r " + os.path.join(env.top_root, "sdk") + "/* .")
+            local("cp -r " + os.path.join(env.top_root, "sdk") + "/.[!.]* .")
 
             # update sample app
             local("cp -R " + os.path.join(env.top_root, "SampleApp") + " .")
