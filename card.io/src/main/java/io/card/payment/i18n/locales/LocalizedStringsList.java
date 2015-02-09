@@ -19,7 +19,6 @@ public class LocalizedStringsList {
         ALL_LOCALES.add(new LocalizedStringsEN());
         ALL_LOCALES.add(new LocalizedStringsEN_AU());
         ALL_LOCALES.add(new LocalizedStringsEN_GB());
-        ALL_LOCALES.add(new LocalizedStringsEN_SE());
         ALL_LOCALES.add(new LocalizedStringsES());
         ALL_LOCALES.add(new LocalizedStringsES_MX());
         ALL_LOCALES.add(new LocalizedStringsFR());
