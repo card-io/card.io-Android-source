@@ -24,7 +24,7 @@ public class ActivityHelper {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static void addActionBarIfSupported(Activity activity) {
-        if (actionBarSupported(activity)) {
+        if (actionBarSupported()) {
             activity.requestWindowFeature(Window.FEATURE_ACTION_BAR);
         }
     }
@@ -46,7 +46,7 @@ public class ActivityHelper {
             titleTextViewPrefix = "";
         }
         activity.setTitle(titleTextViewPrefix + title);
-        if (actionBarSupported(activity)) {
+        if (actionBarSupported() && actionBarNonNull(activity)) {
             setupActionBar(activity, title, icon);
             if (titleTextView != null) {
                 titleTextView.setVisibility(View.GONE);
@@ -56,6 +56,11 @@ public class ActivityHelper {
                 titleTextView.setText(title);
             }
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private static boolean actionBarNonNull(Activity activity) {
+        return activity.getActionBar() != null;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -83,9 +88,8 @@ public class ActivityHelper {
         }
     }
 
-    private static boolean actionBarSupported(Activity activity) {
-        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB
-                && activity.getActionBar() != null;
+    private static boolean actionBarSupported() {
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
