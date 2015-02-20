@@ -16,7 +16,7 @@ class CreditCardNumber {
     /**
      * Checks if the given string represents a number that passes the Luhn Checksum which all valid
      * CCs will pass.
-     * 
+     *
      * @param number
      * @return true if the number does pass the checksum, else false
      */
@@ -38,9 +38,7 @@ class CreditCardNumber {
     }
 
     /**
-     * 
-     * @param numStr
-     *            the String of numbers to view
+     * @param numStr the String of numbers to view
      * @return null if numStr is not formattable by the known formatting rules
      */
 
@@ -94,19 +92,23 @@ class CreditCardNumber {
     }
 
     public static boolean isDateValid(int expiryMonth, int expiryYear) {
-        if (expiryMonth < 1 || 12 < expiryMonth)
+        if (expiryMonth < 1 || 12 < expiryMonth) {
             return false;
+        }
 
         Calendar now = Calendar.getInstance();
         int thisYear = now.get(Calendar.YEAR);
         int thisMonth = now.get(Calendar.MONTH) + 1;
 
-        if (expiryYear < thisYear)
+        if (expiryYear < thisYear) {
             return false;
-        if (expiryYear == thisYear && expiryMonth < thisMonth)
+        }
+        if (expiryYear == thisYear && expiryMonth < thisMonth) {
             return false;
-        if (expiryYear > thisYear + CreditCard.EXPIRY_MAX_FUTURE_YEARS)
+        }
+        if (expiryYear > thisYear + CreditCard.EXPIRY_MAX_FUTURE_YEARS) {
             return false;
+        }
 
         return true;
     }
@@ -114,8 +116,9 @@ class CreditCardNumber {
     public static boolean isDateValid(String dateString) {
         String digitsOnly = StringHelper.getDigitsOnlyString(dateString);
         SimpleDateFormat validDate = getDateFormatForLength(digitsOnly.length());
-        if (validDate == null)
+        if (validDate == null) {
             return false;
+        }
         try {
             validDate.setLenient(false);
             Date enteredDate = validDate.parse(digitsOnly);
@@ -130,14 +133,15 @@ class CreditCardNumber {
             return new SimpleDateFormat("MMyy");
         } else if (len == 6) {
             return new SimpleDateFormat("MMyyyy");
-        } else
+        } else {
             return null;
+        }
     }
 
     public static Date getDateForString(String dateString) {
         String digitsOnly = StringHelper.getDigitsOnlyString(dateString);
         SimpleDateFormat validDate = getDateFormatForLength(digitsOnly.length());
-        if (validDate != null)
+        if (validDate != null) {
             try {
                 validDate.setLenient(false);
                 Date date = validDate.parse(digitsOnly);
@@ -145,6 +149,7 @@ class CreditCardNumber {
             } catch (ParseException pe) {
                 return null;
             }
+        }
         return null;
     }
 }

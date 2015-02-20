@@ -35,7 +35,7 @@ class Util {
     public static boolean deviceSupportsTorch(Context context) {
         return !TORCH_BLACK_LISTED
                 && context.getPackageManager()
-                        .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
 
     @SuppressWarnings("rawtypes")
@@ -49,8 +49,9 @@ class Util {
             error = activityClass.getName()
                     + " requires attribute android:configChanges=\"orientation\"";
         }
-        if (error != null)
+        if (error != null) {
             Log.e(Util.PUBLIC_LOG_TAG, error);
+        }
         return error;
     }
 

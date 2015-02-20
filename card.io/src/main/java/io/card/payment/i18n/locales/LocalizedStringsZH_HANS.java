@@ -36,7 +36,7 @@ public class LocalizedStringsZH_HANS implements SupportedLocale<StringKey> {
         return mErrors.get(key);
     }
 
-    public LocalizedStringsZH_HANS(){
+    public LocalizedStringsZH_HANS() {
         mDisplay.put(StringKey.CANCEL, "取消");
         mDisplay.put(StringKey.CARDTYPE_AMERICANEXPRESS, "American Express");
         mDisplay.put(StringKey.CARDTYPE_DISCOVER, "Discover");

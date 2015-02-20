@@ -36,7 +36,7 @@ public class LocalizedStringsRU implements SupportedLocale<StringKey> {
         return mErrors.get(key);
     }
 
-    public LocalizedStringsRU(){
+    public LocalizedStringsRU() {
         mDisplay.put(StringKey.CANCEL, "Отмена");
         mDisplay.put(StringKey.CARDTYPE_AMERICANEXPRESS, "American Express");
         mDisplay.put(StringKey.CARDTYPE_DISCOVER, "Discover");

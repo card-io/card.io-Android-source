@@ -23,11 +23,11 @@ import java.util.Iterator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-/** 
- * Represents captured recording sequences. 
- * 
+/**
+ * Represents captured recording sequences.
+ * <p/>
  * Test recordings are fed directly into the video frame callback for testing of the vision pipeline.
- * 
+ * <p/>
  * This package should be striped from released code. (e.g. via Proguard)
  */
 
@@ -178,7 +178,7 @@ public class Recording implements Iterator<byte[]> {
     }
 
     private static ManifestEntry[] buildManifest(String manifestDirName, byte[] manifestData,
-            Hashtable<String, byte[]> recordingFiles) throws JSONException {
+                                                 Hashtable<String, byte[]> recordingFiles) throws JSONException {
         String manifestString = new String(manifestData);
         JSONArray manifestJson = new JSONArray(manifestString);
 

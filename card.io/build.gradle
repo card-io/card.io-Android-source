@@ -55,7 +55,7 @@ android {
         debug {
         }
 
-        release{
+        release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-build.cfg'
         }
@@ -80,7 +80,7 @@ android {
 
     tasks.whenTaskAdded { theTask ->
         if (theTask.name == "packageReleaseJniLibs"
-         || theTask.name == "packageDebugJniLibs") {
+                || theTask.name == "packageDebugJniLibs") {
             theTask.dependsOn(buildNative)
         }
     }
@@ -89,7 +89,6 @@ android {
 dependencies {
     androidTestCompile "com.jayway.android.robotium:robotium-solo:5.2.1"
 }
-
 
 // TODO remove the variant specific stuff from below - card.io doesn't have flavors
 

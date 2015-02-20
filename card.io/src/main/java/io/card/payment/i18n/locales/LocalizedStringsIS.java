@@ -36,7 +36,7 @@ public class LocalizedStringsIS implements SupportedLocale<StringKey> {
         return mErrors.get(key);
     }
 
-    public LocalizedStringsIS(){
+    public LocalizedStringsIS() {
         mDisplay.put(StringKey.CANCEL, "Hætta við");
         mDisplay.put(StringKey.CARDTYPE_AMERICANEXPRESS, "American Express");
         mDisplay.put(StringKey.CARDTYPE_DISCOVER, "Discover");

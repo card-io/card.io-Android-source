@@ -12,7 +12,8 @@ import io.card.payment.i18n.SupportedLocale;
 
 public class LocalizedStringsList {
     public static final List<SupportedLocale<StringKey>> ALL_LOCALES = new ArrayList<SupportedLocale<StringKey>>();
-    static{
+
+    static {
         ALL_LOCALES.add(new LocalizedStringsAR());
         ALL_LOCALES.add(new LocalizedStringsDA());
         ALL_LOCALES.add(new LocalizedStringsDE());

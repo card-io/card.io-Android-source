@@ -175,8 +175,9 @@ public class CardIOSimpleExampleActivityTest extends
         Iterator<View> iterator = viewList.iterator();
         while (iterator.hasNext()) {
             View view = iterator.next();
-            if (view.getClass().getName().equals("android.widget.Spinner"))
+            if (view.getClass().getName().equals("android.widget.Spinner")) {
                 spinnerList.add((Spinner) view);
+            }
         }
         return spinnerList;
     }
@@ -248,7 +249,7 @@ public class CardIOSimpleExampleActivityTest extends
 
             solo.assertCurrentActivity("Expected CardIOActivity (scan)", CardIOActivity.class);
             solo.sleep(1000);
-            CardIOActivity cardIOActivity = (CardIOActivity)(solo.getCurrentActivity());
+            CardIOActivity cardIOActivity = (CardIOActivity) (solo.getCurrentActivity());
             Rect torchRect = cardIOActivity.getTorchRect();
 
             if (torchRect != null) {

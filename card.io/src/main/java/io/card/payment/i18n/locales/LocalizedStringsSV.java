@@ -36,7 +36,7 @@ public class LocalizedStringsSV implements SupportedLocale<StringKey> {
         return mErrors.get(key);
     }
 
-    public LocalizedStringsSV(){
+    public LocalizedStringsSV() {
         mDisplay.put(StringKey.CANCEL, "Avbryt");
         mDisplay.put(StringKey.CARDTYPE_AMERICANEXPRESS, "American Express");
         mDisplay.put(StringKey.CARDTYPE_DISCOVER, "Discover");

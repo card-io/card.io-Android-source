@@ -7,7 +7,7 @@ package io.card.payment;
 /**
  * This exception is thrown when the camera cannot be opened for an unexpected reason. It should NOT
  * be used if the hardware is known to be unacceptable.
- * 
+ *
  * @version 1.0
  */
 public class CameraUnavailableException extends RuntimeException {

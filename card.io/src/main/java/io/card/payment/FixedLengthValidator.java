@@ -48,17 +48,19 @@ class FixedLengthValidator implements Validator {
         if (value != null && value.length() == requiredLength) {
             // Log.v(TAG, "number has length " + requiredLength);
             return true;
-        } else
+        } else {
             return false;
+        }
     }
 
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
-            int dend) {
-        if (end > 0 && dest.length() + dend - dstart + end > requiredLength)
+                               int dend) {
+        if (end > 0 && dest.length() + dend - dstart + end > requiredLength) {
             return "";
-        else
+        } else {
             return null;
+        }
     }
 
 }

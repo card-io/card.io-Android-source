@@ -36,8 +36,9 @@ class CardNumberValidator implements Validator {
             int s = spacerToDelete - 1;
             spacerToDelete = 0;
 
-            if (e > s)
+            if (e > s) {
                 source.delete(s, e);
+            }
         }
 
         for (int i = 0; i < source.length(); i++) {
@@ -64,8 +65,9 @@ class CardNumberValidator implements Validator {
 
     @Override
     public boolean hasFullLength() {
-        if (TextUtils.isEmpty(numberString))
+        if (TextUtils.isEmpty(numberString)) {
             return false;
+        }
 
         CardType type = CardType.fromCardNumber(numberString);
         return (numberString.length() == type.numberLength());
@@ -73,10 +75,12 @@ class CardNumberValidator implements Validator {
 
     @Override
     public boolean isValid() {
-        if (!this.hasFullLength())
+        if (!this.hasFullLength()) {
             return false;
-        if (!CreditCardNumber.passesLuhnChecksum(numberString))
+        }
+        if (!CreditCardNumber.passesLuhnChecksum(numberString)) {
             return false;
+        }
 
         // Log.v(TAG,"card number is valid");
         return true;
@@ -89,7 +93,7 @@ class CardNumberValidator implements Validator {
 
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
-            int dend) {
+                               int dend) {
         // Log.v(TAG, "filter(source:\"" + source + "\" start:" + start + " end:" + end + " dest:"
         // + dest + " dstart:" + dstart + " dend:" + dend + ")");
 
@@ -101,22 +105,25 @@ class CardNumberValidator implements Validator {
 
         // Log.v(TAG, "updatedDigits:" + updatedDigits + ",cardType:" + type + ",maxLength:"
         // + maxLength);
-        if (updatedDigits.length() > maxLength)
+        if (updatedDigits.length() > maxLength) {
             return "";
+        }
 
         SpannableStringBuilder result = new SpannableStringBuilder(source);
 
         int[] spacers;
-        if (maxLength == 15)
+        if (maxLength == 15) {
             spacers = AMEX_SPACER;
-        else
+        } else {
             spacers = NORMAL_SPACER;
+        }
 
         int replen = dend - dstart;
 
         for (int i = 0; i < spacers.length; i++) {
-            if (source.length() == 0 && dstart == spacers[i] && dest.charAt(dstart) == ' ')
+            if (source.length() == 0 && dstart == spacers[i] && dest.charAt(dstart) == ' ') {
                 spacerToDelete = spacers[i];
+            }
             if (dstart - replen <= spacers[i] && dstart + end - replen >= spacers[i]) {
                 int loc = spacers[i] - dstart;
                 if (loc == end || (0 <= loc && loc < end && result.charAt(loc) != ' ')) {

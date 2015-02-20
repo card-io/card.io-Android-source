@@ -7,7 +7,7 @@ buildscript {
     }
 }
 
-task assemble{}
+task assemble {}
 
 ext {
     compileSdkVersion = 21

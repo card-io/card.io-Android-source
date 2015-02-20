@@ -34,18 +34,21 @@ class ExpiryValidator implements Validator {
         fullLength = (s.length() >= 5);
 
         String dateStr = s.toString();
-        if (dateStr == null)
+        if (dateStr == null) {
             return;
+        }
 
         Date expiry = CreditCardNumber.getDateForString(dateStr);
-        if (expiry == null)
+        if (expiry == null) {
             return;
+        }
 
         month = expiry.getMonth() + 1; // Java months are 0-11
         year = expiry.getYear();
 
-        if (year < 1900)
+        if (year < 1900) {
             year += 1900;
+        }
     }
 
     @Override
@@ -71,13 +74,15 @@ class ExpiryValidator implements Validator {
 
     @Override
     public boolean isValid() {
-        if (month < 1 || 12 < month)
+        if (month < 1 || 12 < month) {
             return false;
+        }
 
         Date now = new Date();
 
-        if (year > 1900 + now.getYear() + 15)
+        if (year > 1900 + now.getYear() + 15) {
             return false;
+        }
 
         return (year > 1900 + now.getYear() || (year == 1900 + now.getYear() && month >= now
                 .getMonth() + 1));
@@ -85,7 +90,7 @@ class ExpiryValidator implements Validator {
 
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
-            int dend) {
+                               int dend) {
 
         // Log.v(TAG, "filter( source:"+source
         // + " start:" + start
@@ -119,19 +124,23 @@ class ExpiryValidator implements Validator {
                 .toString();
 
         if (updated.length() >= 1) {
-            if (updated.charAt(0) < '0' || '1' < updated.charAt(0))
+            if (updated.charAt(0) < '0' || '1' < updated.charAt(0)) {
                 return "";
+            }
         }
 
         if (updated.length() >= 2) {
-            if (updated.charAt(0) != '0' && updated.charAt(1) > '2')
+            if (updated.charAt(0) != '0' && updated.charAt(1) > '2') {
                 return "";
-            if (updated.charAt(0) == '0' && updated.charAt(1) == '0')
+            }
+            if (updated.charAt(0) == '0' && updated.charAt(1) == '0') {
                 return "";
+            }
         }
 
-        if (updated.length() > 5)
+        if (updated.length() > 5) {
             return "";
+        }
 
         return result;
     }

@@ -90,7 +90,6 @@ class Torch {
     }
 
     /**
-     * 
      * @return Path of width height 1 and width 0.65
      */
 

@@ -157,8 +157,9 @@ public class CardIOSimpleExampleActivity extends Activity {
 
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View content, int pos, long id) {
-                    if (pos <= 0)
+                    if (pos <= 0) {
                         return;
+                    }
 
                     String filename = String.valueOf(recordingNames.get(pos));
                     Log.i(TAG, "chose recording: " + filename);

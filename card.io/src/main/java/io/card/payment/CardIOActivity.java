@@ -48,12 +48,13 @@ import io.card.payment.ui.Appearance;
 import io.card.payment.ui.ViewUtil;
 
 /**
- * This is the entry point {@link android.app.Activity} for a card.io client to use <a href="https://card.io">card.io</a>.
- * 
+ * This is the entry point {@link android.app.Activity} for a card.io client to use <a
+ * href="https://card.io">card.io</a>.
+ *
  * @version 1.0
  */
 public final class CardIOActivity extends Activity {
-     /**
+    /**
      * Boolean extra. Optional. Defaults to <code>false</code>. If set, the card will not be scanned
      * with the camera.
      */
@@ -93,7 +94,7 @@ public final class CardIOActivity extends Activity {
     /**
      * Boolean extra. Optional. Defaults to <code>false</code>. Removes the keyboard button from the
      * scan screen.
-     * 
+     * <p/>
      * If scanning is unavailable, the {@link android.app.Activity} result will be {@link #RESULT_SCAN_NOT_AVAILABLE}.
      */
     public static final String EXTRA_SUPPRESS_MANUAL_ENTRY = "io.card.payment.suppressManual";
@@ -115,7 +116,7 @@ public final class CardIOActivity extends Activity {
      * specifying "en" on a device set to "English" and "United Kingdom" will result in "en_GB". <br/>
      * <br/>
      * These localizations are currently included: <br/>
-     * 
+     * <p/>
      * da, de, en, en_AU, en_GB, es, es_MX, fr, he, is, it, ja, ko, nb, nl, pl, pt, pt_BR, ru,
      * sv, tr, zh-Hans, zh-Hant, zh-Hant_TW.
      */
@@ -185,25 +186,28 @@ public final class CardIOActivity extends Activity {
     public static final String EXTRA_KEEP_APPLICATION_THEME = "io.card.payment.keepApplicationTheme";
 
 
-    /** Boolean extra. Used for testing only. */
+    /**
+     * Boolean extra. Used for testing only.
+     */
     static final String PRIVATE_EXTRA_CAMERA_BYPASS_TEST_MODE = "io.card.payment.cameraBypassTestMode";
 
     private static int lastResult = 0xca8d10; // arbitrary. chosen to be well above
-                                              // Activity.RESULT_FIRST_USER.
+    // Activity.RESULT_FIRST_USER.
     /**
      * result code supplied to {@link Activity#onActivityResult(int, int, Intent)} when a scan request completes.
      */
     public static final int RESULT_CARD_INFO = lastResult++;
 
     /**
-     * result code supplied to {@link Activity#onActivityResult(int, int, Intent)} when the user presses the cancel button.
+     * result code supplied to {@link Activity#onActivityResult(int, int, Intent)} when the user presses the cancel
+     * button.
      */
     public static final int RESULT_ENTRY_CANCELED = lastResult++;
 
     /**
      * result code indicating that scan is not available. Only returned when
      * {@link #EXTRA_SUPPRESS_MANUAL_ENTRY} is set and scanning is not available.
-     * 
+     * <p/>
      * This error can be avoided in normal situations by checking
      * {@link #canReadCardWithCamera()}.
      */
@@ -268,7 +272,8 @@ public final class CardIOActivity extends Activity {
 
     /**
      * Static variable for the decorated card image. This is ugly, but works. Parceling and
-     * unparceling card image data to pass to the next {@link android.app.Activity} does not work because the image data
+     * unparceling card image data to pass to the next {@link android.app.Activity} does not work because the image
+     * data
      * is too big and causes a somewhat misleading exception. Compressing the image data yields a
      * reduction to 30% of the original size, but still gives the same exception. An alternative
      * would be to persist the image data in a file. That seems like a pretty horrible idea, as we
@@ -315,7 +320,7 @@ public final class CardIOActivity extends Activity {
         errorMsg = Util.manifestHasConfigChange(resolveInfo, CardIOActivity.class);
         if (errorMsg != null) {
             throw new RuntimeException(errorMsg); // Throw the actual exception from this class, for
-                                                  // clarity.
+            // clarity.
         }
 
         suppressManualEntry = clientData.getBooleanExtra(EXTRA_SUPPRESS_MANUAL_ENTRY, false);
@@ -411,8 +416,9 @@ public final class CardIOActivity extends Activity {
     private void doOrientationChange(int orientation) {
         // Log.d(TAG, "onOrientationChanged(" + orientation + ")");
 
-        if (orientation < 0 || mCardScanner == null)
+        if (orientation < 0 || mCardScanner == null) {
             return;
+        }
 
         orientation += getRotationalOffset();
 
@@ -455,8 +461,8 @@ public final class CardIOActivity extends Activity {
 
     /**
      * @see <a
-     *      href="http://stackoverflow.com/questions/12216148/android-screen-orientation-differs-between-devices">SO
-     *      post</a>
+     * href="http://stackoverflow.com/questions/12216148/android-screen-orientation-differs-between-devices">SO
+     * post</a>
      */
     private int getRotationalOffset() {
         final int rotationOffset;
@@ -524,8 +530,9 @@ public final class CardIOActivity extends Activity {
 
         super.onPause();
 
-        if (orientationListener != null)
+        if (orientationListener != null) {
             orientationListener.disable();
+        }
         setFlashOn(false);
 
         if (mCardScanner != null) {
@@ -563,15 +570,16 @@ public final class CardIOActivity extends Activity {
             setResultAndFinish(resultCode, data);
 
         } else {
-            if (mUIBar != null)
+            if (mUIBar != null) {
                 mUIBar.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     /**
      * This {@link android.app.Activity} overrides back button handling to handle back presses properly given the
      * various states this {@link android.app.Activity} can be in.
-     * 
+     * <p/>
      * This method is called by Android, never directly by application code.
      */
     @Override
@@ -595,10 +603,10 @@ public final class CardIOActivity extends Activity {
 
     /**
      * Determine if the device supports card scanning.
-     * 
+     * <p/>
      * An ARM7 processor and Android SDK 8 or later are required. Additional checks for specific
      * misbehaving devices may also be added.
-     * 
+     *
      * @return <code>true</code> if camera is supported. <code>false</code> otherwise.
      */
     public static boolean canReadCardWithCamera() {
@@ -614,7 +622,7 @@ public final class CardIOActivity extends Activity {
 
     /**
      * Please include the return value of this method in any support requests.
-     * 
+     *
      * @return An string describing the version of the card.io library.
      */
     public static String sdkVersion() {
@@ -625,32 +633,33 @@ public final class CardIOActivity extends Activity {
     public static Date sdkBuildDate() {
         return new Date(BuildConfig.BUILD_TIME);
     }
-    
+
     /**
      * Utility method for decoding card bitmap
-     * 
-     * @param intent
-     *            - intent received in {@link Activity#onActivityResult(int, int, Intent)}
+     *
+     * @param intent - intent received in {@link Activity#onActivityResult(int, int, Intent)}
      * @return decoded bitmap or null
      */
     public static Bitmap getCapturedCardImage(Intent intent) {
-        if (intent == null || !intent.hasExtra(EXTRA_CAPTURED_CARD_IMAGE))
+        if (intent == null || !intent.hasExtra(EXTRA_CAPTURED_CARD_IMAGE)) {
             return null;
+        }
 
         byte[] imageData = intent.getByteArrayExtra(EXTRA_CAPTURED_CARD_IMAGE);
         ByteArrayInputStream inStream = new ByteArrayInputStream(imageData);
         Bitmap result = BitmapFactory.decodeStream(inStream, null, new BitmapFactory.Options());
         return result;
     }
-    
+
     // end static
 
     void onFirstFrame(int orientation) {
         Log.d(TAG, "mFirstPreviewFrame");
         SurfaceView sv = mPreview.getSurfaceView();
-        if (mOverlay != null)
+        if (mOverlay != null) {
             mOverlay.setCameraPreviewRect(new Rect(sv.getLeft(), sv.getTop(), sv.getRight(), sv
                     .getBottom()));
+        }
         mFrameOrientation = ORIENTATION_PORTRAIT;
         setDeviceDegrees(0);
 
@@ -721,8 +730,9 @@ public final class CardIOActivity extends Activity {
     private void nextActivity() {
         Log.d(TAG, "CardIOActivity.nextActivity()");
 
-        if (!scanAuthorized)
+        if (!scanAuthorized) {
             return;
+        }
 
         Intent origIntent = getIntent();
         if (origIntent != null && origIntent.getBooleanExtra(EXTRA_SUPPRESS_CONFIRMATION, false)) {
@@ -730,7 +740,7 @@ public final class CardIOActivity extends Activity {
             dataIntent.putExtra(EXTRA_SCAN_RESULT, mDetectedCard);
             mDetectedCard = null;
 
-            if ( origIntent.getBooleanExtra(EXTRA_RETURN_CARD_IMAGE, false)
+            if (origIntent.getBooleanExtra(EXTRA_RETURN_CARD_IMAGE, false)
                     && mOverlay != null && mOverlay.getBitmap() != null) {
                 ByteArrayOutputStream scaledCardBytes = new ByteArrayOutputStream();
                 mOverlay.getBitmap().compress(Bitmap.CompressFormat.JPEG, 80, scaledCardBytes);
@@ -762,7 +772,7 @@ public final class CardIOActivity extends Activity {
                     }
 
                     intent.putExtras(getIntent()); // passing on any received params (such as isCvv
-                                                   // and language)
+                    // and language)
                     intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
                             | Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivityForResult(intent, REQUEST_DATA_ENTRY);
@@ -877,7 +887,7 @@ public final class CardIOActivity extends Activity {
             if (scanInstructions != null) {
                 mOverlay.setScanInstructions(scanInstructions);
             }
-            
+
         }
 
         previewFrame.addView(mOverlay);
@@ -936,7 +946,7 @@ public final class CardIOActivity extends Activity {
         uiParams.setMargins(0, uiBarMarginPx, 0, uiBarMarginPx);
         mMainLayout.addView(mUIBar, uiParams);
 
-        if ( getIntent() != null) {
+        if (getIntent() != null) {
             if (customOverlayLayout != null) {
                 mMainLayout.removeView(customOverlayLayout);
                 customOverlayLayout = null;

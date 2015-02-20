@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 /**
  * This class is used for Robotium testing ONLY!
- * 
+ * <p/>
  * ALL classes that match *Tester are excluded from the library jar. As such, they should only be
  * accessed by reflection.
  */
@@ -35,8 +35,9 @@ public class CardScannerTester extends CardScanner {
     private Runnable frameRunner = new Runnable() {
         @Override
         public void run() {
-            if (!scanAllowed)
+            if (!scanAllowed) {
                 return;
+            }
             if (recording == null) {
                 Log.e(TAG, "null recording!");
                 return;
@@ -55,8 +56,9 @@ public class CardScannerTester extends CardScanner {
     private Runnable expireRunner = new Runnable() {
         @Override
         public void run() {
-            if (!scanAllowed)
+            if (!scanAllowed) {
                 return;
+            }
             mScanActivityRef.get().finish();
         }
     };

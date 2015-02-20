@@ -16,11 +16,11 @@ import java.nio.ByteBuffer;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-/** 
+/**
  * Describes metadata about test recordings.
- * 
+ * <p/>
  * Test recordings are fed directly into the video frame callback for testing of the vision pipeline.
- * 
+ * <p/>
  * This package should be striped from released code. (e.g. via Proguard)
  */
 
@@ -54,8 +54,9 @@ public class ManifestEntry {
                 break;
             }
         }
-        if (manifestKey == null)
+        if (manifestKey == null) {
             return null;
+        }
 
         String manifestDirName = manifestKey.substring(0, manifestKey.lastIndexOf("/"));
         String manifestString = new String(recordingData.get(manifestKey));
@@ -83,7 +84,7 @@ public class ManifestEntry {
     }
 
     public ManifestEntry(String manifestDirName, JSONObject data,
-            Hashtable<String, byte[]> recordingData) throws JSONException {
+                         Hashtable<String, byte[]> recordingData) throws JSONException {
         yFilename = data.getString("y_filename");
         cbFilename = data.getString("cb_filename");
         crFilename = data.getString("cr_filename");

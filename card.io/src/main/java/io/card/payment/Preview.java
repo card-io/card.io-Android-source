@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 /**
  * This class contains a SurfaceView, which is used to display the camera preview frames. It
  * performs basic layout and life cycle tasks for the camera and camera previews.
- * <p>
+ * <p/>
  * Technical note: display of camera preview frames will only work when there is a valid surface
  * view to display those frames on. To that end, I have added a valid surface flag that is updated
  * by surface view lifecycle callbacks. We only attempt (re-)start camera preview if there is a

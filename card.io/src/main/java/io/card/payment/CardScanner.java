@@ -22,25 +22,24 @@ import java.util.Map;
 
 /**
  * Encapsulates the core image scanning.
- * 
+ * <p/>
  * As of 7/20/12, the flow should be:
- * 
+ * <p/>
  * 1. CardIOActivity sets up the CardScanner, Preview and Overlay. 2. As each frame is received &
  * processed by the scanner, the scanner notifies the activity of any relevant changes. (e.g. edges
  * detected, scan complete etc.) 3. CardIOActivity passes on the information to the preview and
  * overlay, which can then update themselves as needed. 4. Once a result is reported, CardIOActivty
  * closes the scanner and launches the next activity.
- * 
+ * <p/>
  * HOWEVER, at the moment, the CardScanner is directly communicating with the Preview.
- * 
  */
 class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         SurfaceHolder.Callback {
     private static final String TAG = CardScanner.class.getSimpleName();
 
     private static final float MIN_FOCUS_SCORE = 6; // TODO - parameterize this
-                                                    // value based on phone? or
-                                                    // change focus behavior?
+    // value based on phone? or
+    // change focus behavior?
 
     private static final long AUTOFOCUS_TIMEOUT = 1000;
     private static final long MINIMUM_TIME_BETWEEN_DETECTIONS = 3000;
@@ -68,8 +67,8 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     private native void nGetGuideFrame(int orientation, int previewWidth, int previewHeight, Rect r);
 
     private native void nScanFrame(byte[] data, int frameWidth, int frameHeight, int orientation,
-            DetectionInfo dinfo, Bitmap resultBitmap);
-    
+                                   DetectionInfo dinfo, Bitmap resultBitmap);
+
     private native int nGetNumFramesScanned();
 
     private native void nCleanup();
@@ -205,7 +204,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         numAutoRefocus = 0;
         numManualTorchChange = 0;
         numAutoTorchChange = 0;
-        
+
         numFramesSkipped = 0;
 
         if (useCamera && mCamera == null) {
@@ -294,8 +293,9 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
 
         holder.addCallback(this);
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        if (useCamera)
+        if (useCamera) {
             mCamera.setPreviewCallbackWithBuffer(this);
+        }
 
         if (isSurfaceValid) {
             makePreviewGo(holder);
@@ -331,8 +331,9 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     }
 
     public void endScanning() {
-        if (mCamera != null)
+        if (mCamera != null) {
             pauseScanning();
+        }
         nCleanup();
 
         mPreviewBuffer = null;
@@ -406,18 +407,19 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         Log.d(TAG, "Preview.surfaceDestroyed()");
-        if (mCamera != null)
+        if (mCamera != null) {
             try {
                 mCamera.stopPreview();
             } catch (Exception e) {
                 Log.e(Util.PUBLIC_LOG_TAG, "error stopping camera", e);
             }
+        }
         isSurfaceValid = false;
     }
 
     /**
      * Handles processing of each frame.
-     * 
+     * <p/>
      * This method is called by Android, never directly by application code.
      */
     private static boolean processingInProgress = false;
@@ -436,8 +438,9 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             Log.e(TAG, "processing in progress.... dropping frame");
             // return frame buffer to pool
             numFramesSkipped++;
-            if (camera != null)
+            if (camera != null) {
                 camera.addCallbackBuffer(data);
+            }
             return;
         }
         processingInProgress = true;
@@ -465,8 +468,9 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         }
         // give the image buffer back to the camera, AFTER we're done reading
         // the image.
-        if (camera != null)
+        if (camera != null) {
             camera.addCallbackBuffer(data);
+        }
         processingInProgress = false;
 
     }
@@ -507,7 +511,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         analytics.put("num_frames_scanned", Integer.valueOf(nGetNumFramesScanned()));
         analytics.put("num_frames_skipped", Integer.valueOf(numFramesSkipped));
 
-        analytics.put("elapsed_time", Double.valueOf((System.currentTimeMillis() - captureStart)/1000));
+        analytics.put("elapsed_time", Double.valueOf((System.currentTimeMillis() - captureStart) / 1000));
 
         analytics.put("num_manual_refocusings", Integer.valueOf(numManualRefocus));
         analytics.put("num_auto_triggered_refocusings", Integer.valueOf(numAutoRefocus));
@@ -521,7 +525,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
 
     /**
      * Invoked when autoFocus is complete
-     * 
+     * <p/>
      * This method is called by Android, never directly by application code.
      */
     @Override
@@ -548,12 +552,11 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
 
     /**
      * Tell Preview's camera to trigger autofocus.
-     * 
-     * @param isManual
-     *            callback for when autofocus is complete
+     *
+     * @param isManual callback for when autofocus is complete
      */
     void triggerAutoFocus(boolean isManual) {
-        if (useCamera && !isAutoFocusing())
+        if (useCamera && !isAutoFocusing()) {
             try {
                 mAutoFocusStartedAt = System.currentTimeMillis();
                 mCamera.autoFocus(this);
@@ -565,26 +568,27 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             } catch (RuntimeException e) {
                 Log.w(TAG, "could not trigger auto focus: " + e);
             }
+        }
     }
 
     /**
      * Check if the flash is on.
-     * 
+     *
      * @return state of the flash.
      */
 
     public boolean isFlashOn() {
-        if (!useCamera)
+        if (!useCamera) {
             return false;
+        }
         Camera.Parameters params = mCamera.getParameters();
         return params.getFlashMode().equals(Parameters.FLASH_MODE_TORCH);
     }
 
     /**
      * Set the flash on or off
-     * 
-     * @param b
-     *            desired flash state
+     *
+     * @param b desired flash state
      * @return <code>true</code> if successful
      */
 

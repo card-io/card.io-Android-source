@@ -11,7 +11,7 @@ import java.util.UUID;
 
 /**
  * Describes a credit card.
- * 
+ *
  * @version 2.0
  */
 public class CreditCard implements Parcelable {
@@ -124,7 +124,7 @@ public class CreditCard implements Parcelable {
 
     /**
      * @return The card number string consisting of all but the last four digits replaced with
-     *         bullet ('\u2022').
+     * bullet ('\u2022').
      */
     public String getRedactedCardNumber() {
         if (cardNumber != null) {

@@ -173,25 +173,24 @@ public class I18nManager<E extends Enum<?>> {
     /**
      * Attempts to look up the locale based on the specifier. These are pretty
      * specific rules, so here's the summarized description from iOS:
-     *
+     * <p/>
      * Can be specified as a language code ("en", "fr", "zh-Hans", etc.) or as a
      * locale ("en_AU", "fr_FR", "zh-Hant_TW", etc.).
-     *
+     * <p/>
      * If the library does not contain localized strings for a specified locale,
      * then will fall back to the language.
-     *
+     * <p/>
      * E.g., "es_CO" -> "es".
-     *
+     * <p/>
      * If the library does not contain localized strings for a specified region,
      * then will fall back to American English.
-     *
+     * <p/>
      * If you specify only a language code, and that code matches the device's
      * currently preferred language, then the library will attempt to use the
      * device's current region as well.
-     *
+     * <p/>
      * E.g., specifying "en" on a device set to "English" and "United Kingdom"
      * will result in "en_GB".
-     *
      *
      * @param localeSpecifier
      * @return

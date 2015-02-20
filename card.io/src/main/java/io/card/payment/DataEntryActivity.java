@@ -39,7 +39,7 @@ import io.card.payment.ui.ViewUtil;
 
 /**
  * Activity responsible for entry of Expiry, CVV, Postal Code (and card number in manual case).
- * 
+ *
  * @version 2.0
  */
 public final class DataEntryActivity extends Activity implements TextWatcher {
@@ -84,8 +84,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         Log.v(TAG, "onCreate");
 
         Bundle extras = getIntent().getExtras();
-        if (extras == null)
+        if (extras == null) {
             throw new IllegalStateException("Didn't find any extras!");
+        }
 
         ActivityHelper.setActivityTheme(this, extras.getBoolean(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME));
 
@@ -424,8 +425,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         EditText et;
         while ((et = (EditText) findViewById(viewId++)) != null) {
             if (et.getText().length() == 0) {
-                if (et.requestFocus())
+                if (et.requestFocus()) {
                     return et;
+                }
             }
         }
         // all fields have content
@@ -448,12 +450,14 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
 
         if (numberEdit != null && et == numberEdit.getText()) {
             if (numberValidator.hasFullLength()) {
-                if (!numberValidator.isValid())
+                if (!numberValidator.isValid()) {
                     numberEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
-                else
+                } else {
                     advanceToNextEmptyField();
-            } else
+                }
+            } else {
                 numberEdit.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
+            }
 
             if (cvvEdit != null) {
                 CardType type = CardType.fromCardNumber(numberValidator.getValue().toString());
@@ -462,36 +466,36 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                 v.requiredLength = length;
                 cvvEdit.setHint(length == 4 ? "1234" : "123");
             }
-        }
-
-        else if (expiryEdit != null && et == expiryEdit.getText()) {
+        } else if (expiryEdit != null && et == expiryEdit.getText()) {
             if (expiryValidator.hasFullLength()) {
-                if (!expiryValidator.isValid())
+                if (!expiryValidator.isValid()) {
                     expiryEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
-                else
+                } else {
                     advanceToNextEmptyField();
-            } else
+                }
+            } else {
                 expiryEdit.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
-        }
-
-        else if (cvvEdit != null && et == cvvEdit.getText()) {
+            }
+        } else if (cvvEdit != null && et == cvvEdit.getText()) {
             if (cvvValidator.hasFullLength()) {
-                if (!cvvValidator.isValid())
+                if (!cvvValidator.isValid()) {
                     cvvEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
-                else
+                } else {
                     advanceToNextEmptyField();
-            } else
+                }
+            } else {
                 cvvEdit.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
-        }
-
-        else if (postalCodeEdit != null && et == postalCodeEdit.getText()) {
+            }
+        } else if (postalCodeEdit != null && et == postalCodeEdit.getText()) {
             if (postalCodeValidator.hasFullLength()) {
-                if (!postalCodeValidator.isValid())
+                if (!postalCodeValidator.isValid()) {
                     postalCodeEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
-                else
+                } else {
                     advanceToNextEmptyField();
-            } else
+                }
+            } else {
                 postalCodeEdit.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
+            }
         }
 
         this.validateAndEnableDoneButtonIfValid();

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.card.development" android:versionCode="2"
-    android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18" />
+          package="io.card.development" android:versionCode="2"
+          android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18"/>
 
     <!-- for robotium screen capture functionality -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -14,13 +14,14 @@
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
 
     <application
-        android:name="io.card.development.BuffaloApplication"
-        android:label="card.io demo"
-        android:theme="@android:style/Theme.Light">
-        <activity android:name="io.card.development.CardIOSimpleExampleActivity" android:icon="@drawable/buffalo_icon" android:label="card.io demo" >
+            android:name="io.card.development.BuffaloApplication"
+            android:label="card.io demo"
+            android:theme="@android:style/Theme.Light">
+        <activity android:name="io.card.development.CardIOSimpleExampleActivity" android:icon="@drawable/buffalo_icon"
+                  android:label="card.io demo">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
     </application>

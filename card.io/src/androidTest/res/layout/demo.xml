@@ -1,144 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/gatherExpiry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:checked="false"
-                android:text="Expiry" />
+                    android:id="@+id/gatherExpiry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.33"
+                    android:checked="false"
+                    android:text="Expiry"/>
 
             <CheckBox
-                android:id="@+id/gatherCvv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:checked="false"
-                android:text="CVV" />
+                    android:id="@+id/gatherCvv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.33"
+                    android:checked="false"
+                    android:text="CVV"/>
 
             <CheckBox
-                android:id="@+id/gatherPostalCode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:checked="false"
-                android:text="Postal Code" />
+                    android:id="@+id/gatherPostalCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.33"
+                    android:checked="false"
+                    android:text="Postal Code"/>
         </LinearLayout>
 
         <CheckBox
-            android:id="@+id/forceManual"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Force keyboard entry (bypass scan)" />
+                android:id="@+id/forceManual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Force keyboard entry (bypass scan)"/>
 
         <CheckBox
-            android:id="@+id/suppressManual"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Suppress keyboard number entry" />
-        
-        <CheckBox
-            android:id="@+id/suppressConfirmation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Suppress confirmation" />
+                android:id="@+id/suppressManual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Suppress keyboard number entry"/>
 
         <CheckBox
-            android:id="@+id/detectOnly"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Detect card-ish rectangle only" />
+                android:id="@+id/suppressConfirmation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Suppress confirmation"/>
 
         <CheckBox
-            android:id="@+id/useCardIOLogo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Use card.io logo" />
+                android:id="@+id/detectOnly"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Detect card-ish rectangle only"/>
 
         <CheckBox
-            android:id="@+id/showPayPalActionBarIcon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="PayPal icon in action bar" />
+                android:id="@+id/useCardIOLogo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Use card.io logo"/>
+
+        <CheckBox
+                android:id="@+id/showPayPalActionBarIcon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PayPal icon in action bar"/>
 
         <CheckBox
                 android:id="@+id/keepApplicationTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Keep application theme" />
-            
+                android:text="Keep application theme"/>
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-            
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
             <TextView
-                android:id="@+id/languageTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"     
-                android:gravity="center"
-                android:text="Language " />
+                    android:id="@+id/languageTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Language "/>
             <Spinner
-                android:id="@+id/languageSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                    android:id="@+id/languageSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
             <Button
-                android:id="@+id/demoButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.4"
-                android:onClick="onScanPressed"
-                android:text="Scan Credit Card using Card.io" />
+                    android:id="@+id/demoButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:onClick="onScanPressed"
+                    android:text="Scan Credit Card using Card.io"/>
 
             <Button
-                android:id="@+id/loopButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:onClick="onAutotestPressed"
-                android:text="Auto-test loop" />
+                    android:id="@+id/loopButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:onClick="onAutotestPressed"
+                    android:text="Auto-test loop"/>
         </LinearLayout>
 
         <Spinner
-            android:id="@+id/recordingSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
+                android:id="@+id/recordingSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
 
         <TextView
-            android:id="@+id/resultText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+                android:id="@+id/resultText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
         <ImageView
-            android:id="@+id/resultCardTypeImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        
+                android:id="@+id/resultCardTypeImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         <ImageView
-            android:id="@+id/resultImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+                android:id="@+id/resultImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </ScrollView>

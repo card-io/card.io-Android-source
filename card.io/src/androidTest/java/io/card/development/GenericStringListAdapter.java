@@ -14,14 +14,13 @@ import java.util.List;
 
 /**
  * TODO document this class
- * 
  */
 public class GenericStringListAdapter extends ArrayAdapter<String> {
     protected Activity m_activity;
     public List<String> m_list;
 
     public GenericStringListAdapter(Activity activity, int resource, int textViewResourceId,
-            List<String> x) {
+                                    List<String> x) {
         super(activity, resource, textViewResourceId, x);
         m_activity = activity;
         m_list = x;

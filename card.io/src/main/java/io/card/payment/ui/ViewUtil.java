@@ -29,7 +29,6 @@ import java.util.regex.Pattern;
 
 /**
  * Utility methods for altering views.
- *
  */
 public class ViewUtil {
     /**
@@ -177,7 +176,7 @@ public class ViewUtil {
     }
 
     public static Bitmap base64ToBitmap(String base64Data, Context context,
-            int displayMetricsDensity) {
+                                        int displayMetricsDensity) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         if (context != null) {
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();

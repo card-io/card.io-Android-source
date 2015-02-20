@@ -40,13 +40,14 @@ class NonEmptyValidator implements Validator {
     public boolean isValid() {
         if (value != null && value.length() > 0) {
             return true;
-        } else
+        } else {
             return false;
+        }
     }
 
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
-            int dend) {
+                               int dend) {
         return null;
     }
 

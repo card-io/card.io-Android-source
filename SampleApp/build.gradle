@@ -31,7 +31,7 @@ android {
             applicationIdSuffix ".debug"
         }
 
-        release{
+        release {
             minifyEnabled true
             proguardFile file('proguard.cfg')
             signingConfig signingConfigs.myConfig
@@ -50,7 +50,7 @@ android {
 
 dependencies {
     if (parent != null) {
-        compile project (':card.io')
+        compile project(':card.io')
     } else {
         compile 'io.card:android-sdk:REPLACE_VERSION'
     }

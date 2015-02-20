@@ -17,7 +17,6 @@ import android.graphics.drawable.shapes.RectShape;
 
 /**
  * Appearance constants and utilities
- * 
  */
 public class Appearance {
 
@@ -65,8 +64,8 @@ public class Appearance {
     // Text colors
 
     public static final int TEXT_COLOR_LIGHT = Color.parseColor("#515151"); // Style guide says
-                                                                            // #5e5e5d, but seems
-                                                                            // inconsistent
+    // #5e5e5d, but seems
+    // inconsistent
     public static final int TEXT_COLOR_EDIT_TEXT = Color.DKGRAY;
     public static final int TEXT_COLOR_ERROR = Color.parseColor("#b32317");
 
@@ -147,7 +146,7 @@ public class Appearance {
     }
 
     private static Drawable buttonFocused(int backgroundColor, int focusBoxColor,
-            float scaledBorderWidth) {
+                                          float scaledBorderWidth) {
         Drawable[] layers = new Drawable[3];
         layers[0] = new ColorDrawable(backgroundColor);
 

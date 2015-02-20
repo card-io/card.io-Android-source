@@ -30,40 +30,40 @@ import io.card.payment.i18n.StringKey;
 
 /**
  * This class implements a transparent overlay that is drawn over the raw camera capture frames.
- * <p>
+ * <p/>
  * OverlayView draws the guide frame which indicates to the user where to hold the card. For debug
  * builds, it also displays the frame rate and the focus score. Once a card is detected, the class
  * displays a still image of the card.
- * <p>
+ * <p/>
  * There are two stages of mark-up that are applied to the card image. When the image is first
  * passed into this class, a negative rounded rectangle mask is used to block out the image
  * background behind the rounded corners of the card. Then, a light gray rounded rectangle outline
  * is drawn along the card edges.
- * <p>
+ * <p/>
  * Once the digits are detected for the credit card number, those digits are drawn above the
  * respective digits of the card.
- * <p>
+ * <p/>
  * An instance of this class is created when the owning CardIOActivity is created. Its lifecycle is
  * the same as that of the owning activity.
- * <p>
- * <p>
+ * <p/>
+ * <p/>
  * A couple of technical notes:
- * <p>
+ * <p/>
  * the drawing code is not optimized for performance. It re-computes values for each frame that
  * could be cached instead (such as guide tick locations). However, I have measured performance for
  * the app, including drawing performance, and drawing is not at all a bottleneck. So, fixing this
  * seems like a low priority item.
- * <p>
+ * <p/>
  * It is not clear whether the rotation animation currently implemented is really needed. We should
  * figure out a strategy for this, and then change the code accordingly.
- * <p>
+ * <p/>
  * To prevent race conditions & memory leaks, setting new card images happens in the context of the
  * UI thread.
- * <p>
+ * <p/>
  * The class has an instance float field displayScale that holds the value screen dimensions are
  * scaled by. This field is used for instance to achieve consistent guide frame thickness
  * independent of screen scale.
- * <p>
+ * <p/>
  */
 class OverlayView extends View {
     private static final String TAG = OverlayView.class.getSimpleName();
@@ -239,8 +239,9 @@ class OverlayView extends View {
     public Bitmap getCardImage() {
         if (mBitmap != null && !mBitmap.isRecycled()) {
             return Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight());
-        } else
+        } else {
             return null;
+        }
     }
 
     // Drawing methods

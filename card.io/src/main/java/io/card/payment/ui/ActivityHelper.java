@@ -41,7 +41,7 @@ public class ActivityHelper {
      * @param icon
      */
     public static void setupActionBarIfSupported(Activity activity, TextView titleTextView,
-            String title, String titleTextViewPrefix, Drawable icon) {
+                                                 String title, String titleTextViewPrefix, Drawable icon) {
         if (titleTextViewPrefix == null) {
             titleTextViewPrefix = "";
         }
@@ -107,7 +107,7 @@ public class ActivityHelper {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static void setActivityTheme(Activity activity, boolean useApplicationTheme) {
 
-        if(useApplicationTheme && 0 != activity.getApplicationInfo().theme) {
+        if (useApplicationTheme && 0 != activity.getApplicationInfo().theme) {
             activity.setTheme(activity.getApplicationInfo().theme);
         } else if (holoSupported()) {
             activity.setTheme(android.R.style.Theme_Holo_Light);

@@ -36,7 +36,7 @@ public class LocalizedStringsZH_HANT implements SupportedLocale<StringKey> {
         return mErrors.get(key);
     }
 
-    public LocalizedStringsZH_HANT(){
+    public LocalizedStringsZH_HANT() {
         mDisplay.put(StringKey.CANCEL, "取消");
         mDisplay.put(StringKey.CARDTYPE_AMERICANEXPRESS, "美國運通");
         mDisplay.put(StringKey.CARDTYPE_DISCOVER, "Discover");
