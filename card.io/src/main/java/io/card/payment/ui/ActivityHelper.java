@@ -24,7 +24,7 @@ public class ActivityHelper {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static void addActionBarIfSupported(Activity activity) {
-        if (actionBarSupported()) {
+        if (actionBarSupported(activity)) {
             activity.requestWindowFeature(Window.FEATURE_ACTION_BAR);
         }
     }
@@ -46,7 +46,7 @@ public class ActivityHelper {
             titleTextViewPrefix = "";
         }
         activity.setTitle(titleTextViewPrefix + title);
-        if (actionBarSupported()) {
+        if (actionBarSupported(activity)) {
             setupActionBar(activity, title, icon);
             if (titleTextView != null) {
                 titleTextView.setVisibility(View.GONE);
@@ -83,12 +83,13 @@ public class ActivityHelper {
         }
     }
 
-    public static boolean actionBarSupported() {
-        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
+    private static boolean actionBarSupported(Activity activity) {
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB
+                && activity.getActionBar() != null;
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    public static void setActionBarHomeIcon(ActionBar bar, Drawable icon) {
+    private static void setActionBarHomeIcon(ActionBar bar, Drawable icon) {
         bar.setIcon(icon);
     }
 

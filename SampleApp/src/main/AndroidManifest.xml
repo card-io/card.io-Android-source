@@ -10,7 +10,8 @@
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
 
-    <application android:label="card.io example">
+    <application android:label="card.io example"
+            android:theme="@style/MyTheme">
         <activity android:name="MyScanActivity"
                   android:label="card.io example">
             <intent-filter>
