@@ -76,6 +76,8 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
 
     private boolean autoAcceptDone;
     private String labelLeftPadding;
+    private boolean useApplicationTheme;
+    private int defaultTextColor;
 
     private final String TAG = this.getClass().getName();
 
@@ -88,7 +90,10 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             throw new IllegalStateException("Didn't find any extras!");
         }
 
-        ActivityHelper.setActivityTheme(this, extras.getBoolean(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME));
+        useApplicationTheme = extras.getBoolean(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME);
+        ActivityHelper.setActivityTheme(this, useApplicationTheme);
+
+        defaultTextColor = new TextView(this).getTextColors().getDefaultColor();
 
         labelLeftPadding = ActivityHelper.holoSupported() ? LABEL_LEFT_PADDING_HOLO
                 : LABEL_LEFT_PADDING_DEFAULT;
@@ -101,7 +106,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         int paddingPx = ViewUtil.typedDimensionValueToPixelsInt(PADDING_DIP, this);
 
         RelativeLayout container = new RelativeLayout(this);
-        container.setBackgroundColor(Appearance.DEFAULT_BACKGROUND_COLOR);
+        if( !useApplicationTheme ) {
+            container.setBackgroundColor(Appearance.DEFAULT_BACKGROUND_COLOR);
+        }
         ScrollView scrollView = new ScrollView(this);
         scrollView.setId(viewIdCounter++);
         RelativeLayout.LayoutParams scrollParams = new RelativeLayout.LayoutParams(
@@ -142,7 +149,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
 
             activityTitleTextView = new TextView(this);
             activityTitleTextView.setTextSize(24);
-            activityTitleTextView.setTextColor(Appearance.PAY_BLUE_COLOR);
+            if(! useApplicationTheme ) {
+                activityTitleTextView.setTextColor(Appearance.PAY_BLUE_COLOR);
+            }
             mainLayout.addView(activityTitleTextView);
             ViewUtil.setPadding(activityTitleTextView, null, null, null,
                     Appearance.VERTICAL_SPACING);
@@ -156,7 +165,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             TextView numberLabel = new TextView(this);
             ViewUtil.setPadding(numberLabel, labelLeftPadding, null, null, null);
             numberLabel.setText(LocalizedStrings.getString(StringKey.ENTRY_CARD_NUMBER));
-            numberLabel.setTextColor(Appearance.TEXT_COLOR_LABEL);
+            if(! useApplicationTheme ) {
+                numberLabel.setTextColor(Appearance.TEXT_COLOR_LABEL);
+            }
             numberLayout.addView(numberLabel, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
             numberEdit = new EditText(this);
@@ -194,7 +205,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             expiryLayout.setOrientation(LinearLayout.VERTICAL);
 
             TextView expiryLabel = new TextView(this);
-            expiryLabel.setTextColor(Appearance.TEXT_COLOR_LABEL);
+            if(! useApplicationTheme ) {
+                expiryLabel.setTextColor(Appearance.TEXT_COLOR_LABEL);
+            }
             expiryLabel.setText(LocalizedStrings.getString(StringKey.ENTRY_EXPIRES));
             ViewUtil.setPadding(expiryLabel, labelLeftPadding, null, null, null);
 
@@ -239,7 +252,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             cvvLayout.setOrientation(LinearLayout.VERTICAL);
 
             TextView cvvLabel = new TextView(this);
-            cvvLabel.setTextColor(Appearance.TEXT_COLOR_LABEL);
+            if(! useApplicationTheme ) {
+                cvvLabel.setTextColor(Appearance.TEXT_COLOR_LABEL);
+            }
             ViewUtil.setPadding(cvvLabel, labelLeftPadding, null, null, null);
             cvvLabel.setText(LocalizedStrings.getString(StringKey.ENTRY_CVV));
 
@@ -278,7 +293,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             postalCodeLayout.setOrientation(LinearLayout.VERTICAL);
 
             TextView zipLabel = new TextView(this);
-            zipLabel.setTextColor(Appearance.TEXT_COLOR_LABEL);
+            if(! useApplicationTheme ) {
+                zipLabel.setTextColor(Appearance.TEXT_COLOR_LABEL);
+            }
             ViewUtil.setPadding(zipLabel, labelLeftPadding, null, null, null);
             zipLabel.setText(LocalizedStrings.getString(StringKey.ENTRY_POSTAL_CODE));
 
@@ -453,10 +470,11 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                 if (!numberValidator.isValid()) {
                     numberEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
                 } else {
+                    setDefaultColor(numberEdit);
                     advanceToNextEmptyField();
                 }
             } else {
-                numberEdit.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
+                setDefaultColor(numberEdit);
             }
 
             if (cvvEdit != null) {
@@ -471,34 +489,45 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                 if (!expiryValidator.isValid()) {
                     expiryEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
                 } else {
+                    setDefaultColor(expiryEdit);
                     advanceToNextEmptyField();
                 }
             } else {
-                expiryEdit.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
+                setDefaultColor(expiryEdit);
             }
         } else if (cvvEdit != null && et == cvvEdit.getText()) {
             if (cvvValidator.hasFullLength()) {
                 if (!cvvValidator.isValid()) {
                     cvvEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
                 } else {
+                    setDefaultColor(cvvEdit);
                     advanceToNextEmptyField();
                 }
             } else {
-                cvvEdit.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
+                setDefaultColor(cvvEdit);
             }
         } else if (postalCodeEdit != null && et == postalCodeEdit.getText()) {
             if (postalCodeValidator.hasFullLength()) {
                 if (!postalCodeValidator.isValid()) {
                     postalCodeEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
                 } else {
+                    setDefaultColor(postalCodeEdit);
                     advanceToNextEmptyField();
                 }
             } else {
-                postalCodeEdit.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
+                setDefaultColor(postalCodeEdit);
             }
         }
 
         this.validateAndEnableDoneButtonIfValid();
+    }
+
+    private void setDefaultColor(EditText editText) {
+        if (useApplicationTheme) {
+            editText.setTextColor(defaultTextColor);
+        } else {
+            editText.setTextColor(Appearance.TEXT_COLOR_EDIT_TEXT);
+        }
     }
 
     @Override
