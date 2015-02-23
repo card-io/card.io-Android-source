@@ -268,8 +268,6 @@ public final class CardIOActivity extends Activity {
 
     private boolean manualEntryFallbackOrForced = false;
 
-    private static boolean scanAuthorized = true;
-
     /**
      * Static variable for the decorated card image. This is ugly, but works. Parceling and
      * unparceling card image data to pass to the next {@link android.app.Activity} does not work because the image
@@ -350,7 +348,7 @@ public final class CardIOActivity extends Activity {
             }
         }
 
-        if (scanAuthorized && !manualEntryFallbackOrForced) {
+        if (!manualEntryFallbackOrForced) {
 
             try {
                 // Hide the window title.
@@ -392,7 +390,7 @@ public final class CardIOActivity extends Activity {
             }
         }
 
-        if (manualEntryFallbackOrForced || !scanAuthorized) {
+        if (manualEntryFallbackOrForced) {
             if (suppressManualEntry) {
                 Log.i(Util.PUBLIC_LOG_TAG, "Camera not available and manual entry suppressed.");
                 setResultAndFinish(RESULT_SCAN_NOT_AVAILABLE, null);
@@ -495,11 +493,6 @@ public final class CardIOActivity extends Activity {
 
         if (manualEntryFallbackOrForced) {
             nextActivity();
-            return;
-        }
-        if (!scanAuthorized) {
-            Log.e(Util.PUBLIC_LOG_TAG, "This app is not authorized to scan");
-            setResultAndFinish(Activity.RESULT_CANCELED, null);
             return;
         }
 
@@ -611,7 +604,7 @@ public final class CardIOActivity extends Activity {
      */
     public static boolean canReadCardWithCamera() {
         try {
-            return scanAuthorized && Util.hardwareSupported();
+            return Util.hardwareSupported();
         } catch (CameraUnavailableException e) {
             return false;
         } catch (RuntimeException e) {
@@ -711,7 +704,7 @@ public final class CardIOActivity extends Activity {
                 detectedBitmap.getHeight(), m, false);
         mOverlay.setBitmap(scaledCard);
 
-        if (mDetectOnly && scanAuthorized) {
+        if (mDetectOnly) {
 
             ByteArrayOutputStream scaledCardBytes = new ByteArrayOutputStream();
             scaledCard.compress(Bitmap.CompressFormat.JPEG, 80, scaledCardBytes);
@@ -729,10 +722,6 @@ public final class CardIOActivity extends Activity {
 
     private void nextActivity() {
         Log.d(TAG, "CardIOActivity.nextActivity()");
-
-        if (!scanAuthorized) {
-            return;
-        }
 
         Intent origIntent = getIntent();
         if (origIntent != null && origIntent.getBooleanExtra(EXTRA_SUPPRESS_CONFIRMATION, false)) {
