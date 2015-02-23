@@ -44,6 +44,7 @@ import java.util.Date;
 
 import io.card.payment.i18n.LocalizedStrings;
 import io.card.payment.i18n.StringKey;
+import io.card.payment.ui.ActivityHelper;
 import io.card.payment.ui.Appearance;
 import io.card.payment.ui.ViewUtil;
 
@@ -261,6 +262,7 @@ public final class CardIOActivity extends Activity {
 
     private RelativeLayout mUIBar;
     private FrameLayout mMainLayout;
+    private boolean useApplicationTheme;
 
     static private int numActivityAllocations = 0;
 
@@ -301,6 +303,8 @@ public final class CardIOActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         final Intent clientData = this.getIntent();
+
+        useApplicationTheme = clientData.getExtras().getBoolean(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME);
 
         LocalizedStrings.setLanguage(clientData);
 
