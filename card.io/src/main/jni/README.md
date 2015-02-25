@@ -21,4 +21,4 @@ Compiled OpenCV libs (libopencv_core.so and libopencv_imgproc.so) are kept in gi
 
 ### Compile
 
-If everything is set up properly, the NDK build will be invoked by gradle when card.io is built. But for debugging, you can use `ndk-build` to kick off just this portion of the build.
+If everything is set up properly, the NDK build will be invoked by gradle when card.io is built. But for debugging, you can use `./gradlew buildNative` to kick off just this portion of the build.
