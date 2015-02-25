@@ -41,15 +41,13 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     // value based on phone? or
     // change focus behavior?
 
-    private static final long AUTOFOCUS_TIMEOUT = 1000;
-    private static final long MINIMUM_TIME_BETWEEN_DETECTIONS = 3000;
     private static final int CAMERA_CONNECT_TIMEOUT = 5000;
     private static final int CAMERA_CONNECT_RETRY_INTERVAL = 50;
 
     static final int ORIENTATION_PORTRAIT = 1;
-    static final int ORIENTATION_PORTRAIT_UPSIDE_DOWN = 2;
-    static final int ORIENTATION_LANDSCAPE_RIGHT = 3;
-    static final int ORIENTATION_LANDSCAPE_LEFT = 4;
+    //static final int ORIENTATION_PORTRAIT_UPSIDE_DOWN = 2;
+    //static final int ORIENTATION_LANDSCAPE_RIGHT = 3;
+    //static final int ORIENTATION_LANDSCAPE_LEFT = 4;
 
     // these values MUST match those in dmz_constants.h
     static final int CREDIT_CARD_TARGET_WIDTH = 428; // kCreditCardTargetWidth
@@ -81,20 +79,16 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     protected WeakReference<CardIOActivity> mScanActivityRef;
     private boolean mSuppressScan = false;
 
-    // read by CardIOActivity to set up Preveiw
+    // read by CardIOActivity to set up Preview
     final int mPreviewWidth = 640;
     final int mPreviewHeight = 480;
 
-    private int mLastDegrees;
     private int mFrameOrientation = ORIENTATION_PORTRAIT;
-    private int previousOrientation;
 
     private boolean mFirstPreviewFrame = true;
-    private boolean requestInProgress;
     private long captureStart;
     private long mAutoFocusStartedAt = 0;
     private long mAutoFocusCompletedAt = 0;
-    private long mLastRequest;
 
     private DetectionInfo mLastDetectionInfo;
 
@@ -109,7 +103,6 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     private int numManualRefocus;
     private int numAutoRefocus;
     private int numManualTorchChange;
-    private int numAutoTorchChange;
     private int numFramesSkipped;
 
     // ------------------------------------------------------------------------
@@ -203,7 +196,6 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         numManualRefocus = 0;
         numAutoRefocus = 0;
         numManualTorchChange = 0;
-        numAutoTorchChange = 0;
 
         numFramesSkipped = 0;
 
