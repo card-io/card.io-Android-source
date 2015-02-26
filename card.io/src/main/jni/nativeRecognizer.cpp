@@ -319,7 +319,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 			if (!detectOnly) {
 				result.focus_score = focusScore;
 				result.flipped = flipped;
-				scanner_add_frame(&scanner, cardY, &result);
+				scanner_add_frame_with_expiry(&scanner, cardY, true, &result);
 				if (result.usable) {
 					ScannerResult scanResult;
 					scanner_result(&scanner, &scanResult);
