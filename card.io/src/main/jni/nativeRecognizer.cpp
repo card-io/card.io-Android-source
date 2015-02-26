@@ -46,6 +46,8 @@ static struct {
 	jfieldID rightEdge;
 	jfieldID focusScore;
 	jfieldID prediction;
+	jfieldID expiry_month;
+	jfieldID expiry_year;
 	jfieldID detectedCard;
 } detectionInfoId;
 
@@ -128,11 +130,14 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
 	detectionInfoId.rightEdge = env->GetFieldID(dInfoClass, "rightEdge", "Z");
 	detectionInfoId.focusScore = env->GetFieldID(dInfoClass, "focusScore", "F");
 	detectionInfoId.prediction = env->GetFieldID(dInfoClass, "prediction", "[I");
+	detectionInfoId.expiry_month = env->GetFieldID(dInfoClass, "expiry_month", "I");
+	detectionInfoId.expiry_year = env->GetFieldID(dInfoClass, "expiry_year", "I");
 	detectionInfoId.detectedCard = env->GetFieldID(dInfoClass, "detectedCard", "Lio/card/payment/CreditCard;");
 
 	if (!(detectionInfoId.topEdge && detectionInfoId.bottomEdge
 			&& detectionInfoId.leftEdge && detectionInfoId.rightEdge
 			&& detectionInfoId.focusScore && detectionInfoId.prediction
+			&& detectionInfoId.expiry_month && detectionInfoId.expiry_year
 			&& detectionInfoId.detectedCard
 	)) {
 		dmz_error_log("at least one field was not found for DetectionInfo");
@@ -218,7 +223,6 @@ void setScanResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, FrameS
 	jobject digitArray = env->GetObjectField(dinfo, detectionInfoId.prediction);
 	dmz_debug_log("setting prediction array region");
 	env->SetIntArrayRegion((jintArray)digitArray, 0, scanResult->n_numbers, numbers);
-	dmz_debug_log("done.");
 
 	jobject cardObj = env->GetObjectField(dinfo, detectionInfoId.detectedCard);
 	dmz_debug_log("got cardObj: %x", cardObj);
@@ -227,13 +231,18 @@ void setScanResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, FrameS
 	jobject xoffArray = env->GetObjectField(cardObj, creditCardId.xoff);
 	dmz_debug_log("setting xoffset array region: %x", xoffArray);
 	env->SetIntArrayRegion((jintArray)xoffArray, 0, scanResult->n_numbers, offsets);
-	dmz_debug_log("done");
+
+	dmz_debug_log("done in setScanResult()");
 }
 
 void setScanExpiryResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, FrameScanResult* frameResult) {
   
-  if (scanResult.expiry_month > 0 && scanResult.expiry_year > 0) {
+  if (scanResult->expiry_month > 0 && scanResult->expiry_year > 0) {
     // *** copy expiry_month and expiry_year into Java object ***
+	dmz_debug_log("setting expiry to %i/%i", scanResult->expiry_month, scanResult->expiry_year);
+
+    env->SetIntField(dinfo, detectionInfoId.expiry_month, scanResult->expiry_month);
+    env->SetIntField(dinfo, detectionInfoId.expiry_year, scanResult->expiry_year);
   }
 }
 
