@@ -288,9 +288,6 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 
 	FrameScanResult result;
 
-	// unclear what the difference between these two is, but do what icc does.
-	scan_analytics_record_frame(&scanner.session_analytics, &result);
-
 	IplImage *image = cvCreateImageHeader(cvSize(width, height), IPL_DEPTH_8U, 1);
 	jbyte *jBytes = env->GetByteArrayElements(jb, 0);
 	image->imageData = (char *)jBytes;
