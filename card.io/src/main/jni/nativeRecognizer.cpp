@@ -230,6 +230,13 @@ void setScanResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, FrameS
 	dmz_debug_log("done");
 }
 
+void setScanExpiryResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, FrameScanResult* frameResult) {
+  
+  if (scanResult.expiry_month > 0 && scanResult.expiry_year > 0) {
+    // *** copy expiry_month and expiry_year into Java object ***
+  }
+}
+
 void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap, IplImage* cardY, IplImage* cb, IplImage* cr,
 		dmz_corner_points corner_points, int orientation) {
 
@@ -321,15 +328,16 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 				result.focus_score = focusScore;
 				result.flipped = flipped;
 				scanner_add_frame_with_expiry(&scanner, cardY, true, &result);
-        if (collectCardNumber) {
-          if (result.usable) {
-            ScannerResult scanResult;
-            scanner_result(&scanner, &scanResult);
+        if (result.usable) {
+          ScannerResult scanResult;
+          scanner_result(&scanner, &scanResult);
+          if (collectCardNumber) {
             setScanResult(env, dinfo, &scanResult, &result);
           }
-          else if (result.upside_down) {
-            flipped = !flipped;
-          }
+          setScanExpiryResult(env, dinfo, &scanResult, &result);
+        }
+        else if (result.upside_down) {
+          flipped = !flipped;
         }
 			}
 
