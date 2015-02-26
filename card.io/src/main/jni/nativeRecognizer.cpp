@@ -287,6 +287,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 	}
 
 	FrameScanResult result;
+  bool collectCardNumber = (scanner.timeOfCardNumberCompletionInMilliseconds == 0);
 
 	IplImage *image = cvCreateImageHeader(cvSize(width, height), IPL_DEPTH_8U, 1);
 	jbyte *jBytes = env->GetByteArrayElements(jb, 0);
@@ -320,16 +321,18 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 				result.focus_score = focusScore;
 				result.flipped = flipped;
 				scanner_add_frame_with_expiry(&scanner, cardY, true, &result);
-				if (result.usable) {
-					ScannerResult scanResult;
-					scanner_result(&scanner, &scanResult);
-					if (scanResult.complete) {
-						setScanResult(env, dinfo, &scanResult, &result);
-					}
-				}
-				else if (result.upside_down) {
-					flipped = !flipped;
-				}
+        if (collectCardNumber) {
+          if (result.usable) {
+            ScannerResult scanResult;
+            scanner_result(&scanner, &scanResult);
+            if (scanResult.complete) {
+              setScanResult(env, dinfo, &scanResult, &result);
+            }
+          }
+          else if (result.upside_down) {
+            flipped = !flipped;
+          }
+        }
 			}
 
 			setDetectedCardImage(env, jCardResultBitmap, cardY, cb, cr, corner_points, orientation);
