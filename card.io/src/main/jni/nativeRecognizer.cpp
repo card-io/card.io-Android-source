@@ -325,9 +325,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
           if (result.usable) {
             ScannerResult scanResult;
             scanner_result(&scanner, &scanResult);
-            if (scanResult.complete) {
-              setScanResult(env, dinfo, &scanResult, &result);
-            }
+            setScanResult(env, dinfo, &scanResult, &result);
           }
           else if (result.upside_down) {
             flipped = !flipped;
