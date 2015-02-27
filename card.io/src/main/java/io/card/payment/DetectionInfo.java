@@ -10,6 +10,7 @@ package io.card.payment;
  */
 
 class DetectionInfo {
+    public boolean complete;
     public boolean topEdge;
     public boolean bottomEdge;
     public boolean leftEdge;
@@ -21,6 +22,8 @@ class DetectionInfo {
     public CreditCard detectedCard;
 
     public DetectionInfo() {
+        complete = false;
+        
         prediction = new int[16];
         prediction[0] = -1;
         prediction[15] = -1;
@@ -40,7 +43,7 @@ class DetectionInfo {
     }
 
     boolean predicted() {
-        return prediction[0] > -1;
+        return complete;
     }
 
     CreditCard creditCard() {

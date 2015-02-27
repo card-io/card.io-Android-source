@@ -246,6 +246,10 @@ void setScanExpiryResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, 
   }
 }
 
+void setScanCompleteResult(JNIEnv* env, jobject dinfo) {
+  env->SetBooleanField(dinfo, detectionInfoId.complete, true);
+}
+
 void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap, IplImage* cardY, IplImage* cb, IplImage* cr,
 		dmz_corner_points corner_points, int orientation) {
 
@@ -346,7 +350,12 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
           if (!cardNumberWasAlreadyDone && cardNumberIsNowDone) {
             setScanCardNumberResult(env, dinfo, &scanResult, &result);
           }
+          
           setScanExpiryResult(env, dinfo, &scanResult, &result);
+          
+          if (scanResult->complete) {
+            setScanCompleteResult(env, dinfo);
+          }
         }
         else if (result.upside_down) {
           flipped = !flipped;
