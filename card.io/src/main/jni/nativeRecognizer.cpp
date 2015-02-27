@@ -213,15 +213,15 @@ void updateEdgeDetectDisplay(JNIEnv* env, jobject thiz, jobject dinfo, dmz_edges
 	env->CallVoidMethod(thiz, cardScannerId.edgeUpdateCallback, dinfo);
 }
 
-void setScanCardNumberResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, FrameScanResult* frameResult) {
+void setScanCardNumberResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult) {
 
 	jint numbers[16];
 	jint offsets[16];
 	for (int i=0; i<scanResult->n_numbers; i++) {
 		numbers[i] = scanResult->predictions(i);
 	    dmz_debug_log("prediction[%i]= %i", i, scanResult->predictions(i));
-		offsets[i] = frameResult->hseg.offsets[i];
-	    dmz_debug_log("offsets[%i]= %i", i, frameResult->hseg.offsets[i]);
+		offsets[i] = scanResult->hseg.offsets[i];
+	    dmz_debug_log("offsets[%i]= %i", i, scanResult->hseg.offsets[i]);
 	}
 
 	jobject digitArray = env->GetObjectField(dinfo, detectionInfoId.prediction);
@@ -230,29 +230,20 @@ void setScanCardNumberResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResu
 
 	jobject cardObj = env->GetObjectField(dinfo, detectionInfoId.detectedCard);
 	dmz_debug_log("got cardObj: %x", cardObj);
-	env->SetIntField(cardObj, creditCardId.yoff, frameResult->vseg.y_offset);
+	env->SetIntField(cardObj, creditCardId.yoff, scanResult->vseg.y_offset);
 
 	jobject xoffArray = env->GetObjectField(cardObj, creditCardId.xoff);
 	dmz_debug_log("setting xoffset array region: %x", xoffArray);
 	env->SetIntArrayRegion((jintArray)xoffArray, 0, scanResult->n_numbers, offsets);
 
-	dmz_debug_log("done in setScanCardNumberResult()");
-}
+  dmz_debug_log("setting expiry to %i/%i", scanResult->expiry_month, scanResult->expiry_year);
+  env->SetIntField(dinfo, detectionInfoId.expiry_month, scanResult->expiry_month);
+  env->SetIntField(dinfo, detectionInfoId.expiry_year, scanResult->expiry_year);
 
-void setScanExpiryResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, FrameScanResult* frameResult) {
-  
-  if (scanResult->expiry_month > 0 && scanResult->expiry_year > 0) {
-    // *** copy expiry_month and expiry_year into Java object ***
-	dmz_debug_log("setting expiry to %i/%i", scanResult->expiry_month, scanResult->expiry_year);
-
-    env->SetIntField(dinfo, detectionInfoId.expiry_month, scanResult->expiry_month);
-    env->SetIntField(dinfo, detectionInfoId.expiry_year, scanResult->expiry_year);
-  }
-}
-
-void setScanCompleteResult(JNIEnv* env, jobject dinfo) {
   dmz_debug_log("setting detectionInfoId.complete=true");
   env->SetBooleanField(dinfo, detectionInfoId.complete, true);
+  
+	dmz_debug_log("done in setScanCardNumberResult()");
 }
 
 void logDinfo(JNIEnv* env, jobject dinfo) {
@@ -323,7 +314,6 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 	}
 
 	FrameScanResult result;
-  bool cardNumberWasAlreadyDone = (scannerState.timeOfCardNumberCompletionInMilliseconds > 0);
 
 	IplImage *image = cvCreateImageHeader(cvSize(width, height), IPL_DEPTH_8U, 1);
 	jbyte *jBytes = env->GetByteArrayElements(jb, 0);
@@ -361,20 +351,8 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
           ScannerResult scanResult;
           scanner_result(&scannerState, &scanResult);
 
-          bool cardNumberIsNowDone = (scannerState.timeOfCardNumberCompletionInMilliseconds > 0);
-          
-          if (!cardNumberWasAlreadyDone && cardNumberIsNowDone) {
-            setScanCardNumberResult(env, dinfo, &scanResult, &result);
-            logDinfo(env, dinfo);
-          }
-          
-          setScanExpiryResult(env, dinfo, &scanResult, &result);
-          logDinfo(env, dinfo);
-
           if (scanResult.complete) {
-            setScanCardNumberResult(env, dinfo, &scanResult, &result);
-            setScanCompleteResult(env, dinfo);
-
+            setScanCardNumberResult(env, dinfo, &scanResult);
             logDinfo(env, dinfo);
           }
         }
