@@ -211,7 +211,7 @@ void updateEdgeDetectDisplay(JNIEnv* env, jobject thiz, jobject dinfo, dmz_edges
 	env->CallVoidMethod(thiz, cardScannerId.edgeUpdateCallback, dinfo);
 }
 
-void setScanResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, FrameScanResult* frameResult) {
+void setScanCardNumberResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, FrameScanResult* frameResult) {
 
 	jint numbers[16];
 	jint offsets[16];
@@ -232,7 +232,7 @@ void setScanResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, FrameS
 	dmz_debug_log("setting xoffset array region: %x", xoffArray);
 	env->SetIntArrayRegion((jintArray)xoffArray, 0, scanResult->n_numbers, offsets);
 
-	dmz_debug_log("done in setScanResult()");
+	dmz_debug_log("done in setScanCardNumberResult()");
 }
 
 void setScanExpiryResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, FrameScanResult* frameResult) {
@@ -303,7 +303,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 	}
 
 	FrameScanResult result;
-  bool collectCardNumber = (scanner.timeOfCardNumberCompletionInMilliseconds == 0);
+  bool cardNumberWasAlreadyDone = (scanner.timeOfCardNumberCompletionInMilliseconds > 0);
 
 	IplImage *image = cvCreateImageHeader(cvSize(width, height), IPL_DEPTH_8U, 1);
 	jbyte *jBytes = env->GetByteArrayElements(jb, 0);
@@ -340,8 +340,11 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
         if (result.usable) {
           ScannerResult scanResult;
           scanner_result(&scanner, &scanResult);
-          if (collectCardNumber) {
-            setScanResult(env, dinfo, &scanResult, &result);
+
+          bool cardNumberIsNowDone = (scanner.timeOfCardNumberCompletionInMilliseconds > 0);
+          
+          if (!cardNumberWasAlreadyDone && cardNumberIsNowDone) {
+            setScanCardNumberResult(env, dinfo, &scanResult, &result);
           }
           setScanExpiryResult(env, dinfo, &scanResult, &result);
         }
