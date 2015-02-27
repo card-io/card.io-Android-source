@@ -24,7 +24,7 @@
 static dmz_context* dmz = NULL;
 static int dmz_refcount = 0;
 
-static ScannerState scanner;
+static ScannerState scannerState;
 static bool detectOnly;
 static bool flipped;
 static bool lastFrameWasUsable;
@@ -163,10 +163,10 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup(JNIEnv *env, jobj
 
   if (dmz == NULL) {
 	  dmz = dmz_context_create();
-	  scanner_initialize(&scanner);
+	  scanner_initialize(&scannerState);
   }
   else {
-	  scanner_reset(&scanner);
+	  scanner_reset(&scannerState);
   }
   dmz_refcount++;
 
@@ -175,7 +175,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup(JNIEnv *env, jobj
 
 extern "C"
 JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nResetAnalytics(JNIEnv *env, jobject thiz) {
-	scanner_reset(&scanner);
+	scanner_reset(&scannerState);
 }
 
 extern "C"
@@ -183,7 +183,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nCleanup(JNIEnv *env, jo
   dmz_debug_log("Java_io_card_payment_CardScanner_nCleanup");
 
   if (dmz_refcount == 1) {
-	  scanner_destroy(&scanner);
+	  scanner_destroy(&scannerState);
 	  dmz_context_destroy(dmz);
 	  dmz = NULL;
   }
@@ -323,7 +323,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 	}
 
 	FrameScanResult result;
-  bool cardNumberWasAlreadyDone = (scanner.timeOfCardNumberCompletionInMilliseconds > 0);
+  bool cardNumberWasAlreadyDone = (scannerState.timeOfCardNumberCompletionInMilliseconds > 0);
 
 	IplImage *image = cvCreateImageHeader(cvSize(width, height), IPL_DEPTH_8U, 1);
 	jbyte *jBytes = env->GetByteArrayElements(jb, 0);
@@ -356,12 +356,12 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 			if (!detectOnly) {
 				result.focus_score = focusScore;
 				result.flipped = flipped;
-				scanner_add_frame_with_expiry(&scanner, cardY, jScanExpiry, &result);
+				scanner_add_frame_with_expiry(&scannerState, cardY, jScanExpiry, &result);
         if (result.usable) {
           ScannerResult scanResult;
-          scanner_result(&scanner, &scanResult);
+          scanner_result(&scannerState, &scanResult);
 
-          bool cardNumberIsNowDone = (scanner.timeOfCardNumberCompletionInMilliseconds > 0);
+          bool cardNumberIsNowDone = (scannerState.timeOfCardNumberCompletionInMilliseconds > 0);
           
           if (!cardNumberWasAlreadyDone && cardNumberIsNowDone) {
             setScanCardNumberResult(env, dinfo, &scanResult, &result);
@@ -397,7 +397,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 
 extern "C"
 JNIEXPORT jint JNICALL Java_io_card_payment_CardScanner_nGetNumFramesScanned(JNIEnv *env, jobject thiz) {
-	return scanner.session_analytics.num_frames_scanned;
+	return scannerState.session_analytics.num_frames_scanned;
 }
 
 
