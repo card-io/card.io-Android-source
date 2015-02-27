@@ -255,6 +255,17 @@ void setScanCompleteResult(JNIEnv* env, jobject dinfo) {
   env->SetBooleanField(dinfo, detectionInfoId.complete, true);
 }
 
+void logDinfo(JNIEnv* env, jobject dinfo) {
+  dmz_debug_log("dinfo: complete=%i", env->GetBooleanField(dinfo, detectionInfoId.complete));
+
+  jintArray digitArray = (jintArray) env->GetObjectField(dinfo, detectionInfoId.prediction);
+  dmz_debug_log("dinfo: prediction[0-3]=%i%i%i%i...",
+      env->GetIntArrayElements(digitArray, NULL)[0],
+      env->GetIntArrayElements(digitArray, NULL)[1],
+      env->GetIntArrayElements(digitArray, NULL)[2],
+      env->GetIntArrayElements(digitArray, NULL)[3]);
+}
+
 void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap, IplImage* cardY, IplImage* cb, IplImage* cr,
 		dmz_corner_points corner_points, int orientation) {
 
@@ -354,12 +365,17 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
           
           if (!cardNumberWasAlreadyDone && cardNumberIsNowDone) {
             setScanCardNumberResult(env, dinfo, &scanResult, &result);
+            logDinfo(env, dinfo);
           }
           
           setScanExpiryResult(env, dinfo, &scanResult, &result);
-          
+          logDinfo(env, dinfo);
+
           if (scanResult.complete) {
+            setScanCardNumberResult(env, dinfo, &scanResult, &result);
             setScanCompleteResult(env, dinfo);
+
+            logDinfo(env, dinfo);
           }
         }
         else if (result.upside_down) {
