@@ -40,6 +40,7 @@ static struct {
 
 static struct {
 	jclass classRef;
+	jfieldID complete;
 	jfieldID topEdge;
 	jfieldID bottomEdge;
 	jfieldID leftEdge;
@@ -124,6 +125,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
 		return -1;
 	}
 	detectionInfoId.classRef = (jclass)env->NewGlobalRef(dInfoClass);
+	detectionInfoId.complete = env->GetFieldID(dInfoClass, "complete", "Z");
 	detectionInfoId.topEdge = env->GetFieldID(dInfoClass, "topEdge", "Z");
 	detectionInfoId.bottomEdge = env->GetFieldID(dInfoClass, "bottomEdge", "Z");
 	detectionInfoId.leftEdge =  env->GetFieldID(dInfoClass, "leftEdge", "Z");
@@ -134,7 +136,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
 	detectionInfoId.expiry_year = env->GetFieldID(dInfoClass, "expiry_year", "I");
 	detectionInfoId.detectedCard = env->GetFieldID(dInfoClass, "detectedCard", "Lio/card/payment/CreditCard;");
 
-	if (!(detectionInfoId.topEdge && detectionInfoId.bottomEdge
+	if (!(detectionInfoId.complete && detectionInfoId.topEdge && detectionInfoId.bottomEdge
 			&& detectionInfoId.leftEdge && detectionInfoId.rightEdge
 			&& detectionInfoId.focusScore && detectionInfoId.prediction
 			&& detectionInfoId.expiry_month && detectionInfoId.expiry_year
@@ -217,7 +219,9 @@ void setScanCardNumberResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResu
 	jint offsets[16];
 	for (int i=0; i<scanResult->n_numbers; i++) {
 		numbers[i] = scanResult->predictions(i);
+	    dmz_debug_log("prediction[%i]= %i", i, scanResult->predictions(i));
 		offsets[i] = frameResult->hseg.offsets[i];
+	    dmz_debug_log("offsets[%i]= %i", i, frameResult->hseg.offsets[i]);
 	}
 
 	jobject digitArray = env->GetObjectField(dinfo, detectionInfoId.prediction);
@@ -247,6 +251,7 @@ void setScanExpiryResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, 
 }
 
 void setScanCompleteResult(JNIEnv* env, jobject dinfo) {
+  dmz_debug_log("setting detectionInfoId.complete=true");
   env->SetBooleanField(dinfo, detectionInfoId.complete, true);
 }
 
@@ -353,7 +358,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
           
           setScanExpiryResult(env, dinfo, &scanResult, &result);
           
-          if (scanResult->complete) {
+          if (scanResult.complete) {
             setScanCompleteResult(env, dinfo);
           }
         }
