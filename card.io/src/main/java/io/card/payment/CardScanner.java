@@ -65,7 +65,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     private native void nGetGuideFrame(int orientation, int previewWidth, int previewHeight, Rect r);
 
     private native void nScanFrame(byte[] data, int frameWidth, int frameHeight, int orientation,
-                                   DetectionInfo dinfo, Bitmap resultBitmap);
+                                   DetectionInfo dinfo, Bitmap resultBitmap, boolean scanExpiry);
 
     private native int nGetNumFramesScanned();
 
@@ -448,7 +448,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         DetectionInfo dInfo = new DetectionInfo();
 
         /** pika **/
-        nScanFrame(data, mPreviewWidth, mPreviewHeight, mFrameOrientation, dInfo, detectedBitmap);
+        nScanFrame(data, mPreviewWidth, mPreviewHeight, mFrameOrientation, dInfo, detectedBitmap, true);
 
         boolean sufficientFocus = (dInfo.focusScore >= MIN_FOCUS_SCORE);
 

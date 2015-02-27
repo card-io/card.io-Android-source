@@ -290,7 +290,7 @@ void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap, IplImage* card
 extern "C"
 JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, jobject thiz,
 		jbyteArray jb, jint width, jint height, jint orientation, jobject dinfo,
-		jobject jCardResultBitmap) {
+		jobject jCardResultBitmap, jboolean jScanExpiry) {
 	dmz_trace_log("Java_io_card_payment_CardScanner_nScanFrame ... width:%i height:%i orientation:%i", width, height, orientation);
 
 	if (orientation == 0) {
@@ -336,7 +336,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 			if (!detectOnly) {
 				result.focus_score = focusScore;
 				result.flipped = flipped;
-				scanner_add_frame_with_expiry(&scanner, cardY, true, &result);
+				scanner_add_frame_with_expiry(&scanner, cardY, jScanExpiry, &result);
         if (result.usable) {
           ScannerResult scanResult;
           scanner_result(&scanner, &scanResult);
