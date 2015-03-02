@@ -78,6 +78,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     // member data
     protected WeakReference<CardIOActivity> mScanActivityRef;
     private boolean mSuppressScan = false;
+    private boolean mScanExpiry;
 
     // read by CardIOActivity to set up Preview
     final int mPreviewWidth = 640;
@@ -149,6 +150,8 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         Intent scanIntent = scanActivity.getIntent();
         if (scanIntent != null) {
             mSuppressScan = scanIntent.getBooleanExtra(CardIOActivity.EXTRA_SUPPRESS_SCAN, false);
+            mScanExpiry = scanIntent.getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false)
+                    && scanIntent.getBooleanExtra(CardIOActivity.EXTRA_SCAN_EXPIRY, true);
         }
         mScanActivityRef = new WeakReference<CardIOActivity>(scanActivity);
         mFrameOrientation = currentFrameOrientation;
@@ -448,7 +451,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         DetectionInfo dInfo = new DetectionInfo();
 
         /** pika **/
-        nScanFrame(data, mPreviewWidth, mPreviewHeight, mFrameOrientation, dInfo, detectedBitmap, true);
+        nScanFrame(data, mPreviewWidth, mPreviewHeight, mFrameOrientation, dInfo, detectedBitmap, mScanExpiry);
 
         boolean sufficientFocus = (dInfo.focusScore >= MIN_FOCUS_SCORE);
 

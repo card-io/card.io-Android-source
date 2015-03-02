@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -49,7 +50,8 @@ public class CardIOSimpleExampleActivity extends Activity {
 
     // UI elements
     private CheckBox mManualToggle;
-    private CheckBox mExpiryToggle;
+    private CheckBox mEnableExpiryToggle;
+    private CheckBox mScanExpiryToggle;
     private CheckBox mCvvToggle;
     private CheckBox mPostalCodeToggle;
     private CheckBox mSuppressManualToggle;
@@ -90,7 +92,8 @@ public class CardIOSimpleExampleActivity extends Activity {
         setContentView(R.layout.demo);
 
         mManualToggle = (CheckBox) findViewById(R.id.forceManual);
-        mExpiryToggle = (CheckBox) findViewById(R.id.gatherExpiry);
+        mEnableExpiryToggle = (CheckBox) findViewById(R.id.gatherExpiry);
+        mScanExpiryToggle = (CheckBox) findViewById(R.id.scanExpiry);
         mCvvToggle = (CheckBox) findViewById(R.id.gatherCvv);
         mPostalCodeToggle = (CheckBox) findViewById(R.id.gatherPostalCode);
         mSuppressManualToggle = (CheckBox) findViewById(R.id.suppressManual);
@@ -121,6 +124,18 @@ public class CardIOSimpleExampleActivity extends Activity {
 
         mResultImage = (ImageView) findViewById(R.id.resultImage);
         mResultCardTypeImage = (ImageView) findViewById(R.id.resultCardTypeImage);
+
+        mEnableExpiryToggle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setScanExpiryEnabled();
+            }
+        });
+        setScanExpiryEnabled();
+    }
+
+    private void setScanExpiryEnabled(){
+        mScanExpiryToggle.setEnabled(mEnableExpiryToggle.isChecked());
     }
 
     @Override
@@ -170,7 +185,8 @@ public class CardIOSimpleExampleActivity extends Activity {
                     Intent intent = new Intent(CardIOSimpleExampleActivity.this,
                             CardIOActivity.class);
                     intent.putExtra("io.card.payment.cameraBypassTestMode", true);
-                    intent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, mExpiryToggle.isChecked());
+                    intent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, mEnableExpiryToggle.isChecked());
+                    intent.putExtra(CardIOActivity.EXTRA_SCAN_EXPIRY, mScanExpiryToggle.isChecked());
                     intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, mCvvToggle.isChecked());
                     intent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE,
                             mPostalCodeToggle.isChecked());
@@ -201,7 +217,8 @@ public class CardIOSimpleExampleActivity extends Activity {
         Intent intent = new Intent(CardIOSimpleExampleActivity.this, CardIOActivity.class);
 
         intent.putExtra(CardIOActivity.EXTRA_NO_CAMERA, mManualToggle.isChecked());
-        intent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, mExpiryToggle.isChecked());
+        intent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, mEnableExpiryToggle.isChecked());
+        intent.putExtra(CardIOActivity.EXTRA_SCAN_EXPIRY, mScanExpiryToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, mCvvToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, mPostalCodeToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_SUPPRESS_MANUAL_ENTRY,
@@ -286,7 +303,7 @@ public class CardIOSimpleExampleActivity extends Activity {
                 outStr += "Card type: " + cardType.name() + " cardType.getDisplayName(null)="
                         + cardType.getDisplayName(null) + "\n";
 
-                if (mExpiryToggle.isChecked()) {
+                if (mEnableExpiryToggle.isChecked()) {
                     outStr += "Expiry: " + result.expiryMonth + "/" + result.expiryYear + "\n";
                 }
 

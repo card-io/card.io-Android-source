@@ -40,6 +40,13 @@
         </LinearLayout>
 
         <CheckBox
+                android:id="@+id/scanExpiry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Scan Expiry"
+                android:checked="true"/>
+
+        <CheckBox
                 android:id="@+id/forceManual"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
