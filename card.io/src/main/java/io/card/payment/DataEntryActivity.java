@@ -229,9 +229,6 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             }
             if (expiryValidator.hasFullLength()) {
                 expiryEdit.setText(expiryValidator.getValue());
-                if (!expiryValidator.isValid()) {
-                    expiryEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
-                }
             }
             expiryEdit.addTextChangedListener(expiryValidator);
             expiryEdit.addTextChangedListener(this);
@@ -390,6 +387,11 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             Bitmap bitmap = ViewUtil.base64ToBitmap(Base64EncodedImages.paypal_monogram_actionbar_icon, this,
                     DisplayMetrics.DENSITY_HIGH);
             icon = new BitmapDrawable(this.getResources(), bitmap);
+        }
+
+        // update UI to reflect expiry validness
+        if(requireExpiry && expiryValidator.isValid()){
+            afterTextChanged(expiryEdit.getEditableText());
         }
 
         ActivityHelper.setupActionBarIfSupported(this, activityTitleTextView,
