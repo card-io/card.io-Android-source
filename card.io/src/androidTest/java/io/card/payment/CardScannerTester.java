@@ -28,11 +28,12 @@ public class CardScannerTester extends CardScanner {
 
     public CardScannerTester(CardIOActivity scanActivity, int currentFrameOrientation) {
         super(scanActivity, currentFrameOrientation);
-        // TODO Auto-generated constructor stub
         useCamera = false;
     }
 
     private Runnable frameRunner = new Runnable() {
+        private byte[] lastFrame = null;
+
         @Override
         public void run() {
             if (!scanAllowed) {
@@ -44,12 +45,12 @@ public class CardScannerTester extends CardScanner {
             }
             if (recording.hasNext()) {
                 Log.i(TAG, "Setting test frame: " + testFrameCount++);
-                onPreviewFrame(recording.next(), null);
-                mHandler.postDelayed(this, FRAME_INTERVAL);
+                lastFrame = recording.next();
             } else {
-                Log.w(TAG, "No more frames left at " + testFrameCount);
-                mHandler.postDelayed(expireRunner, 5000); // give up after 5 sec.
+                Log.w(TAG, "No more frames left at " + testFrameCount + " repeating last frame indefinitely.");
             }
+            onPreviewFrame(lastFrame, null);
+            mHandler.postDelayed(this, FRAME_INTERVAL);
         }
     };
 
