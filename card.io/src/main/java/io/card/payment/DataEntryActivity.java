@@ -454,9 +454,10 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
     }
 
     private void validateAndEnableDoneButtonIfValid() {
-
         doneBtn.setEnabled(numberValidator.isValid() && expiryValidator.isValid()
                 && cvvValidator.isValid() && postalCodeValidator.isValid());
+
+        Log.d(TAG, "setting doneBtn.enabled=" + doneBtn.isEnabled());
 
         if (autoAcceptDone && numberValidator.isValid() && expiryValidator.isValid()
                 && cvvValidator.isValid() && postalCodeValidator.isValid()) {
