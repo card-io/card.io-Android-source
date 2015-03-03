@@ -25,13 +25,4 @@ public interface SupportedLocale<E extends Enum<?>> {
      * @return
      */
     String getAdaptedDisplay(E key, String country);
-
-    /**
-     * Returns a string translation of the given server side error. This may or
-     * may not be used by all implementations.
-     *
-     * @param key
-     * @return
-     */
-    String getError(String key);
 }
