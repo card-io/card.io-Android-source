@@ -229,9 +229,6 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             }
             if (expiryValidator.hasFullLength()) {
                 expiryEdit.setText(expiryValidator.getValue());
-                if (!expiryValidator.isValid()) {
-                    expiryEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
-                }
             }
             expiryEdit.addTextChangedListener(expiryValidator);
             expiryEdit.addTextChangedListener(this);
@@ -392,6 +389,11 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             icon = new BitmapDrawable(this.getResources(), bitmap);
         }
 
+        // update UI to reflect expiry validness
+        if(requireExpiry && expiryValidator.isValid()){
+            afterTextChanged(expiryEdit.getEditableText());
+        }
+
         ActivityHelper.setupActionBarIfSupported(this, activityTitleTextView,
                 LocalizedStrings.getString(StringKey.MANUAL_ENTRY_TITLE), "card.io - ", icon);
     }
@@ -452,9 +454,10 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
     }
 
     private void validateAndEnableDoneButtonIfValid() {
-
         doneBtn.setEnabled(numberValidator.isValid() && expiryValidator.isValid()
                 && cvvValidator.isValid() && postalCodeValidator.isValid());
+
+        Log.d(TAG, "setting doneBtn.enabled=" + doneBtn.isEnabled());
 
         if (autoAcceptDone && numberValidator.isValid() && expiryValidator.isValid()
                 && cvvValidator.isValid() && postalCodeValidator.isValid()) {

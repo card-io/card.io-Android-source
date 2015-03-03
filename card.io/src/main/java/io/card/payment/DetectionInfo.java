@@ -10,15 +10,20 @@ package io.card.payment;
  */
 
 class DetectionInfo {
+    public boolean complete;
     public boolean topEdge;
     public boolean bottomEdge;
     public boolean leftEdge;
     public boolean rightEdge;
     public float focusScore;
     public int[] prediction;
+    public int expiry_month;
+    public int expiry_year;
     public CreditCard detectedCard;
 
     public DetectionInfo() {
+        complete = false;
+        
         prediction = new int[16];
         prediction[0] = -1;
         prediction[15] = -1;
@@ -38,7 +43,7 @@ class DetectionInfo {
     }
 
     boolean predicted() {
-        return prediction[0] > -1;
+        return complete;
     }
 
     CreditCard creditCard() {
@@ -47,6 +52,11 @@ class DetectionInfo {
             numberStr += String.valueOf(prediction[i]);
         }
         detectedCard.cardNumber = numberStr;
+
+        // set these regardless. They'll just be zeroes if not found.
+        detectedCard.expiryMonth = expiry_month;
+        detectedCard.expiryYear = expiry_year;
+        
         return detectedCard;
     }
 

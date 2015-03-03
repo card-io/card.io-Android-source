@@ -62,10 +62,17 @@ public final class CardIOActivity extends Activity {
     public static final String EXTRA_NO_CAMERA = "io.card.payment.noCamera";
 
     /**
-     * Boolean extra. Optional. Defaults to <code>true</code>. If
-     * unset, expiry information will not be required.
+     * Boolean extra. Optional. Defaults to <code>false</code>. If
+     * set to <code>false</code>, expiry information will not be required.
      */
     public static final String EXTRA_REQUIRE_EXPIRY = "io.card.payment.requireExpiry";
+
+    /**
+     * Boolean extra. Optional. Defaults to <code>true</code>. If
+     * set to <code>true</code>, and {@link #EXTRA_REQUIRE_EXPIRY} is <code>true</code>,
+     * an attempt to extract the expiry from the card image will be made.
+     */
+    public static final String EXTRA_SCAN_EXPIRY = "io.card.payment.scanExpiry";
 
     /**
      * Boolean extra. Optional. Defaults to <code>false</code>. If set, the user will be prompted

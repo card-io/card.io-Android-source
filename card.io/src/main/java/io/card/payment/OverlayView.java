@@ -387,8 +387,8 @@ class OverlayView extends View {
         }
     }
 
-    public void setDetectedCard(CreditCard serverResponse) {
-        mDetectedCard = serverResponse;
+    public void setDetectedCard(CreditCard creditCard) {
+        mDetectedCard = creditCard;
     }
 
     @Override

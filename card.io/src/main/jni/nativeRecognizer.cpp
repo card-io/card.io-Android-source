@@ -24,7 +24,7 @@
 static dmz_context* dmz = NULL;
 static int dmz_refcount = 0;
 
-static ScannerState scanner;
+static ScannerState scannerState;
 static bool detectOnly;
 static bool flipped;
 static bool lastFrameWasUsable;
@@ -40,12 +40,15 @@ static struct {
 
 static struct {
 	jclass classRef;
+	jfieldID complete;
 	jfieldID topEdge;
 	jfieldID bottomEdge;
 	jfieldID leftEdge;
 	jfieldID rightEdge;
 	jfieldID focusScore;
 	jfieldID prediction;
+	jfieldID expiry_month;
+	jfieldID expiry_year;
 	jfieldID detectedCard;
 } detectionInfoId;
 
@@ -122,17 +125,21 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
 		return -1;
 	}
 	detectionInfoId.classRef = (jclass)env->NewGlobalRef(dInfoClass);
+	detectionInfoId.complete = env->GetFieldID(dInfoClass, "complete", "Z");
 	detectionInfoId.topEdge = env->GetFieldID(dInfoClass, "topEdge", "Z");
 	detectionInfoId.bottomEdge = env->GetFieldID(dInfoClass, "bottomEdge", "Z");
 	detectionInfoId.leftEdge =  env->GetFieldID(dInfoClass, "leftEdge", "Z");
 	detectionInfoId.rightEdge = env->GetFieldID(dInfoClass, "rightEdge", "Z");
 	detectionInfoId.focusScore = env->GetFieldID(dInfoClass, "focusScore", "F");
 	detectionInfoId.prediction = env->GetFieldID(dInfoClass, "prediction", "[I");
+	detectionInfoId.expiry_month = env->GetFieldID(dInfoClass, "expiry_month", "I");
+	detectionInfoId.expiry_year = env->GetFieldID(dInfoClass, "expiry_year", "I");
 	detectionInfoId.detectedCard = env->GetFieldID(dInfoClass, "detectedCard", "Lio/card/payment/CreditCard;");
 
-	if (!(detectionInfoId.topEdge && detectionInfoId.bottomEdge
+	if (!(detectionInfoId.complete && detectionInfoId.topEdge && detectionInfoId.bottomEdge
 			&& detectionInfoId.leftEdge && detectionInfoId.rightEdge
 			&& detectionInfoId.focusScore && detectionInfoId.prediction
+			&& detectionInfoId.expiry_month && detectionInfoId.expiry_year
 			&& detectionInfoId.detectedCard
 	)) {
 		dmz_error_log("at least one field was not found for DetectionInfo");
@@ -156,10 +163,10 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup(JNIEnv *env, jobj
 
   if (dmz == NULL) {
 	  dmz = dmz_context_create();
-	  scanner_initialize(&scanner);
+	  scanner_initialize(&scannerState);
   }
   else {
-	  scanner_reset(&scanner);
+	  scanner_reset(&scannerState);
   }
   dmz_refcount++;
 
@@ -168,7 +175,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup(JNIEnv *env, jobj
 
 extern "C"
 JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nResetAnalytics(JNIEnv *env, jobject thiz) {
-	scanner_reset(&scanner);
+	scanner_reset(&scannerState);
 }
 
 extern "C"
@@ -176,7 +183,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nCleanup(JNIEnv *env, jo
   dmz_debug_log("Java_io_card_payment_CardScanner_nCleanup");
 
   if (dmz_refcount == 1) {
-	  scanner_destroy(&scanner);
+	  scanner_destroy(&scannerState);
 	  dmz_context_destroy(dmz);
 	  dmz = NULL;
   }
@@ -206,28 +213,48 @@ void updateEdgeDetectDisplay(JNIEnv* env, jobject thiz, jobject dinfo, dmz_edges
 	env->CallVoidMethod(thiz, cardScannerId.edgeUpdateCallback, dinfo);
 }
 
-void setScanResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult, FrameScanResult* frameResult) {
+void setScanCardNumberResult(JNIEnv* env, jobject dinfo, ScannerResult* scanResult) {
 
 	jint numbers[16];
 	jint offsets[16];
 	for (int i=0; i<scanResult->n_numbers; i++) {
 		numbers[i] = scanResult->predictions(i);
-		offsets[i] = frameResult->hseg.offsets[i];
+	    dmz_debug_log("prediction[%i]= %i", i, scanResult->predictions(i));
+		offsets[i] = scanResult->hseg.offsets[i];
+	    dmz_debug_log("offsets[%i]= %i", i, scanResult->hseg.offsets[i]);
 	}
 
 	jobject digitArray = env->GetObjectField(dinfo, detectionInfoId.prediction);
 	dmz_debug_log("setting prediction array region");
 	env->SetIntArrayRegion((jintArray)digitArray, 0, scanResult->n_numbers, numbers);
-	dmz_debug_log("done.");
 
 	jobject cardObj = env->GetObjectField(dinfo, detectionInfoId.detectedCard);
 	dmz_debug_log("got cardObj: %x", cardObj);
-	env->SetIntField(cardObj, creditCardId.yoff, frameResult->vseg.y_offset);
+	env->SetIntField(cardObj, creditCardId.yoff, scanResult->vseg.y_offset);
 
 	jobject xoffArray = env->GetObjectField(cardObj, creditCardId.xoff);
 	dmz_debug_log("setting xoffset array region: %x", xoffArray);
 	env->SetIntArrayRegion((jintArray)xoffArray, 0, scanResult->n_numbers, offsets);
-	dmz_debug_log("done");
+
+  dmz_debug_log("setting expiry to %i/%i", scanResult->expiry_month, scanResult->expiry_year);
+  env->SetIntField(dinfo, detectionInfoId.expiry_month, scanResult->expiry_month);
+  env->SetIntField(dinfo, detectionInfoId.expiry_year, scanResult->expiry_year);
+
+  dmz_debug_log("setting detectionInfoId.complete=true");
+  env->SetBooleanField(dinfo, detectionInfoId.complete, true);
+  
+	dmz_debug_log("done in setScanCardNumberResult()");
+}
+
+void logDinfo(JNIEnv* env, jobject dinfo) {
+  dmz_debug_log("dinfo: complete=%i", env->GetBooleanField(dinfo, detectionInfoId.complete));
+
+  jintArray digitArray = (jintArray) env->GetObjectField(dinfo, detectionInfoId.prediction);
+  dmz_debug_log("dinfo: prediction[0-3]=%i%i%i%i...",
+      env->GetIntArrayElements(digitArray, NULL)[0],
+      env->GetIntArrayElements(digitArray, NULL)[1],
+      env->GetIntArrayElements(digitArray, NULL)[2],
+      env->GetIntArrayElements(digitArray, NULL)[3]);
 }
 
 void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap, IplImage* cardY, IplImage* cb, IplImage* cr,
@@ -274,7 +301,7 @@ void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap, IplImage* card
 extern "C"
 JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, jobject thiz,
 		jbyteArray jb, jint width, jint height, jint orientation, jobject dinfo,
-		jobject jCardResultBitmap) {
+		jobject jCardResultBitmap, jboolean jScanExpiry) {
 	dmz_trace_log("Java_io_card_payment_CardScanner_nScanFrame ... width:%i height:%i orientation:%i", width, height, orientation);
 
 	if (orientation == 0) {
@@ -287,9 +314,6 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 	}
 
 	FrameScanResult result;
-
-	// unclear what the difference between these two is, but do what icc does.
-	scan_analytics_record_frame(&scanner.session_analytics, &result);
 
 	IplImage *image = cvCreateImageHeader(cvSize(width, height), IPL_DEPTH_8U, 1);
 	jbyte *jBytes = env->GetByteArrayElements(jb, 0);
@@ -322,17 +346,19 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 			if (!detectOnly) {
 				result.focus_score = focusScore;
 				result.flipped = flipped;
-				scanner_add_frame(&scanner, cardY, &result);
-				if (result.usable) {
-					ScannerResult scanResult;
-					scanner_result(&scanner, &scanResult);
-					if (scanResult.complete) {
-						setScanResult(env, dinfo, &scanResult, &result);
-					}
-				}
-				else if (result.upside_down) {
-					flipped = !flipped;
-				}
+				scanner_add_frame_with_expiry(&scannerState, cardY, jScanExpiry, &result);
+        if (result.usable) {
+          ScannerResult scanResult;
+          scanner_result(&scannerState, &scanResult);
+
+          if (scanResult.complete) {
+            setScanCardNumberResult(env, dinfo, &scanResult);
+            logDinfo(env, dinfo);
+          }
+        }
+        else if (result.upside_down) {
+          flipped = !flipped;
+        }
 			}
 
 			setDetectedCardImage(env, jCardResultBitmap, cardY, cb, cr, corner_points, orientation);
@@ -349,7 +375,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 
 extern "C"
 JNIEXPORT jint JNICALL Java_io_card_payment_CardScanner_nGetNumFramesScanned(JNIEnv *env, jobject thiz) {
-	return scanner.session_analytics.num_frames_scanned;
+	return scannerState.session_analytics.num_frames_scanned;
 }
 
 

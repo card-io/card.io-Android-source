@@ -27,6 +27,11 @@ class ExpiryValidator implements Validator {
         year = y;
 
         fullLength = (month > 0 && year > 0);
+
+        // accept 2-digit years.
+        if (year < 2000) {
+            year += 2000;
+        }
     }
 
     @Override

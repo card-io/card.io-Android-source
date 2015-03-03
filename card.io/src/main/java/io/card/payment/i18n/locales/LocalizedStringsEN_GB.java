@@ -14,7 +14,6 @@ public class LocalizedStringsEN_GB implements SupportedLocale<StringKey> {
 
     private static Map<StringKey, String> mDisplay = new HashMap<StringKey, String>();
     private static Map<String, String> mAdapted = new HashMap<String, String>();
-    private static Map<String, String> mErrors = new HashMap<String, String>();
 
     @Override
     public String getName() {
@@ -29,11 +28,6 @@ public class LocalizedStringsEN_GB implements SupportedLocale<StringKey> {
         } else {
             return mDisplay.get(key);
         }
-    }
-
-    @Override
-    public String getError(String key) {
-        return mErrors.get(key);
     }
 
     public LocalizedStringsEN_GB() {
@@ -57,6 +51,5 @@ public class LocalizedStringsEN_GB implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.ERROR_CAMERA_UNEXPECTED_FAIL, "The device had an unexpected error opening the camera.");
 
         // no adapted_translations found
-        // no error_translations found
     }
 }
