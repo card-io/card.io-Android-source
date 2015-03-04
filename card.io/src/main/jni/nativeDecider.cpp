@@ -11,13 +11,13 @@
 
 extern "C"
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
-    return JNI_VERSION_1_6; 
+  return JNI_VERSION_1_6;
 }
 
 extern "C" jboolean JNICALL Java_io_card_payment_CardScanner_nUseNeon() {
-	return (dmz_has_neon_runtime());
+  return (dmz_has_neon_runtime());
 }
 
 extern "C" jboolean JNICALL Java_io_card_payment_CardScanner_nUseTegra() {
-	return (dmz_use_vfp3_16());
+  return (dmz_use_vfp3_16());
 }
