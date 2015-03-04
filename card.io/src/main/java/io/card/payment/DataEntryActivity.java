@@ -83,25 +83,24 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         Log.v(TAG, "onCreate");
 
-        Bundle extras = getIntent().getExtras();
-        if (extras == null) {
-            throw new IllegalStateException("Didn't find any extras!");
+        if (null == getIntent().getExtras()) {
+            // extras should never be null.  This is some weird android state that we handle by just going back.
+            onBackPressed();
+            return;
         }
 
-        useApplicationTheme = extras.getBoolean(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME);
+        useApplicationTheme = getIntent().getBooleanExtra(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME, false);
         ActivityHelper.setActivityTheme(this, useApplicationTheme);
 
         defaultTextColor = new TextView(this).getTextColors().getDefaultColor();
 
         labelLeftPadding = ActivityHelper.holoSupported() ? LABEL_LEFT_PADDING_HOLO
                 : LABEL_LEFT_PADDING_DEFAULT;
-        super.onCreate(savedInstanceState);
 
         LocalizedStrings.setLanguage(getIntent());
-        boolean usePayPalActionBarIcon = extras
-                .getBoolean(CardIOActivity.EXTRA_USE_PAYPAL_ACTIONBAR_ICON);
 
         int paddingPx = ViewUtil.typedDimensionValueToPixelsInt(PADDING_DIP, this);
 
@@ -125,9 +124,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         LinearLayout.LayoutParams mainParams = new LinearLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
-        capture = extras.getParcelable(CardIOActivity.EXTRA_SCAN_RESULT);
+        capture = getIntent().getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT);
 
-        autoAcceptDone = extras.getBoolean("debug_autoAcceptResult");
+        autoAcceptDone = getIntent().getBooleanExtra("debug_autoAcceptResult", false);
 
         if (capture != null) {
             numberValidator = new CardNumberValidator(capture.cardNumber);
@@ -194,9 +193,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         ViewUtil.setPadding(optionLayout, null, PADDING_DIP, null, null);
         optionLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        boolean requireExpiry = extras.getBoolean(CardIOActivity.EXTRA_REQUIRE_EXPIRY);
-        boolean requireCVV = extras.getBoolean(CardIOActivity.EXTRA_REQUIRE_CVV);
-        boolean requirePostalCode = extras.getBoolean(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE);
+        boolean requireExpiry = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false);
+        boolean requireCVV = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_CVV, false);
+        boolean requirePostalCode = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false);
 
         if (requireExpiry) {
             LinearLayout expiryLayout = new LinearLayout(this);
@@ -383,6 +382,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         setContentView(container);
 
         Drawable icon = null;
+        boolean usePayPalActionBarIcon = getIntent().getBooleanExtra(CardIOActivity.EXTRA_USE_PAYPAL_ACTIONBAR_ICON, true);
         if (usePayPalActionBarIcon) {
             Bitmap bitmap = ViewUtil.base64ToBitmap(Base64EncodedImages.paypal_monogram_actionbar_icon, this,
                     DisplayMetrics.DENSITY_HIGH);
@@ -418,7 +418,6 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
     @Override
     protected void onResume() {
         super.onResume();
-
         Log.d(TAG, "onResume()");
 
         getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_FULLSCREEN);

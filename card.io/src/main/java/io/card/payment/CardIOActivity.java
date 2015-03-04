@@ -100,6 +100,11 @@ public final class CardIOActivity extends Activity {
     public static final String EXTRA_SCAN_RESULT = "io.card.payment.scanResult";
 
     /**
+     * Boolean extra indicating card was not scanned.
+     */
+    private static final String EXTRA_MANUAL_ENTRY_RESULT = "io.card.payment.manualEntryScanResult";
+
+    /**
      * Boolean extra. Optional. Defaults to <code>false</code>. Removes the keyboard button from the
      * scan screen.
      * <p/>
@@ -294,6 +299,7 @@ public final class CardIOActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate() ================================================================");
 
         numActivityAllocations++;
@@ -307,11 +313,9 @@ public final class CardIOActivity extends Activity {
                     numActivityAllocations));
         }
 
-        super.onCreate(savedInstanceState);
-
         final Intent clientData = this.getIntent();
 
-        useApplicationTheme = clientData.getExtras().getBoolean(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME);
+        useApplicationTheme = clientData.getBooleanExtra(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME, false);
 
         LocalizedStrings.setLanguage(clientData);
 
@@ -530,9 +534,8 @@ public final class CardIOActivity extends Activity {
 
     @Override
     protected void onPause() {
-        Log.i(TAG, "onPause() xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-
         super.onPause();
+        Log.i(TAG, "onPause() xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 
         if (orientationListener != null) {
             orientationListener.disable();
@@ -769,6 +772,14 @@ public final class CardIOActivity extends Activity {
                     if (mDetectedCard != null) {
                         intent.putExtra(EXTRA_SCAN_RESULT, mDetectedCard);
                         mDetectedCard = null;
+                    } else {
+                        /*
+                         add extra to indicate manual entry.
+                         This can obviously be indicated by the presence of EXTRA_SCAN_RESULT.
+                         The purpose of this is to ensure there's always an extra in the DataEntryActivity.
+                         If there are no extras received by DataEntryActivity, then an error has occurred.
+                         */
+                        intent.putExtra(EXTRA_MANUAL_ENTRY_RESULT, true);
                     }
 
                     intent.putExtras(getIntent()); // passing on any received params (such as isCvv
