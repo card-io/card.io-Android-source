@@ -7,6 +7,7 @@ card.io Android SDK change log and release notes
 You can disable this feature via the new `EXTRA_SCAN_EXPIRY` extra of `CardIOActivity`.
 Note: Expiry scans will not infrequently fail to obtain the correct expiry date.
 We are continuing to work to improve expiry-scanning accuracy.
+* Fix crash when the `DataEntryActivity` is missing extras [#19](https://github.com/card-io/card.io-Android-SDK/issues/19)).
 
 4.0.2
 -----
