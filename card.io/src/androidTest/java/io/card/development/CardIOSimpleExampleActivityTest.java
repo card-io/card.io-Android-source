@@ -34,6 +34,10 @@ import io.card.payment.i18n.StringKey;
 public class CardIOSimpleExampleActivityTest extends
         ActivityInstrumentationTestCase2<CardIOSimpleExampleActivity> {
     private static final String TAG = "TESTER";
+    public static final int EXPIRY_CHECKBOX_INDEX = 0;
+    public static final int CVV_CHECKBOX_INDEX = 1;
+    public static final int POSTAL_CODE_CHECKBOX_INDEX = 2;
+    public static final int FORCE_MANUAL_CHECKBOX_INDEX = 4;
 
     private Solo solo;
 
@@ -69,12 +73,12 @@ public class CardIOSimpleExampleActivityTest extends
     private void selectEntryItems(boolean shouldForceManual) throws Exception {
         solo.assertCurrentActivity("Expected Buffalo Activity", CardIOSimpleExampleActivity.class);
         solo.scrollToTop();
-        // solo.clickOnCheckBox(0);
-        solo.clickOnCheckBox(1);
-        solo.clickOnCheckBox(2);
+        solo.clickOnCheckBox(EXPIRY_CHECKBOX_INDEX);
+        solo.clickOnCheckBox(CVV_CHECKBOX_INDEX);
+        solo.clickOnCheckBox(POSTAL_CODE_CHECKBOX_INDEX);
 
         if (shouldForceManual) {
-            solo.clickOnCheckBox(3);
+            solo.clickOnCheckBox(FORCE_MANUAL_CHECKBOX_INDEX);
         }
     }
 
@@ -85,7 +89,7 @@ public class CardIOSimpleExampleActivityTest extends
 
         int i = 0;
         solo.enterText(i++, "4111111111111111");
-        // solo.enterText(i++, "12/22");
+        solo.enterText(i++, "12/22");
         solo.enterText(i++, "123");
         solo.enterText(i++, "95131");
 
@@ -99,7 +103,7 @@ public class CardIOSimpleExampleActivityTest extends
         solo.assertCurrentActivity("Expected completion", CardIOSimpleExampleActivity.class);
         solo.takeScreenshot("completion");
 
-        // assertEquals("Expiry not found", true, solo.searchText("Expiry: 12/2022"));
+        assertEquals("Expiry not found", true, solo.searchText("Expiry: 12/2022"));
         assertEquals("CVV not found", true, solo.searchText("CVV: 123"));
         assertEquals("Postal Code not found", true, solo.searchText("Postal Code: 95131"));
     }
@@ -107,7 +111,7 @@ public class CardIOSimpleExampleActivityTest extends
     public void test015_Cancel() throws Exception {
 
         solo.assertCurrentActivity("expecting example app", CardIOSimpleExampleActivity.class);
-        solo.clickOnCheckBox(3);
+        solo.clickOnCheckBox(FORCE_MANUAL_CHECKBOX_INDEX);
         solo.sleep(250);
         solo.clickOnButton("Scan Credit Card using Card.io");
 
@@ -198,6 +202,8 @@ public class CardIOSimpleExampleActivityTest extends
         solo.assertCurrentActivity("Expected Buffalo to launch",
                 CardIOSimpleExampleActivity.class);
 
+        solo.clickOnCheckBox(EXPIRY_CHECKBOX_INDEX);
+
         Spinner spinner = getCurrentSpinners(solo).get(1);
 
         int numItems = spinner.getCount();
@@ -209,6 +215,8 @@ public class CardIOSimpleExampleActivityTest extends
             solo.waitForLogMessage("ready for manual entry");
 
             solo.sleep(1000); // extra settle time.
+
+            solo.enterText(0, "12/22");
 
             solo.assertCurrentActivity("didn't finish scan", DataEntryActivity.class);
 
