@@ -16,7 +16,7 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 
 1. Update `release_notes.md` and commit.
 
-1. Run `fab sdk_reset sdk_release`, it will reset the branches and build the sdk in the `distribution-repo` folder.  It will also tag the release.
+1. Run `fab sdk_reset sdk_release`, it will reset the branches, build the sdk in the `distribution-repo` folder, tag the release, and deploy to mavenCentral.
 
 1. Switch to master and merge release branch
 	```bash
@@ -37,7 +37,8 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 		```
 	2. Promote the repo in maven central
 	    2. Open [Sonatype](https://oss.sonatype.org/), and
-	    2. follow [these instructions](http://central.sonatype.org/pages/releasing-the-deployment.html)
+	    2. Follow [these instructions](http://central.sonatype.org/pages/releasing-the-deployment.html)
+	    2. Only when the [card.io maven repo](https://repo1.maven.org/maven2/io/card/android-sdk/) lists this release, proceed to next step.  Otherwise, the sample app won't compile. 
 	3. Push
 		```
 		    git push public master --tags
