@@ -327,7 +327,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
     IplImage *cbcr = cvCreateImageHeader(cvSize(width / 2, height / 2), IPL_DEPTH_8U, 2);
     cbcr->imageData = ((char *)jBytes) + width * height;
     IplImage *cb, *cr;
-    dmz_deinterleave_uint8_c2(cbcr, &cb, &cr);
+    dmz_deinterleave_uint8_c2(cbcr, &cr, &cb);
     cvReleaseImageHeader(&cbcr);
 
     dmz_edges found_edges;
