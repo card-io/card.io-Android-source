@@ -153,13 +153,24 @@ android.libraryVariants.all { variant ->
         sign configurations.archives
     }
 
+    // these should be specified in the gradle.properties file as:
+    // systemProp.sonatypeUsername=xxxxxxx
+    // systemProp.sonatypePassword=yyyyyyy
+    def sonatypeUsername = System.properties.containsKey('sonatypeUsername') ? System.properties['sonatypeUsername'] : ''
+    def sonatypePassword = System.properties.containsKey('sonatypePassword') ? System.properties['sonatypePassword'] : ''
+
     uploadArchives {
+        doFirst {
+            println "***"
+            println "uploading archives using username: '" + sonatypeUsername + "'"
+            println "***"
+        }
+
         repositories {
             mavenDeployer {
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
                 repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                    // these should be specified in the gradle.properties file
                     authentication(userName: sonatypeUsername, password: sonatypePassword)
                 }
 
