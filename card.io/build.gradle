@@ -114,7 +114,10 @@ android.libraryVariants.all { variant ->
                 variantCompiledClassesDir,
                 project.plugins.findPlugin("com.android.library").bootClasspath
         )
-
+        
+        if (JavaVersion.current().isJava8Compatible()) {
+		    options.addStringOption('Xdoclint:none', '-quiet')
+	    }
         include 'io/card/payment/*.java'
 
         // More info on options here: http://www.gradle.org/docs/current/javadoc/org/gradle/external/javadoc/StandardJavadocDocletOptions.html
