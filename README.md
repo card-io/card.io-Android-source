@@ -37,7 +37,7 @@ There are a few bugs in the build process, so these steps are required for the f
 3. init its `dmz` submodule: `git submodule sync; git submodule update --init --recursive`
 4. `$ cp local.properties.example local.properties`
 5. Edit `local.properties with your env (Assuming you've defined `$ANDROID_NDK` correctly, run `$ echo "$ANDROID_NDK" "$ANDROID_SDK"`
-6. `$ ./gradlew clean build`
+6. `$ ./gradlew clean assembleDebug`
 
 #### Hints & tricks.
 - See [card.io/src/main/jni](card.io/src/main/jni) for native layer (NDK) discussion.
