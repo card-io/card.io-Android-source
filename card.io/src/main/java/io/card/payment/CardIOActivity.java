@@ -515,6 +515,12 @@ public final class CardIOActivity extends Activity {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
+		if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+			// Prevent screenshots; FLAG_SECURE is restricted to HoneyComb and above to prevent issues with some Samsung handsets
+			// Please see http://stackoverflow.com/questions/9822076/how-do-i-prevent-android-taking-a-screenshot-when-my-app-goes-to-the-background			
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+		}
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         orientationListener.enable();
