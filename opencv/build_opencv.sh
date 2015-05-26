@@ -4,7 +4,7 @@ cd `dirname $0`
 WD=`pwd`
 
 CV_SUBMODULE_DIR="../ThirdParty/opencv"
-CV_VERSION="2.4.2"
+CV_VERSION="2.4.11"
 
 if [ -d "$CV_SUBMODULE_DIR" ] ; then
 	cd $CV_SUBMODULE_DIR
@@ -19,13 +19,13 @@ else
 	unset CV_SUBMODULE_DIR
 fi
 
-CV_NAME="OpenCV-$CV_VERSION"
+CV_NAME="opencv-$CV_VERSION"
 BUILD_DIR="build-$CV_VERSION"
 
 if [ ! "$CV_SRC" ] ; then
 	CV_SRC="$WD/$CV_NAME"
 	
-	CV_ZIP="$CV_NAME.tar.bz2"
+	CV_ZIP="$CV_NAME.zip"
 	CV_URL="http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/$CV_VERSION/$CV_ZIP"
 
 	# standard on MacOSX
@@ -55,6 +55,16 @@ cd $BUILD_DIR
 cmake -C ../CMakeCache.android.initial.cmake -DANDROID_ABI="armeabi-v7a" \
   -DCMAKE_TOOLCHAIN_FILE=$CV_SRC/android/android.toolchain.cmake \
   -DLIBRARY_OUTPUT_PATH="$WD/../../card.io/src/main/jni/lib" \
+  $CV_SRC || exit -1
+
+# we could specify which libs to make in the cmake args, or we could just build them manually.
+make opencv_core -j16 || exit -1
+make opencv_imgproc -j16 || exit -1
+
+# copy/paste for arm64-v8a
+cmake -C ../CMakeCache.android.initial.cmake -DANDROID_ABI="arm64-v8a" \
+  -DCMAKE_TOOLCHAIN_FILE=$CV_SRC/android/android.toolchain.cmake \
+  -DLIBRARY_OUTPUT_PATH="$WD/../../card.io/src/main/jni/lib-arm64-v8a" \
   $CV_SRC || exit -1
 
 # we could specify which libs to make in the cmake args, or we could just build them manually.
