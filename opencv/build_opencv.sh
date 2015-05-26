@@ -3,7 +3,7 @@
 cd `dirname $0`
 WD=`pwd`
 
-CV_SUBMODULE_DIR="../ThirdParty/opencv"
+CV_SUBMODULE_DIR="$WD/../ThirdParty/opencv"
 CV_VERSION="2.4.11"
 
 if [ -d "$CV_SUBMODULE_DIR" ] ; then
@@ -20,7 +20,10 @@ else
 fi
 
 CV_NAME="opencv-$CV_VERSION"
-BUILD_DIR="build-$CV_VERSION"
+BUILD_DIR="$WD/build-$CV_VERSION"
+
+ANDROID_CMAKE_FILE="android.toolchain.cmake"
+
 
 if [ ! "$CV_SRC" ] ; then
 	CV_SRC="$WD/$CV_NAME"
@@ -46,27 +49,20 @@ if [ ! "$CV_SRC" ] ; then
 	    echo "unzipping $CV_ZIP"
 	    tar -xjf $CV_ZIP || exit -1
 	fi
-
 fi
+
+ANDROID_CMAKE_URL="https://raw.githubusercontent.com/taka-no-me/android-cmake/master/android.toolchain.cmake"
+wget -q $ANDROID_CMAKE_URL -O $ANDROID_CMAKE_FILE || exit -1
 
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
-cmake -C ../CMakeCache.android.initial.cmake -DANDROID_ABI="armeabi-v7a" \
-  -DCMAKE_TOOLCHAIN_FILE=$CV_SRC/android/android.toolchain.cmake \
-  -DLIBRARY_OUTPUT_PATH="$WD/../../card.io/src/main/jni/lib" \
+cmake -C "$WD/CMakeCache.android.initial.cmake" -DANDROID_ABI="armeabi-v7a" \
+  -DCMAKE_TOOLCHAIN_FILE="$WD/$ANDROID_CMAKE_FILE" \
   $CV_SRC || exit -1
 
 # we could specify which libs to make in the cmake args, or we could just build them manually.
 make opencv_core -j16 || exit -1
 make opencv_imgproc -j16 || exit -1
 
-# copy/paste for arm64-v8a
-cmake -C ../CMakeCache.android.initial.cmake -DANDROID_ABI="arm64-v8a" \
-  -DCMAKE_TOOLCHAIN_FILE=$CV_SRC/android/android.toolchain.cmake \
-  -DLIBRARY_OUTPUT_PATH="$WD/../../card.io/src/main/jni/lib-arm64-v8a" \
-  $CV_SRC || exit -1
-
-# we could specify which libs to make in the cmake args, or we could just build them manually.
-make opencv_core -j16 || exit -1
-make opencv_imgproc -j16 || exit -1
+cp $BUILD_DIR/lib/armeabi-v7a/*.so $WD/../card.io/src/main/jni/lib/

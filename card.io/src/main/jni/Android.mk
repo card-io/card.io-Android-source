@@ -11,7 +11,7 @@ LOCAL_PATH := $(call my-dir)
 LOCAL_DMZ_DIR := card.io-dmz
 
 # --- declare opencv prebuilt static libs ---------------------------------
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a))
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := opencv_core
@@ -26,13 +26,28 @@ include $(PREBUILT_SHARED_LIBRARY)
 
 endif
 
+ifneq (,$(filter $(TARGET_ARCH_ABI),arm64-v8a))
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := opencv_core
+LOCAL_SRC_FILES := lib-arm64-v8a/libopencv_core.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := opencv_imgproc
+LOCAL_SRC_FILES := lib-arm64-v8a/libopencv_imgproc.so
+LOCAL_SHARED_LIBRARIES := opencv_core
+include $(PREBUILT_SHARED_LIBRARY)
+
+endif
+
 # --- libcardioRecocognizer.so -------------------------------------------------------- 
 # (neon version)
 
 ifeq (1,1)
 
 include $(CLEAR_VARS)
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a))
 
 LOCAL_MODULE  := cardioRecognizer
 LOCAL_LDLIBS := -llog -L$(SYSROOT)/usr/lib -lz -ljnigraphics
@@ -55,7 +70,7 @@ endif
 ifeq (1,1)
 
 include $(CLEAR_VARS)
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a, arm64-v8a))
 
 LOCAL_MODULE  := cardioRecognizer_tegra2
 LOCAL_LDLIBS := -llog -L$(SYSROOT)/usr/lib -lz -ljnigraphics
