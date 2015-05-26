@@ -421,6 +421,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         Log.d(TAG, "onResume()");
 
         getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        ActivityHelper.setFlagSecure(this);
 
         validateAndEnableDoneButtonIfValid();
 
