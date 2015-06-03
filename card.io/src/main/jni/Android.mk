@@ -26,22 +26,7 @@ include $(PREBUILT_SHARED_LIBRARY)
 
 endif
 
-ifneq (,$(filter $(TARGET_ARCH_ABI),arm64-v8a))
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := opencv_core
-LOCAL_SRC_FILES := lib-arm64-v8a/libopencv_core.so
-include $(PREBUILT_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := opencv_imgproc
-LOCAL_SRC_FILES := lib-arm64-v8a/libopencv_imgproc.so
-LOCAL_SHARED_LIBRARIES := opencv_core
-include $(PREBUILT_SHARED_LIBRARY)
-
-endif
-
-# --- libcardioRecocognizer.so -------------------------------------------------------- 
+# --- libcardioRecognizer.so --------------------------------------------------------
 # (neon version)
 
 ifeq (1,1)
@@ -70,7 +55,7 @@ endif
 ifeq (1,1)
 
 include $(CLEAR_VARS)
-ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a, arm64-v8a))
+ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a))
 
 LOCAL_MODULE  := cardioRecognizer_tegra2
 LOCAL_LDLIBS := -llog -L$(SYSROOT)/usr/lib -lz -ljnigraphics
@@ -91,6 +76,8 @@ endif
 
 # --- libcardioDecider.so ------------------------------------------------------------
 
+ifneq (,$(filter $(TARGET_ARCH_ABI), armeabi armeabi-v7a mips x86 ))
+
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := cardioDecider
@@ -103,6 +90,7 @@ LOCAL_SRC_FILES := $(LOCAL_DMZ_DIR)/processor_support.cpp nativeDecider.cpp
 LOCAL_CFLAGS := -DANDROID_DMZ=1 -DANDROID_HAS_NEON=1
 
 include $(BUILD_SHARED_LIBRARY)
+endif
 
 # ------------
 
