@@ -4,7 +4,7 @@ This is probably only useful for maintainers.
 
 Public github address (https://github.com/card-io/card.io-Android-SDK)
 
-1. Make sure you're using NDK r10d!  Ndk 8 is broken for some devices.  
+1. Make sure you're using NDK r10e!  Ndk 8 is broken for some devices.
 
 1. Sanity check the master branch.  
 

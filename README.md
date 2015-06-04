@@ -26,7 +26,7 @@ Dev Setup
 ### Prerequisites
 
 - Current version of the Android SDK. (obviously)
-- Android NDK. We've tested with r10d. At minimum, the Clang toolchain is required.
+- Android NDK. We've tested with r10e. At minimum, the Clang toolchain is required.
 
 ### First build
 
