@@ -107,29 +107,30 @@ public final class CardIOActivity extends Activity {
     /**
      * Boolean extra. Optional. Defaults to <code>false</code>. Removes the keyboard button from the
      * scan screen.
-     * <p/>
+     * <br><br>
      * If scanning is unavailable, the {@link android.app.Activity} result will be {@link #RESULT_SCAN_NOT_AVAILABLE}.
      */
     public static final String EXTRA_SUPPRESS_MANUAL_ENTRY = "io.card.payment.suppressManual";
 
     /**
      * String extra. Optional. The preferred language for all strings appearing in the user
-     * interface. If not set, or if set to null, defaults to the device's current language setting. <br/>
-     * <br/>
+     * interface. If not set, or if set to null, defaults to the device's current language setting.
+     * <br><br>
      * Can be specified as a language code ("en", "fr", "zh-Hans", etc.) or as a locale ("en_AU",
-     * "fr_FR", "zh-Hant_TW", etc.). <br/>
-     * <br/>
+     * "fr_FR", "zh-Hant_TW", etc.).
+     * <br><br>
      * If the library does not contain localized strings for a specified locale, then will fall back
-     * to the language. E.g., "es_CO" -> "es". <br/>
+     * to the language. E.g., "es_CO" -&gt; "es".
+     * <br><br>
      * If the library does not contain localized strings for a specified language, then will fall
-     * back to American English. <br/>
-     * <br/>
+     * back to American English.
+     * <br><br>
      * If you specify only a language code, and that code matches the device's currently preferred
      * language, then the library will attempt to use the device's current region as well. E.g.,
-     * specifying "en" on a device set to "English" and "United Kingdom" will result in "en_GB". <br/>
-     * <br/>
-     * These localizations are currently included: <br/>
-     * <p/>
+     * specifying "en" on a device set to "English" and "United Kingdom" will result in "en_GB".
+     * <br><br>
+     * These localizations are currently included:
+     * <br><br>
      * da, de, en, en_AU, en_GB, es, es_MX, fr, he, is, it, ja, ko, nb, nl, pl, pt, pt_BR, ru,
      * sv, tr, zh-Hans, zh-Hant, zh-Hant_TW.
      */
@@ -220,7 +221,7 @@ public final class CardIOActivity extends Activity {
     /**
      * result code indicating that scan is not available. Only returned when
      * {@link #EXTRA_SUPPRESS_MANUAL_ENTRY} is set and scanning is not available.
-     * <p/>
+     * <br><br>
      * This error can be avoided in normal situations by checking
      * {@link #canReadCardWithCamera()}.
      */
@@ -588,7 +589,7 @@ public final class CardIOActivity extends Activity {
     /**
      * This {@link android.app.Activity} overrides back button handling to handle back presses properly given the
      * various states this {@link android.app.Activity} can be in.
-     * <p/>
+     * <br><br>
      * This method is called by Android, never directly by application code.
      */
     @Override
@@ -612,7 +613,7 @@ public final class CardIOActivity extends Activity {
 
     /**
      * Determine if the device supports card scanning.
-     * <p/>
+     * <br><br>
      * An ARM7 processor and Android SDK 8 or later are required. Additional checks for specific
      * misbehaving devices may also be added.
      *
@@ -630,15 +631,19 @@ public final class CardIOActivity extends Activity {
     }
 
     /**
-     * Please include the return value of this method in any support requests.
+     * Returns the String version of this SDK.  Please include the return value of this method in any support requests.
      *
-     * @return An string describing the version of the card.io library.
+     * @return The String version of this SDK
      */
     public static String sdkVersion() {
         return BuildConfig.PRODUCT_VERSION;
     }
 
-    @SuppressWarnings("deprecation")
+    /**
+     * Returns the time this SDK was built.
+     *
+     * @return the time this SDK was built
+     */
     public static Date sdkBuildDate() {
         return new Date(BuildConfig.BUILD_TIME);
     }

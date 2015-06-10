@@ -124,7 +124,7 @@ public class CreditCard implements Parcelable {
 
     /**
      * @return The card number string consisting of all but the last four digits replaced with
-     * bullet ('\u2022').
+     * bullet ('&#8226;').
      */
     public String getRedactedCardNumber() {
         if (cardNumber != null) {

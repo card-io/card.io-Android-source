@@ -58,7 +58,7 @@ public enum CardType {
     UNKNOWN("Unknown"),
     /**
      * Not enough information given.
-     * <p/>
+     * <br><br>
      * More digits are required to know the card type. (e.g. all we have is a 3, so we don't know if
      * it's JCB or AmEx)
      */
@@ -84,6 +84,7 @@ public enum CardType {
      * explanation of languageOrLocale.
      *
      * @param languageOrLocale See {@link CardIOActivity#EXTRA_LANGUAGE_OR_LOCALE}.
+     * @return the display name of the card
      */
     public String getDisplayName(String languageOrLocale) {
         switch (this) {
@@ -162,11 +163,12 @@ public enum CardType {
 
     /**
      * Returns the {@link Bitmap} of the card logo (e.g. Visa, MC, etc.), if known. Otherwise, returns null.
-     * <p/>
+     * <br><br>
      * Returned bitmap is suitable for display with a masked card number, for example, to indicate a user's chosen
      * card.
      *
-     * @param context For retrieving the image density
+     * @param context The application context for retrieving the image density
+     * @return the bitmap icon of the card for display
      */
     public Bitmap imageBitmap(Context context) {
         String cardImageData = null;
@@ -285,8 +287,8 @@ public enum CardType {
     /**
      * Infer the card type from a string.
      *
-     * @param typeStr
-     * @return matched real type
+     * @param typeStr The String value of this enum
+     * @return the matched real type
      */
     public static CardType fromString(String typeStr) {
         if (typeStr == null) {
@@ -310,7 +312,7 @@ public enum CardType {
      * for these ranges (last checked: 19 Feb 2013)
      *
      * @param numStr A string containing only the card number.
-     * @return Inferred card type
+     * @return the inferred card type
      */
     public static CardType fromCardNumber(String numStr) {
         if (TextUtils.isEmpty(numStr)) {
