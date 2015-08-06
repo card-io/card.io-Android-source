@@ -58,6 +58,8 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
 
     public static native boolean nUseTegra();
 
+    public static native boolean nUseX86();
+
     private native void nSetup(boolean shouldDetectOnly, float minFocusScore);
 
     private native void nResetAnalytics();
@@ -118,7 +120,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             Log.d(Util.PUBLIC_LOG_TAG, "Loaded card.io decider library.  nUseNeon():" + nUseNeon()
                     + ",nUseTegra():" + nUseTegra());
 
-            if (nUseNeon() || nUseTegra()) {
+            if (nUseNeon() || nUseTegra() || nUseX86()) {
                 System.loadLibrary("opencv_core");
                 Log.d(Util.PUBLIC_LOG_TAG, "Loaded opencv core library");
                 System.loadLibrary("opencv_imgproc");
@@ -127,6 +129,9 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             if (nUseNeon()) {
                 System.loadLibrary("cardioRecognizer");
                 Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io NEON library");
+            } else if (nUseX86()) {
+                System.loadLibrary("cardioRecognizer");
+                Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io x86 library");
             } else if (nUseTegra()) {
                 System.loadLibrary("cardioRecognizer_tegra2");
                 Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io Tegra2 library");
@@ -143,7 +148,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     }
 
     static boolean processorSupported() {
-        return (!manualFallbackForError && (nUseNeon() || nUseTegra()));
+        return (!manualFallbackForError && (nUseNeon() || nUseTegra() || nUseX86()));
     }
 
     CardScanner(CardIOActivity scanActivity, int currentFrameOrientation) {
