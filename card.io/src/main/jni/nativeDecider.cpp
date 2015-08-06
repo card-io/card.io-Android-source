@@ -21,3 +21,11 @@ extern "C" jboolean JNICALL Java_io_card_payment_CardScanner_nUseNeon() {
 extern "C" jboolean JNICALL Java_io_card_payment_CardScanner_nUseTegra() {
   return (dmz_use_vfp3_16());
 }
+
+extern "C" jboolean JNICALL Java_io_card_payment_CardScanner_nUseX86() {
+#ifdef __i386__
+  return true;
+#else
+  return false;
+#endif
+}
