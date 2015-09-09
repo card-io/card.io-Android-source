@@ -53,6 +53,10 @@ public enum CardType {
      */
     MAESTRO("Maestro"),
     /**
+     * ElKart
+     */
+    ELKART("ElKart"),
+    /**
      * Unknown card type.
      */
     UNKNOWN("Unknown"),
@@ -99,6 +103,8 @@ public enum CardType {
                 return LocalizedStrings.getString(StringKey.CARDTYPE_MASTERCARD, languageOrLocale);
             case VISA:
                 return LocalizedStrings.getString(StringKey.CARDTYPE_VISA, languageOrLocale);
+            case ELKART:
+                return LocalizedStrings.getString(StringKey.CARDTYPE_ELKART, languageOrLocale);
             default:
                 break;
         }
@@ -119,6 +125,7 @@ public enum CardType {
             case MASTERCARD:
             case VISA:
             case DISCOVER:
+            case ELKART:
                 result = 16;
                 break;
             case DINERSCLUB:
@@ -150,6 +157,7 @@ public enum CardType {
             case VISA:
             case DISCOVER:
             case DINERSCLUB:
+            case ELKART:
                 result = 3;
                 break;
             case UNKNOWN:
@@ -212,9 +220,9 @@ public enum CardType {
     /**
      * Determine if a number matches a prefix interval
      *
-     * @param number credit card number
+     * @param number        credit card number
      * @param intervalStart prefix (e.g. "4") or prefix interval start (e.g. "51")
-     * @param intervalEnd prefix interval end (e.g. "55") or null for non-intervals
+     * @param intervalEnd   prefix interval end (e.g. "55") or null for non-intervals
      * @return -1 for insufficient digits, 0 for no, 1 for yes.
      */
     private static boolean isNumberInInterval(String number, String intervalStart,
@@ -262,6 +270,7 @@ public enum CardType {
         intervalLookup.put(getNewPair("65", null), CardType.DISCOVER);          // Discover
         intervalLookup.put(getNewPair("66", "69"), CardType.MAESTRO);           // Maestro
         intervalLookup.put(getNewPair("88", null), CardType.DISCOVER);          // China UnionPay (Discover)
+        intervalLookup.put(getNewPair("94", null), CardType.ELKART);
 
         for (Entry<Pair<String, String>, CardType> entry : getIntervalLookup().entrySet()) {
             minDigits = Math.max(minDigits, entry.getKey().first.length());
