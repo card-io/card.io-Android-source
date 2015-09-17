@@ -428,7 +428,9 @@ public final class CardIOActivity extends Activity {
     }
 
     private void doOrientationChange(int orientation) {
-        Log.d(TAG, "doOrientationChange(" + orientation + ")");
+        // This method calls every time the orientation changes by a degree.
+        // Don't enable logging unless doing rotational testing.
+        // Log.d(TAG, "doOrientationChange(" + orientation + ")");
 
         if (orientation < 0 || mCardScanner == null) {
             return;
