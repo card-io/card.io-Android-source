@@ -719,9 +719,9 @@ public final class CardIOActivity extends Activity {
         float sf;
         if (mFrameOrientation == ORIENTATION_PORTRAIT
                 || mFrameOrientation == ORIENTATION_PORTRAIT_UPSIDE_DOWN) {
-            sf = mGuideFrame.right / 428f * .95f;
+            sf = mGuideFrame.right / (float)CardScanner.CREDIT_CARD_TARGET_WIDTH * .95f;
         } else {
-            sf = mGuideFrame.right / 428f * 1.15f;
+            sf = mGuideFrame.right / (float)CardScanner.CREDIT_CARD_TARGET_WIDTH * 1.15f;
         }
 
         Matrix m = new Matrix();
