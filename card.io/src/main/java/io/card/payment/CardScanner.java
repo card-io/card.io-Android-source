@@ -401,7 +401,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
      */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.d(TAG, "Preview.surfaceDestroyed()");
+        Log.d(TAG, "surfaceDestroyed()");
         if (mCamera != null) {
             try {
                 mCamera.stopPreview();

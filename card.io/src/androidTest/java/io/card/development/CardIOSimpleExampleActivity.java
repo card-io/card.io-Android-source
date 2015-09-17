@@ -75,7 +75,7 @@ public class CardIOSimpleExampleActivity extends Activity {
     @Override
     public void onCreate(Bundle b) {
         super.onCreate(b);
-        Log.v(TAG, "onCreate()");
+        Log.d(TAG, "onCreate()");
 
         // debugging. Requires android-9, but preferably android-11 or 14
         // StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -141,7 +141,7 @@ public class CardIOSimpleExampleActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.v(TAG, "onResume()");
+        Log.d(TAG, "onResume()");
 
         KeyguardManager mKeyGuardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         KeyguardLock mLock = mKeyGuardManager.newKeyguardLock(getClass().getName());
@@ -252,13 +252,13 @@ public class CardIOSimpleExampleActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.v(TAG, "onPause()");
+        Log.d(TAG, "onPause()");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v(TAG, "onDestroy()");
+        Log.d(TAG, "onDestroy()");
     }
 
     private void autotest() {
@@ -281,7 +281,7 @@ public class CardIOSimpleExampleActivity extends Activity {
     public void onStop() {
         super.onStop();
         mResultLabel.setText("");
-        Log.v(TAG, "onStop()");
+        Log.d(TAG, "onStop()");
     }
 
     @Override

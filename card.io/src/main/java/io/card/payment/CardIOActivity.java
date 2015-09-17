@@ -301,7 +301,7 @@ public final class CardIOActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate() ================================================================");
+        Log.i(TAG, "onCreate()");
 
         numActivityAllocations++;
         // NOTE: java native asserts are disabled by default on Android.
@@ -420,7 +420,7 @@ public final class CardIOActivity extends Activity {
         String localizedError = LocalizedStrings.getString(errorKey);
 
         Log.e(Util.PUBLIC_LOG_TAG,
-                "Unkown exception - please send the stack trace to support@card.io", e);
+                "Unknown exception - please send the stack trace to support@card.io", e);
         Toast toast = Toast.makeText(this, localizedError, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, TOAST_OFFSET_Y);
         toast.show();
@@ -428,7 +428,7 @@ public final class CardIOActivity extends Activity {
     }
 
     private void doOrientationChange(int orientation) {
-        // Log.d(TAG, "onOrientationChanged(" + orientation + ")");
+        Log.d(TAG, "doOrientationChange(" + orientation + ")");
 
         if (orientation < 0 || mCardScanner == null) {
             return;
@@ -505,7 +505,7 @@ public final class CardIOActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(TAG, "onResume() ----------------------------------------------------------");
+        Log.i(TAG, "onResume()");
 
         if (manualEntryFallbackOrForced) {
             nextActivity();
@@ -538,7 +538,7 @@ public final class CardIOActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.i(TAG, "onPause() xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        Log.i(TAG, "onPause()");
 
         if (orientationListener != null) {
             orientationListener.disable();
@@ -548,7 +548,7 @@ public final class CardIOActivity extends Activity {
         if (mCardScanner != null) {
             mCardScanner.pauseScanning();
         } else if (!manualEntryFallbackOrForced) {
-            Log.wtf(Util.PUBLIC_LOG_TAG, "cardScanner is null in onPause()");
+            Log.wtf(Util.PUBLIC_LOG_TAG, "cardScanner is null");
         }
     }
 
@@ -594,7 +594,7 @@ public final class CardIOActivity extends Activity {
      */
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "CardIOActivity.onBackPressed()");
+        Log.d(TAG, "onBackPressed()");
 
         if (!manualEntryFallbackOrForced && mOverlay.isAnimating()) {
             try {
@@ -668,7 +668,7 @@ public final class CardIOActivity extends Activity {
     // end static
 
     void onFirstFrame(int orientation) {
-        Log.d(TAG, "mFirstPreviewFrame");
+        Log.d(TAG, "onFirstFrame(" + orientation + ")");
         SurfaceView sv = mPreview.getSurfaceView();
         if (mOverlay != null) {
             mOverlay.setCameraPreviewRect(new Rect(sv.getLeft(), sv.getTop(), sv.getRight(), sv
@@ -689,7 +689,7 @@ public final class CardIOActivity extends Activity {
     }
 
     void onCardDetected(Bitmap detectedBitmap, DetectionInfo dInfo) {
-        Log.d(TAG, "processDetections");
+        Log.d(TAG, "onCardDetected()");
 
         try {
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -742,7 +742,7 @@ public final class CardIOActivity extends Activity {
     }
 
     private void nextActivity() {
-        Log.d(TAG, "CardIOActivity.nextActivity()");
+        Log.d(TAG, "nextActivity()");
 
         Intent origIntent = getIntent();
         if (origIntent != null && origIntent.getBooleanExtra(EXTRA_SUPPRESS_CONFIRMATION, false)) {
@@ -762,7 +762,7 @@ public final class CardIOActivity extends Activity {
             new Handler().post(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d(TAG, "CardIOActivity.nextActivity().post(Runnable)");
+                    Log.d(TAG, "post(Runnable)");
 
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);

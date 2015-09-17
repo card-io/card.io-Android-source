@@ -84,7 +84,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v(TAG, "onCreate");
+        Log.d(TAG, "onCreate()");
 
         if (null == getIntent().getExtras()) {
             // extras should never be null.  This is some weird android state that we handle by just going back.
