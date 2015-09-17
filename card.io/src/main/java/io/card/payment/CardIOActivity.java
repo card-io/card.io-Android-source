@@ -558,6 +558,11 @@ public final class CardIOActivity extends Activity {
         mOverlay = null;
         numActivityAllocations--;
 
+        if (orientationListener != null) {
+            orientationListener.disable();
+        }
+        setFlashOn(false);
+
         if (mCardScanner != null) {
             mCardScanner.endScanning();
             mCardScanner = null;
