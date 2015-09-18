@@ -409,9 +409,13 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
 
         CreditCard result = new CreditCard(numberValidator.getValue(), capture.expiryMonth,
                 capture.expiryYear, cvvValidator.getValue(), postalCodeValidator.getValue());
-        Intent completion = new Intent();
-        completion.putExtra(CardIOActivity.EXTRA_SCAN_RESULT, result);
-        DataEntryActivity.this.setResult(CardIOActivity.RESULT_CARD_INFO, completion);
+        Intent dataIntent = new Intent();
+        dataIntent.putExtra(CardIOActivity.EXTRA_SCAN_RESULT, result);
+        if(getIntent().hasExtra(CardIOActivity.EXTRA_CAPTURED_CARD_IMAGE)){
+            dataIntent.putExtra(CardIOActivity.EXTRA_CAPTURED_CARD_IMAGE,
+                    getIntent().getByteArrayExtra(CardIOActivity.EXTRA_CAPTURED_CARD_IMAGE));
+        }
+        DataEntryActivity.this.setResult(CardIOActivity.RESULT_CARD_INFO, dataIntent);
         finish();
     }
 

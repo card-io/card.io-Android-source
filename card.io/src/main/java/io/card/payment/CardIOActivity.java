@@ -38,7 +38,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Constructor;
 import java.util.Date;
 
@@ -733,14 +732,8 @@ public final class CardIOActivity extends Activity {
         mOverlay.setBitmap(scaledCard);
 
         if (mDetectOnly) {
-
-            ByteArrayOutputStream scaledCardBytes = new ByteArrayOutputStream();
-            scaledCard.compress(Bitmap.CompressFormat.JPEG, 80, scaledCardBytes);
-
             Intent dataIntent = new Intent();
-            if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_RETURN_CARD_IMAGE, false)) {
-                dataIntent.putExtra(EXTRA_CAPTURED_CARD_IMAGE, scaledCardBytes.toByteArray());
-            }
+            Util.writeCapturedCardImageIfNecessary(getIntent(), dataIntent, mOverlay);
 
             setResultAndFinish(RESULT_SCAN_SUPPRESSED, dataIntent);
         } else {
@@ -751,18 +744,13 @@ public final class CardIOActivity extends Activity {
     private void nextActivity() {
         Log.d(TAG, "nextActivity()");
 
-        Intent origIntent = getIntent();
+        final Intent origIntent = getIntent();
         if (origIntent != null && origIntent.getBooleanExtra(EXTRA_SUPPRESS_CONFIRMATION, false)) {
             Intent dataIntent = new Intent(CardIOActivity.this, DataEntryActivity.class);
             dataIntent.putExtra(EXTRA_SCAN_RESULT, mDetectedCard);
             mDetectedCard = null;
 
-            if (origIntent.getBooleanExtra(EXTRA_RETURN_CARD_IMAGE, false)
-                    && mOverlay != null && mOverlay.getBitmap() != null) {
-                ByteArrayOutputStream scaledCardBytes = new ByteArrayOutputStream();
-                mOverlay.getBitmap().compress(Bitmap.CompressFormat.JPEG, 80, scaledCardBytes);
-                dataIntent.putExtra(EXTRA_CAPTURED_CARD_IMAGE, scaledCardBytes.toByteArray());
-            }
+            Util.writeCapturedCardImageIfNecessary(origIntent, dataIntent, mOverlay);
 
             setResultAndFinish(RESULT_CONFIRMATION_SUPPRESSED, dataIntent);
         } else {
@@ -774,7 +762,8 @@ public final class CardIOActivity extends Activity {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-                    Intent intent = new Intent(CardIOActivity.this, DataEntryActivity.class);
+                    Intent dataIntent = new Intent(CardIOActivity.this, DataEntryActivity.class);
+                    Util.writeCapturedCardImageIfNecessary(origIntent, dataIntent, mOverlay);
 
                     if (mOverlay != null) {
                         mOverlay.markupCard();
@@ -784,7 +773,7 @@ public final class CardIOActivity extends Activity {
                         markedCardImage = mOverlay.getCardImage();
                     }
                     if (mDetectedCard != null) {
-                        intent.putExtra(EXTRA_SCAN_RESULT, mDetectedCard);
+                        dataIntent.putExtra(EXTRA_SCAN_RESULT, mDetectedCard);
                         mDetectedCard = null;
                     } else {
                         /*
@@ -793,18 +782,19 @@ public final class CardIOActivity extends Activity {
                          The purpose of this is to ensure there's always an extra in the DataEntryActivity.
                          If there are no extras received by DataEntryActivity, then an error has occurred.
                          */
-                        intent.putExtra(EXTRA_MANUAL_ENTRY_RESULT, true);
+                        dataIntent.putExtra(EXTRA_MANUAL_ENTRY_RESULT, true);
                     }
 
-                    intent.putExtras(getIntent()); // passing on any received params (such as isCvv
+                    dataIntent.putExtras(getIntent()); // passing on any received params (such as isCvv
                     // and language)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+                    dataIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
                             | Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivityForResult(intent, REQUEST_DATA_ENTRY);
+                    startActivityForResult(dataIntent, REQUEST_DATA_ENTRY);
                 }
             });
         }
     }
+
 
     /**
      * Show an error message using toast.

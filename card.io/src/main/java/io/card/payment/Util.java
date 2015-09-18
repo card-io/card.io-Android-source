@@ -5,9 +5,11 @@ package io.card.payment;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -18,6 +20,7 @@ import android.os.Build;
 import android.os.Debug;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -136,5 +139,24 @@ class Util {
         paint.setAntiAlias(true);
         float[] black = { 0f, 0f, 0f };
         paint.setShadowLayer(1.5f, 0.5f, 0f, Color.HSVToColor(200, black));
+    }
+
+    /**
+     * Writes {@link CardIOActivity#EXTRA_CAPTURED_CARD_IMAGE} to dataIntent if
+     * origIntent has {@link CardIOActivity#EXTRA_RETURN_CARD_IMAGE}.
+     *
+     * @param origIntent
+     * @param dataIntent
+     * @param mOverlay
+     */
+    static void writeCapturedCardImageIfNecessary(
+            Intent origIntent, Intent dataIntent, OverlayView mOverlay){
+        if (origIntent.getBooleanExtra(CardIOActivity.EXTRA_RETURN_CARD_IMAGE, false)
+            && mOverlay != null && mOverlay.getBitmap() != null) {
+            ByteArrayOutputStream scaledCardBytes = new ByteArrayOutputStream();
+            mOverlay.getBitmap().compress(Bitmap.CompressFormat.JPEG, 80, scaledCardBytes);
+            dataIntent.putExtra(CardIOActivity.EXTRA_CAPTURED_CARD_IMAGE, scaledCardBytes.toByteArray());
+        }
+
     }
 }

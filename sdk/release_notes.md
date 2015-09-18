@@ -4,6 +4,7 @@ card.io Android SDK change log and release notes
 next
 -----
 * Fix leaking IntentReceiver [#76](https://github.com/card-io/card.io-Android-SDK/issues/76).
+* Populate CardIOActivity.EXTRA_CAPTURED_CARD_IMAGE when confirmation is shown [#10-source](https://github.com/card-io/card.io-Android-source/issues/10).
 
 5.0.1
 -----
