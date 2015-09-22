@@ -11,7 +11,7 @@ LOCAL_PATH := $(call my-dir)
 LOCAL_DMZ_DIR := card.io-dmz
 
 # --- declare opencv prebuilt static libs ---------------------------------
-ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86))
+ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86 arm64-v8a))
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := opencv_core
@@ -32,7 +32,7 @@ endif
 ifeq (1,1)
 
 include $(CLEAR_VARS)
-ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86))
+ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86 arm64-v8a))
 
 LOCAL_MODULE  := cardioRecognizer
 LOCAL_LDLIBS := -llog -L$(SYSROOT)/usr/lib -lz -ljnigraphics
@@ -48,6 +48,10 @@ LOCAL_CPPFLAGS += -DANDROID_HAS_NEON=1
 LOCAL_ARM_NEON := true
 endif
 
+ifeq ($(TARGET_ARCH_ABI), arm64-v8a)
+LOCAL_CFLAGS += -DANDROID_HAS_NEON=0   ## arm64 changed register names - requires asm fixes
+endif
+
 include $(BUILD_SHARED_LIBRARY)
 endif
 
@@ -59,7 +63,7 @@ endif
 ifeq (1,1)
 
 include $(CLEAR_VARS)
-ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86))
+ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86 arm64-v8a))
 
 LOCAL_MODULE  := cardioRecognizer_tegra2
 LOCAL_LDLIBS := -llog -L$(SYSROOT)/usr/lib -lz -ljnigraphics
@@ -85,7 +89,7 @@ endif
 
 # --- libcardioDecider.so ------------------------------------------------------------
 
-ifneq (,$(filter $(TARGET_ARCH_ABI), armeabi armeabi-v7a mips x86 ))
+ifneq (,$(filter $(TARGET_ARCH_ABI), armeabi armeabi-v7a mips x86 arm64-v8a))
 
 include $(CLEAR_VARS)
 
