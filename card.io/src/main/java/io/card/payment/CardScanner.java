@@ -117,10 +117,12 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
 
         try {
             System.loadLibrary("cardioDecider");
-            Log.d(Util.PUBLIC_LOG_TAG, "Loaded card.io decider library.  nUseNeon():" + nUseNeon()
-                    + ",nUseTegra():" + nUseTegra());
+            Log.d(Util.PUBLIC_LOG_TAG, "Loaded card.io decider library.");
+            Log.d(Util.PUBLIC_LOG_TAG, "    nUseNeon(): " + nUseNeon());
+            Log.d(Util.PUBLIC_LOG_TAG, "    nUseTegra():" + nUseTegra());
+            Log.d(Util.PUBLIC_LOG_TAG, "    nUseX86():  " + nUseX86());
 
-            if (nUseNeon() || nUseTegra() || nUseX86()) {
+            if (usesSupportedProcessorArch()) {
                 System.loadLibrary("opencv_core");
                 Log.d(Util.PUBLIC_LOG_TAG, "Loaded opencv core library");
                 System.loadLibrary("opencv_imgproc");
@@ -137,7 +139,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
                 Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io Tegra2 library");
             } else {
                 Log.w(Util.PUBLIC_LOG_TAG,
-                        "unsupported processor - card.io scanning requires ARMv7 architecture");
+                        "unsupported processor - card.io scanning requires ARMv7 or x86 architecture");
                 manualFallbackForError = true;
             }
         } catch (UnsatisfiedLinkError e) {
@@ -147,8 +149,12 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         }
     }
 
+    private static boolean usesSupportedProcessorArch() {
+        return nUseNeon() || nUseTegra() || nUseX86();
+    }
+
     static boolean processorSupported() {
-        return (!manualFallbackForError && (nUseNeon() || nUseTegra() || nUseX86()));
+        return (!manualFallbackForError && (usesSupportedProcessorArch()));
     }
 
     CardScanner(CardIOActivity scanActivity, int currentFrameOrientation) {
