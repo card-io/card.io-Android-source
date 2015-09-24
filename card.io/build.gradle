@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 21
+        targetSdkVersion 23
 
         buildConfigField "String", "PRODUCT_NAME", "\"${product_name}\""
         buildConfigField "String", "PRODUCT_VERSION", "\"${product_version}\""
