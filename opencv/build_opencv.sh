@@ -55,7 +55,7 @@ wget -q $ANDROID_CMAKE_URL -O $ANDROID_CMAKE_FILE || exit -1
 
 
 
-for ARCH in "armeabi-v7a" "x86" "arm64-v8a"
+for ARCH in "armeabi-v7a" "x86" "arm64-v8a" "x86_64"
 do
 	echo "---- building $ARCH ----"
 	BUILD_DIR="$WD/build-$CV_VERSION-"$ARCH

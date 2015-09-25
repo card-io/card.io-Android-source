@@ -11,7 +11,7 @@ LOCAL_PATH := $(call my-dir)
 LOCAL_DMZ_DIR := card.io-dmz
 
 # --- declare opencv prebuilt static libs ---------------------------------
-ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86 arm64-v8a))
+ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86 arm64-v8a x86_64))
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := opencv_core
@@ -32,9 +32,9 @@ endif
 ifeq (1,1)
 
 include $(CLEAR_VARS)
-ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86 arm64-v8a))
+ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86 arm64-v8a x86_64))
 
-LOCAL_MODULE  := cardioRecognizer
+LOCAL_MODULE := cardioRecognizer
 LOCAL_LDLIBS := -llog -L$(SYSROOT)/usr/lib -lz -ljnigraphics
 LOCAL_SHARED_LIBRARIES := cpufeatures opencv_imgproc opencv_core 
 
@@ -48,8 +48,8 @@ LOCAL_CPPFLAGS += -DANDROID_HAS_NEON=1
 LOCAL_ARM_NEON := true
 endif
 
-ifeq ($(TARGET_ARCH_ABI), arm64-v8a)
-LOCAL_CFLAGS += -DANDROID_HAS_NEON=0   ## arm64 changed register names - requires asm fixes
+ifneq (,$(filter $(TARGET_ARCH_ABI), arm64-v8a x86_64))
+LOCAL_CFLAGS += -DANDROID_HAS_NEON=0 ## 64-bit changed register names - requires asm fixes
 endif
 
 include $(BUILD_SHARED_LIBRARY)
@@ -63,9 +63,9 @@ endif
 ifeq (1,1)
 
 include $(CLEAR_VARS)
-ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86 arm64-v8a))
+ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86 arm64-v8a x86_64))
 
-LOCAL_MODULE  := cardioRecognizer_tegra2
+LOCAL_MODULE := cardioRecognizer_tegra2
 LOCAL_LDLIBS := -llog -L$(SYSROOT)/usr/lib -lz -ljnigraphics
 LOCAL_SHARED_LIBRARIES := cpufeatures opencv_imgproc opencv_core 
 
@@ -73,8 +73,8 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(LOCAL_DMZ_DIR) $(LOCAL_PATH)/$(LOCAL_DMZ_DIR
 LOCAL_SRC_FILES := $(LOCAL_DMZ_DIR)/dmz_all.cpp nativeRecognizer.cpp
 
 ifeq ($(TARGET_ARCH_ABI), x86) #we're generating an empty libcardioRecognizer_tegra2.so for x86 devices, so the list of .so files is the same for armeabi-v7a and x86 folders. This is to avoid any fallback to arm versions.
-LOCAL_C_INCLUDES :=  
-LOCAL_SRC_FILES :=  
+LOCAL_C_INCLUDES :=
+LOCAL_SRC_FILES :=
 endif
 
 # Note: setting -mfloat-abi=hard will generate libs that cannot be linked with built in Android ones. So don't.
@@ -89,7 +89,7 @@ endif
 
 # --- libcardioDecider.so ------------------------------------------------------------
 
-ifneq (,$(filter $(TARGET_ARCH_ABI), armeabi armeabi-v7a mips x86 arm64-v8a))
+ifneq (,$(filter $(TARGET_ARCH_ABI), armeabi armeabi-v7a mips x86 arm64-v8a x86_64))
 
 include $(CLEAR_VARS)
 
