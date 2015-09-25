@@ -23,7 +23,7 @@ extern "C" jboolean JNICALL Java_io_card_payment_CardScanner_nUseTegra() {
 }
 
 extern "C" jboolean JNICALL Java_io_card_payment_CardScanner_nUseX86() {
-#ifdef __i386__
+#if defined __i386__ || defined __x86_64__
   return true;
 #else
   return false;

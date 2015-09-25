@@ -20,8 +20,6 @@ else
 fi
 
 CV_NAME="opencv-$CV_VERSION"
-BUILD_DIR_ARM="$WD/build-$CV_VERSION-arm"
-BUILD_DIR_X86="$WD/build-$CV_VERSION-x86"
 
 ANDROID_CMAKE_FILE="android.toolchain.cmake"
 
@@ -55,30 +53,25 @@ fi
 ANDROID_CMAKE_URL="https://raw.githubusercontent.com/taka-no-me/android-cmake/master/android.toolchain.cmake"
 wget -q $ANDROID_CMAKE_URL -O $ANDROID_CMAKE_FILE || exit -1
 
-#building armeabi-v7a version
-mkdir -p $BUILD_DIR_ARM
-cd $BUILD_DIR_ARM
 
-cmake -C "$WD/CMakeCache.android.initial.cmake" -DANDROID_ABI="armeabi-v7a" \
-  -DCMAKE_TOOLCHAIN_FILE="$WD/$ANDROID_CMAKE_FILE" \
-  $CV_SRC || exit -1
 
-# we could specify which libs to make in the cmake args, or we could just build them manually.
-make opencv_core -j16 || exit -1
-make opencv_imgproc -j16 || exit -1
+for ARCH in "armeabi-v7a" "x86" "arm64-v8a" "x86_64"
+do
+	echo "---- building $ARCH ----"
+	BUILD_DIR="$WD/build-$CV_VERSION-"$ARCH
+	DEST_DIR="$WD/../card.io/src/main/jni/lib/"$ARCH
 
-cp $BUILD_DIR_ARM/lib/armeabi-v7a/*.so $WD/../card.io/src/main/jni/lib/armeabi-v7a/
+	mkdir -p $BUILD_DIR
+	cd $BUILD_DIR
 
-#building x86 version
-mkdir -p $BUILD_DIR_X86
-cd $BUILD_DIR_X86
+	cmake -C "$WD/CMakeCache.android.initial.cmake" -DANDROID_ABI="$ARCH" \
+	  -DCMAKE_TOOLCHAIN_FILE="$WD/$ANDROID_CMAKE_FILE" \
+	  $CV_SRC || exit -1
 
-cmake -C "$WD/CMakeCache.android.initial.cmake" -DANDROID_ABI="x86" \
-  -DCMAKE_TOOLCHAIN_FILE="$WD/$ANDROID_CMAKE_FILE" \
-  $CV_SRC || exit -1
+	# we could specify which libs to make in the cmake args, or we could just build them manually.
+	make opencv_core -j16 || exit -1
+	make opencv_imgproc -j16 || exit -1
 
-# we could specify which libs to make in the cmake args, or we could just build them manually.
-make opencv_core -j16 || exit -1
-make opencv_imgproc -j16 || exit -1
-
-cp $BUILD_DIR_X86/lib/x86/*.so $WD/../card.io/src/main/jni/lib/x86/
+	mkdir -p $DEST_DIR
+	cp $BUILD_DIR/lib/"$ARCH"/*.so $DEST_DIR
+done
