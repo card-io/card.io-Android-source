@@ -6,6 +6,7 @@ next
 * Fix leaking IntentReceiver [#76](https://github.com/card-io/card.io-Android-SDK/issues/76).
 * Populate CardIOActivity.EXTRA_CAPTURED_CARD_IMAGE when confirmation is shown [#10-source](https://github.com/card-io/card.io-Android-source/issues/10).
 * Add x86 processor support [#26-source](https://github.com/card-io/card.io-Android-source/issues/26).
+* Add arm64-v8a processor support [#33-source](https://github.com/card-io/card.io-Android-source/issues/33), [#51](https://github.com/card-io/card.io-Android-SDK/issues/51).
 
 5.0.1
 -----
