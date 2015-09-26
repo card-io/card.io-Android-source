@@ -198,6 +198,14 @@ public final class CardIOActivity extends Activity {
      */
     public static final String EXTRA_KEEP_APPLICATION_THEME = "io.card.payment.keepApplicationTheme";
 
+    /**
+     * Boolean extra. Optional. Defaults to <code>false</code>. Defaults to manual entry instead of
+     * scanning card.
+     * <br><br>
+     * If {@link #EXTRA_SUPPRESS_MANUAL_ENTRY} is true this will be ignored.
+     */
+    public static final String EXTRA_DEFAULT_TO_MANUAL_ENTRY = "io.card.payment.defaultToManual";
+
 
     /**
      * Boolean extra. Used for testing only.
@@ -281,6 +289,7 @@ public final class CardIOActivity extends Activity {
     private CardScanner mCardScanner;
 
     private boolean manualEntryFallbackOrForced = false;
+    private boolean nextActivityOnResume = false;
 
     /**
      * Static variable for the decorated card image. This is ugly, but works. Parceling and
@@ -341,6 +350,8 @@ public final class CardIOActivity extends Activity {
         if (clientData.getBooleanExtra(EXTRA_NO_CAMERA, false)) {
             Log.i(Util.PUBLIC_LOG_TAG, "EXTRA_NO_CAMERA set to true. Skipping camera.");
             manualEntryFallbackOrForced = true;
+        } else if (clientData.getBooleanExtra(EXTRA_DEFAULT_TO_MANUAL_ENTRY, false)) {
+            nextActivityOnResume = true;
         } else {
             try {
                 if (!Util.hardwareSupported()) {
@@ -508,7 +519,8 @@ public final class CardIOActivity extends Activity {
         super.onResume();
         Log.i(TAG, "onResume()");
 
-        if (manualEntryFallbackOrForced) {
+        if (manualEntryFallbackOrForced || (nextActivityOnResume && !suppressManualEntry)) {
+            nextActivityOnResume = false;
             nextActivity();
             return;
         }
