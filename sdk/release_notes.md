@@ -1,13 +1,14 @@
 card.io Android SDK change log and release notes
 ================================================
 
-next
+5.1.0
 -----
 * Fix leaking IntentReceiver [#76](https://github.com/card-io/card.io-Android-SDK/issues/76).
 * Populate CardIOActivity.EXTRA_CAPTURED_CARD_IMAGE when confirmation is shown [#10-source](https://github.com/card-io/card.io-Android-source/issues/10).
 * Add x86 processor support [#26-source](https://github.com/card-io/card.io-Android-source/issues/26).
 * Add arm64-v8a processor support [#33-source](https://github.com/card-io/card.io-Android-source/issues/33), [#51](https://github.com/card-io/card.io-Android-SDK/issues/51).
 * Add x86_64 processor support.
+* Add support for Android 23 new permission model for the Camera permission [#78](https://github.com/card-io/card.io-Android-SDK/issues/78).  When permission is granted, the SDK performs as in previous versions.  When permission is or has already been denied, the SDK falls back to manual entry.  Note: this SDK does not call the `shouldShowRequestPermissionRationale()` method and does not show a rationale.  It is up to the implementor whether or not to show the Camera permission rationale before opening the SDK.
 
 5.0.1
 -----
