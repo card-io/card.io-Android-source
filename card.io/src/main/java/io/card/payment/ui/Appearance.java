@@ -67,6 +67,7 @@ public class Appearance {
     // #5e5e5d, but seems
     // inconsistent
     public static final int TEXT_COLOR_EDIT_TEXT = Color.DKGRAY;
+    public static final int TEXT_COLOR_EDIT_TEXT_HINT = Color.LTGRAY;
     public static final int TEXT_COLOR_ERROR = Color.parseColor("#b32317");
 
     public static final int TEXT_COLOR_LABEL = TEXT_COLOR_LIGHT;

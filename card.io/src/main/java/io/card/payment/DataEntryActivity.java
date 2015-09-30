@@ -177,6 +177,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                     android.R.attr.textAppearanceLarge);
             numberEdit.setInputType(InputType.TYPE_CLASS_PHONE);
             numberEdit.setHint("1234 5678 1234 5678");
+            if(! useApplicationTheme ) {
+                numberEdit.setHintTextColor(Appearance.TEXT_COLOR_EDIT_TEXT_HINT);
+            }
 
             numberValidator = new CardNumberValidator();
             numberEdit.addTextChangedListener(numberValidator);
@@ -220,6 +223,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                     android.R.attr.textAppearanceLarge);
             expiryEdit.setInputType(InputType.TYPE_CLASS_PHONE);
             expiryEdit.setHint(LocalizedStrings.getString(StringKey.EXPIRES_PLACEHOLDER));
+            if(! useApplicationTheme ) {
+                expiryEdit.setHintTextColor(Appearance.TEXT_COLOR_EDIT_TEXT_HINT);
+            }
 
             if (capture != null) {
                 expiryValidator = new ExpiryValidator(capture.expiryMonth, capture.expiryYear);
@@ -263,6 +269,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             cvvEdit.setTextAppearance(getApplicationContext(), android.R.attr.textAppearanceLarge);
             cvvEdit.setInputType(InputType.TYPE_CLASS_PHONE);
             cvvEdit.setHint("123");
+            if(! useApplicationTheme ) {
+                cvvEdit.setHintTextColor(Appearance.TEXT_COLOR_EDIT_TEXT_HINT);
+            }
 
             int length = 4;
             if (capture != null) {
@@ -305,6 +314,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             postalCodeEdit.setTextAppearance(getApplicationContext(),
                     android.R.attr.textAppearanceLarge);
             postalCodeEdit.setInputType(InputType.TYPE_CLASS_TEXT);
+            if(! useApplicationTheme ) {
+                postalCodeEdit.setHintTextColor(Appearance.TEXT_COLOR_EDIT_TEXT_HINT);
+            }
 
             postalCodeValidator = new MaxLengthValidator(MAX_POSTAL_CODE_LENGTH);
             postalCodeEdit.addTextChangedListener(postalCodeValidator);
