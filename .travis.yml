@@ -18,6 +18,7 @@ before_install:
 - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_NDK_HOME}
 - echo "sdk.dir=$ANDROID_HOME" > local.properties
 - echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties
+- echo y | android update sdk -u -a -t android-23
 script: ./gradlew clean assembleDebug assembleDebugTest :card.io:assembleRelease releaseDoc
 notifications:
   webhooks:
