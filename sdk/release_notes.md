@@ -10,6 +10,7 @@ card.io Android SDK change log and release notes
 * Add x86_64 processor support.
 * Add support for Android 23 new permission model for the Camera permission [#78](https://github.com/card-io/card.io-Android-SDK/issues/78).  When permission is granted, the SDK performs as in previous versions.  When permission is or has already been denied, the SDK falls back to manual entry.  Note: this SDK does not call the `shouldShowRequestPermissionRationale()` method and does not show a rationale.  It is up to the implementor whether or not to show the Camera permission rationale before opening the SDK.
 * Add a default edit text hint color [#22-source](https://github.com/card-io/card.io-Android-source/issues/22).
+* Fix issue where setting `EXTRA_KEEP_APPLICATION_THEME` would not create buttons that matched the theme [#24-source](https://github.com/card-io/card.io-Android-source/issues/24).
 
 5.0.1
 -----

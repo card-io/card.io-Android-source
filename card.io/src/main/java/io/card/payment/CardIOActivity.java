@@ -322,7 +322,8 @@ public final class CardIOActivity extends Activity {
 
         final Intent clientData = this.getIntent();
 
-        useApplicationTheme = clientData.getBooleanExtra(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME, false);
+        useApplicationTheme = getIntent().getBooleanExtra(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME, false);
+        ActivityHelper.setActivityTheme(this, useApplicationTheme);
 
         LocalizedStrings.setLanguage(clientData);
 
@@ -1020,7 +1021,6 @@ public final class CardIOActivity extends Activity {
             Button keyboardBtn = new Button(this);
             keyboardBtn.setId(KEY_BTN_ID);
             keyboardBtn.setText(LocalizedStrings.getString(StringKey.KEYBOARD));
-            keyboardBtn.setTextSize(12.0f);
             keyboardBtn.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1028,8 +1028,10 @@ public final class CardIOActivity extends Activity {
                 }
             });
             mUIBar.addView(keyboardBtn);
-            ViewUtil.styleAsButton(keyboardBtn, false, this);
-            keyboardBtn.setTextSize(Appearance.TEXT_SIZE_SMALL_BUTTON);
+            ViewUtil.styleAsButton(keyboardBtn, false, this, useApplicationTheme);
+            if(!useApplicationTheme){
+                keyboardBtn.setTextSize(Appearance.TEXT_SIZE_SMALL_BUTTON);
+            }
             keyboardBtn.setMinimumHeight(ViewUtil.typedDimensionValueToPixelsInt(
                     Appearance.SMALL_BUTTON_HEIGHT, this));
             RelativeLayout.LayoutParams keyboardParams = (RelativeLayout.LayoutParams) keyboardBtn

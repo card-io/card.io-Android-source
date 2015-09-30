@@ -362,10 +362,12 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         doneBtn.setEnabled(false);
 
         buttonLayout.addView(doneBtn, doneParam);
-        ViewUtil.styleAsButton(doneBtn, true, this);
+        ViewUtil.styleAsButton(doneBtn, true, this, useApplicationTheme);
         ViewUtil.setPadding(doneBtn, "5dip", null, "5dip", null);
-        ViewUtil.setMargins(doneBtn, "8dip", "8dip", "4dip", "8dip");
-        doneBtn.setTextSize(Appearance.TEXT_SIZE_MEDIUM_BUTTON);
+        ViewUtil.setMargins(doneBtn, "8dip", "8dip", "8dip", "8dip");
+        if(!useApplicationTheme) {
+            doneBtn.setTextSize(Appearance.TEXT_SIZE_MEDIUM_BUTTON);
+        }
 
         cancelBtn = new Button(this);
 
@@ -382,11 +384,12 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         });
 
         buttonLayout.addView(cancelBtn, cancelParam);
-        ViewUtil.styleAsButton(cancelBtn, false, this);
+        ViewUtil.styleAsButton(cancelBtn, false, this, useApplicationTheme);
         ViewUtil.setPadding(cancelBtn, "5dip", null, "5dip", null);
         ViewUtil.setMargins(cancelBtn, "4dip", "8dip", "8dip", "8dip");
-        cancelBtn.setTextSize(Appearance.TEXT_SIZE_MEDIUM_BUTTON);
-
+        if(!useApplicationTheme) {
+            cancelBtn.setTextSize(Appearance.TEXT_SIZE_MEDIUM_BUTTON);
+        }
         container.addView(buttonLayout, buttonLayoutParam);
 
         ActivityHelper.addActionBarIfSupported(this);
