@@ -16,7 +16,7 @@
     <application
             android:name="io.card.development.BuffaloApplication"
             android:label="card.io demo"
-            android:theme="@android:style/Theme.Light">
+            android:theme="@android:style/Theme.Material">
         <activity android:name="io.card.development.CardIOSimpleExampleActivity" android:icon="@drawable/buffalo_icon"
                   android:label="card.io demo">
             <intent-filter>
