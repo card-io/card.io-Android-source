@@ -1,3 +1,8 @@
+sudo: false
+addons:
+  apt:
+    packages:
+    - p7zip-full
 language: android
 jdk: oraclejdk7
 env:
@@ -14,7 +19,6 @@ before_install:
 - if [ `uname -m` = x86_64 ]; then wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86_64.bin
   -O ndk.bin; else wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86.bin
   -O ndk.bin; fi
-- sudo apt-get install -y p7zip-full
 - 7z x ndk.bin android-ndk-r10d/build/ android-ndk-r10d/ndk-build android-ndk-r10d/platforms/android-21
   > /dev/null
 - export ANDROID_NDK_HOME=`pwd`/android-ndk-r10d
