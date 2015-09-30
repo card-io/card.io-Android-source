@@ -5,7 +5,10 @@ env:
   - ANDROID_TARGET=android-23  ANDROID_ABI=armeabi-v7a
 android:
   components:
+  - android-23
   - build-tools-23.0.1
+  - platform-tools
+  - tools
 before_install:
 - export ANDROID_HOME=/usr/local/android-sdk
 - if [ `uname -m` = x86_64 ]; then wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86_64.bin
@@ -18,7 +21,6 @@ before_install:
 - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_NDK_HOME}
 - echo "sdk.dir=$ANDROID_HOME" > local.properties
 - echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties
-- echo y | android update sdk -u -a -t android-23
 script: ./gradlew clean assembleDebug assembleDebugTest :card.io:assembleRelease releaseDoc
 notifications:
   webhooks:
