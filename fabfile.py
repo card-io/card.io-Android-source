@@ -29,12 +29,14 @@ def verbose(verbose=True):
 def build(is_upload_archives):
     cmd = "./gradlew clean :card.io:assembleRelease releaseDoc"
 
-    if is_upload_archives == True:
-        cmd += " :card.io:uploadArchives"
-
     with lcd(env.top_root):
         print "running " + cmd
         local(cmd)
+
+        if is_upload_archives == True:
+            cmd = "./gradlew :card.io:uploadArchives"
+            print "running " + cmd
+            local(cmd)
 
 
 def sdk_setup():
