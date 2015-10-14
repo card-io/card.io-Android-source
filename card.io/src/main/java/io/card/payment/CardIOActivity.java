@@ -386,19 +386,6 @@ public final class CardIOActivity extends Activity {
             finishIfSuppressManualEntry();
         } else {
             // Guaranteed to be called in API 23+
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                View decorView = getWindow().getDecorView();
-                // Hide the status bar.
-                int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-                decorView.setSystemUiVisibility(uiOptions);
-                // Remember that you should never show the action bar if the
-                // status bar is hidden, so hide that too if necessary.
-                ActionBar actionBar = getActionBar();
-                if (null != actionBar) {
-                    actionBar.hide();
-                }
-            }
-
             showCameraScannerOverlay();
         }
     }
@@ -463,6 +450,19 @@ public final class CardIOActivity extends Activity {
     }
 
     private void showCameraScannerOverlay() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            View decorView = getWindow().getDecorView();
+            // Hide the status bar.
+            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+            // Remember that you should never show the action bar if the
+            // status bar is hidden, so hide that too if necessary.
+            ActionBar actionBar = getActionBar();
+            if (null != actionBar) {
+                actionBar.hide();
+            }
+        }
+
         try {
             mGuideFrame = new Rect();
 
