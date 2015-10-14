@@ -16,7 +16,7 @@ Public github address (https://github.com/card-io/card.io-Android-SDK)
 
 1. Update `release_notes.md` and commit.
 
-1. Run `fab sdk_reset sdk_release`, it will reset the branches, build the sdk in the `distribution-repo` folder, tag the release, and deploy to mavenCentral.
+1. Run `fab sdk_reset sdk_release`, it will reset the branches, build the sdk in the `distribution-repo` folder, tag the release, and deploy to mavenCentral.  Modify the fab task to `sdk_release:is_upload_archives=false` if you do not want to deploy to mavenCentral.
 
 1. Switch to master and merge release branch
 	```bash
