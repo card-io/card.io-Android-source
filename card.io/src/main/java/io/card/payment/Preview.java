@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 class Preview extends ViewGroup {
     private static final String TAG = Preview.class.getSimpleName();
 
-    private boolean isSurfaceValid;
     private int mPreviewWidth;
     private int mPreviewHeight;
 
@@ -90,7 +89,6 @@ class Preview extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         Log.d(TAG, "Preview.onLayout()");
-        Log.d(TAG, "- isSurfaceValid: " + isSurfaceValid);
 
         if (changed && getChildCount() > 0) {
             assert mSurfaceView != null;
