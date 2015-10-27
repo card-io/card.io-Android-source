@@ -430,25 +430,6 @@ public final class CardIOActivity extends Activity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_ID: {
-                waitingForPermission = false;
-                if (grantResults[0] ==
-                        PackageManager.PERMISSION_GRANTED){
-                    showCameraScannerOverlay();
-
-                } else {
-                    manualEntryFallbackOrForced = true;
-                    // show manual entry - handled in onResume()
-                }
-                onResume();
-            }
-        }
-    }
-
     private void showCameraScannerOverlay() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             View decorView = getWindow().getDecorView();
@@ -662,6 +643,25 @@ public final class CardIOActivity extends Activity {
         }
 
         super.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_ID: {
+                waitingForPermission = false;
+                if (grantResults[0] ==
+                        PackageManager.PERMISSION_GRANTED){
+                    showCameraScannerOverlay();
+
+                } else {
+                    manualEntryFallbackOrForced = true;
+                    // show manual entry - handled in onResume()
+                }
+                onResume();
+            }
+        }
     }
 
     @Override
