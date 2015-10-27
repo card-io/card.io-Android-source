@@ -252,7 +252,6 @@ public final class CardIOActivity extends Activity {
     private static final int UIBAR_ID = 2;
     private static final int KEY_BTN_ID = 3;
 
-    private static final int PERMISSION_REQUEST_ID = 1;
     private static final String BUNDLE_WAITING_FOR_PERMISSION = "io.card.payment.waitingForPermission";
 
     private static final float UIBAR_VERTICAL_MARGIN_DP = 15.0f;
@@ -261,8 +260,8 @@ public final class CardIOActivity extends Activity {
 
     private static final int TOAST_OFFSET_Y = -75;
 
-    private static int uniqueOMatic = 10;
-    private static final int REQUEST_DATA_ENTRY = uniqueOMatic++;
+    private static final int DATA_ENTRY_REQUEST_ID = 10;
+    private static final int PERMISSION_REQUEST_ID = 11;
 
     private OverlayView mOverlay;
     private OrientationEventListener orientationListener;
@@ -670,17 +669,25 @@ public final class CardIOActivity extends Activity {
         Log.d(TAG, String.format("onActivityResult(requestCode:%d, resultCode:%d, ...",
                 requestCode, resultCode));
 
-        if (resultCode == RESULT_CARD_INFO || resultCode == RESULT_ENTRY_CANCELED
-                || manualEntryFallbackOrForced) {
-            if (data != null && data.hasExtra(EXTRA_SCAN_RESULT)) {
-                Log.v(TAG, "data entry result: " + data.getParcelableExtra(EXTRA_SCAN_RESULT));
-            }
-            setResultAndFinish(resultCode, data);
+        switch (requestCode) {
+            case DATA_ENTRY_REQUEST_ID:
+                if (resultCode == RESULT_CANCELED) {
+                    Log.d(TAG, "ignoring onActivityResult(RESULT_CANCELED) caused only when Camera Permissions are Denied in Android 23");
+                } else if (resultCode == RESULT_CARD_INFO || resultCode == RESULT_ENTRY_CANCELED
+                        || manualEntryFallbackOrForced) {
+                    if (data != null && data.hasExtra(EXTRA_SCAN_RESULT)) {
+                        Log.v(TAG, "EXTRA_SCAN_RESULT: " + data.getParcelableExtra(EXTRA_SCAN_RESULT));
+                    } else {
+                        Log.d(TAG, "no data in EXTRA_SCAN_RESULT");
+                    }
+                    setResultAndFinish(resultCode, data);
 
-        } else {
-            if (mUIBar != null) {
-                mUIBar.setVisibility(View.VISIBLE);
-            }
+                } else {
+                    if (mUIBar != null) {
+                        mUIBar.setVisibility(View.VISIBLE);
+                    }
+                }
+                break;
         }
     }
 
@@ -881,7 +888,7 @@ public final class CardIOActivity extends Activity {
                     // and language)
                     dataIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
                             | Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivityForResult(dataIntent, REQUEST_DATA_ENTRY);
+                    startActivityForResult(dataIntent, DATA_ENTRY_REQUEST_ID);
                 }
             });
         }
