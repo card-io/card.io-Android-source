@@ -378,8 +378,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         cancelBtn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataEntryActivity.this.setResult(CardIOActivity.RESULT_ENTRY_CANCELED);
-                finish();
+                onBackPressed();
             }
         });
 
@@ -431,6 +430,12 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                     getIntent().getByteArrayExtra(CardIOActivity.EXTRA_CAPTURED_CARD_IMAGE));
         }
         DataEntryActivity.this.setResult(CardIOActivity.RESULT_CARD_INFO, dataIntent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        DataEntryActivity.this.setResult(CardIOActivity.RESULT_ENTRY_CANCELED);
         finish();
     }
 
