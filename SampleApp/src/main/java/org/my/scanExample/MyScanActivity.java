@@ -92,6 +92,10 @@ public class MyScanActivity extends Activity {
             if (scanResult.postalCode != null) {
                 resultStr += "Postal Code: " + scanResult.postalCode + "\n";
             }
+
+            if (scanResult.cardholderName != null) {
+                resultStr += "Cardholder Name: " + scanResult.cardholderName + "\n";
+            }
         } else {
             resultStr = "Scan was canceled.";
         }

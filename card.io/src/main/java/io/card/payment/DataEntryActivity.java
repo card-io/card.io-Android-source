@@ -49,7 +49,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
      * PayPal REST Apis only handle max 20 chars postal code, so we'll do the same here.
      */
     private static final int MAX_POSTAL_CODE_LENGTH = 20;
-    private static final int MAX_CARDHOLDER_NAME_LENGTH = 200;
+    private static final int MAX_CARDHOLDER_NAME_LENGTH = 50;
     private static final String PADDING_DIP = "4dip";
     private static final String LABEL_LEFT_PADDING_DEFAULT = "2dip";
     private static final String LABEL_LEFT_PADDING_HOLO = "12dip";
@@ -429,7 +429,8 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         }
 
         CreditCard result = new CreditCard(numberValidator.getValue(), capture.expiryMonth,
-                capture.expiryYear, cvvValidator.getValue(), postalCodeValidator.getValue());
+                capture.expiryYear, cvvValidator.getValue(), postalCodeValidator.getValue(),
+                cardholderNameValidator.getValue());
         Intent dataIntent = new Intent();
         dataIntent.putExtra(CardIOActivity.EXTRA_SCAN_RESULT, result);
         if(getIntent().hasExtra(CardIOActivity.EXTRA_CAPTURED_CARD_IMAGE)){
@@ -462,7 +463,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             advanceToNextEmptyField();
         }
 
-        if (numberEdit != null || expiryEdit != null || cvvEdit != null || postalCodeEdit != null) {
+        if (numberEdit != null || expiryEdit != null || cvvEdit != null || postalCodeEdit != null || cardholderNameEdit != null) {
             getWindow()
                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
@@ -486,12 +487,14 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
 
     private void validateAndEnableDoneButtonIfValid() {
         doneBtn.setEnabled(numberValidator.isValid() && expiryValidator.isValid()
-                && cvvValidator.isValid() && postalCodeValidator.isValid());
+                && cvvValidator.isValid() && postalCodeValidator.isValid()
+                && cardholderNameValidator.isValid());
 
         Log.d(TAG, "setting doneBtn.enabled=" + doneBtn.isEnabled());
 
         if (autoAcceptDone && numberValidator.isValid() && expiryValidator.isValid()
-                && cvvValidator.isValid() && postalCodeValidator.isValid()) {
+                && cvvValidator.isValid() && postalCodeValidator.isValid()
+                && cardholderNameValidator.isValid()) {
             completed();
         }
     }
@@ -550,6 +553,17 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                 }
             } else {
                 setDefaultColor(postalCodeEdit);
+            }
+        } else if (cardholderNameEdit != null && et == cardholderNameEdit.getText()) {
+            if (cardholderNameValidator.hasFullLength()) {
+                if (!cardholderNameValidator.isValid()) {
+                    cardholderNameEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
+                } else {
+                    setDefaultColor(cardholderNameEdit);
+                    advanceToNextEmptyField();
+                }
+            } else {
+                setDefaultColor(cardholderNameEdit);
             }
         }
 
