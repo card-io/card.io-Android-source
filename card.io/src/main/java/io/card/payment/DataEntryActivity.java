@@ -197,7 +197,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         LinearLayout optionLayout = new LinearLayout(this);
         LinearLayout.LayoutParams optionLayoutParam = new LinearLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        ViewUtil.setPadding(optionLayout, null, PADDING_DIP, null, null);
+        ViewUtil.setPadding(optionLayout, null, PADDING_DIP, null, PADDING_DIP);
         optionLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         boolean requireExpiry = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false);
@@ -593,6 +593,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         boolean requireNameOnCard = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_NAME_ON_CARD, false);
         if (requireNameOnCard) {
             LinearLayout nameOnCardLayout = new LinearLayout(this);
+            ViewUtil.setPadding(nameOnCardLayout, null, PADDING_DIP, null, null);
             nameOnCardLayout.setOrientation(LinearLayout.VERTICAL);
 
             TextView nameOnCardLabel = new TextView(this);
