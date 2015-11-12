@@ -600,7 +600,8 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                 nameOnCardLabel.setTextColor(Appearance.TEXT_COLOR_LABEL);
             }
             ViewUtil.setPadding(nameOnCardLabel, labelLeftPadding, null, null, null);
-            nameOnCardLabel.setText(LocalizedStrings.getString(StringKey.ENTRY_NAME_ON_CARD));
+            // temporary until localized string is set up - StringKey.ENTRY_NAME_ON_CARD
+            nameOnCardLabel.setText("Name on Card");
 
             nameOnCardLayout
                     .addView(nameOnCardLabel, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
