@@ -549,7 +549,6 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                     postalCodeEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
                 } else {
                     setDefaultColor(postalCodeEdit);
-                    advanceToNextEmptyField();
                 }
             } else {
                 setDefaultColor(postalCodeEdit);
@@ -560,7 +559,6 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                     nameOnCardEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
                 } else {
                     setDefaultColor(nameOnCardEdit);
-                    advanceToNextEmptyField();
                 }
             } else {
                 setDefaultColor(nameOnCardEdit);
