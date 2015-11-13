@@ -40,7 +40,7 @@ public class LocalizedStringsNL implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "Gereed");
         mDisplay.put(StringKey.ENTRY_CVV, "CVV");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "Postcode");
-        mDisplay.put(StringKey.ENTRY_NAME_ON_CARD, "Naam op kaart");
+        mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "Kaarthouder Naam");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "Vervaldatum");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/JJ");
         mDisplay.put(StringKey.SCAN_GUIDE, "Houd uw kaart hier.\nScannen gaat automatisch.");

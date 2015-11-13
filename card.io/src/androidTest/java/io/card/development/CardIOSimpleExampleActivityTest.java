@@ -37,7 +37,7 @@ public class CardIOSimpleExampleActivityTest extends
     public static final int EXPIRY_CHECKBOX_INDEX = 0;
     public static final int CVV_CHECKBOX_INDEX = 1;
     public static final int POSTAL_CODE_CHECKBOX_INDEX = 2;
-    public static final int NAME_ON_CARD_CHECKBOX_INDEX = 3;
+    public static final int CARDHOLDER_NAME_CHECKBOX_INDEX = 3;
     public static final int FORCE_MANUAL_CHECKBOX_INDEX = 5;
 
     private Solo solo;
@@ -77,7 +77,7 @@ public class CardIOSimpleExampleActivityTest extends
         solo.clickOnCheckBox(EXPIRY_CHECKBOX_INDEX);
         solo.clickOnCheckBox(CVV_CHECKBOX_INDEX);
         solo.clickOnCheckBox(POSTAL_CODE_CHECKBOX_INDEX);
-        solo.clickOnCheckBox(NAME_ON_CARD_CHECKBOX_INDEX);
+        solo.clickOnCheckBox(CARDHOLDER_NAME_CHECKBOX_INDEX);
 
         if (shouldForceManual) {
             solo.clickOnCheckBox(FORCE_MANUAL_CHECKBOX_INDEX);
@@ -109,7 +109,7 @@ public class CardIOSimpleExampleActivityTest extends
         assertEquals("Expiry not found", true, solo.searchText("Expiry: 12/2022"));
         assertEquals("CVV not found", true, solo.searchText("CVV: 123"));
         assertEquals("Postal Code not found", true, solo.searchText("Postal Code: 95131"));
-        assertEquals("Name on Card not found", true, solo.searchText("Name on Card: John Doe"));
+        assertEquals("Cardholder Name not found", true, solo.searchText("Cardholder Name: John Doe"));
     }
 
     public void test015_Cancel() throws Exception {

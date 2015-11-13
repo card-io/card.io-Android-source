@@ -90,9 +90,9 @@ public final class CardIOActivity extends Activity {
 
     /**
      * Boolean extra. Optional. Defaults to <code>false</code>. If set, the user will be prompted
-     * for the name on the card.
+     * for the cardholder name.
      */
-    public static final String EXTRA_REQUIRE_NAME_ON_CARD = "io.card.payment.requireNameOnCard";
+    public static final String EXTRA_REQUIRE_CARDHOLDER_NAME = "io.card.payment.requireCardholderName";
 
     /**
      * Boolean extra. Optional. Defaults to <code>false</code>. If set, the card.io logo will be

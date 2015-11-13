@@ -40,7 +40,7 @@ public class LocalizedStringsMS implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "Selesai");
         mDisplay.put(StringKey.ENTRY_CVV, "CVV");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "Poskod");
-        mDisplay.put(StringKey.ENTRY_NAME_ON_CARD, "Nama pada kad");
+        mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "Nama Pemegang Kad");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "Luput");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "BB/TT");
         mDisplay.put(StringKey.SCAN_GUIDE, "Pegang kad di sini.\nIa akan mengimbas secara automatik.");

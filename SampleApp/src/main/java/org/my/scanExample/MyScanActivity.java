@@ -53,7 +53,7 @@ public class MyScanActivity extends Activity {
         scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, true); // default: false
         scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, false); // default: false
         scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false); // default: false
-        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_NAME_ON_CARD, false); // default: false
+        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME, false); // default: false
 
         // hides the manual entry button
         // if set, developers should provide their own manual entry mechanism in the app
@@ -93,8 +93,8 @@ public class MyScanActivity extends Activity {
                 resultStr += "Postal Code: " + scanResult.postalCode + "\n";
             }
 
-            if (scanResult.nameOnCard != null) {
-                resultStr += "Name on Card: " + scanResult.nameOnCard + "\n";
+            if (scanResult.cardholderName != null) {
+                resultStr += "Cardholder Name : " + scanResult.cardholderName + "\n";
             }
         } else {
             resultStr = "Scan was canceled.";

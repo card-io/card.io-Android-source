@@ -40,7 +40,7 @@ public class LocalizedStringsSV implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "Klart");
         mDisplay.put(StringKey.ENTRY_CVV, "CVV");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "Postnummer");
-        mDisplay.put(StringKey.ENTRY_NAME_ON_CARD, "Namn på kort");
+        mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "Kortinnehavarens Namn");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "Går ut");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/ÅÅ");
         mDisplay.put(StringKey.SCAN_GUIDE, "Håll kortet här.\nDet skannas automatiskt.");
