@@ -20,6 +20,7 @@ import android.text.method.DigitsKeyListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -48,6 +49,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
      * PayPal REST Apis only handle max 20 chars postal code, so we'll do the same here.
      */
     private static final int MAX_POSTAL_CODE_LENGTH = 20;
+    private static final int MAX_NAME_ON_CARD_LENGTH = 50;
     private static final String PADDING_DIP = "4dip";
     private static final String LABEL_LEFT_PADDING_DEFAULT = "2dip";
     private static final String LABEL_LEFT_PADDING_HOLO = "12dip";
@@ -69,6 +71,8 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
     private Validator cvvValidator;
     private EditText postalCodeEdit;
     private Validator postalCodeValidator;
+    private EditText nameOnCardEdit;
+    private Validator nameOnCardValidator;
     private ImageView cardView;
     private Button doneBtn;
     private Button cancelBtn;
@@ -193,7 +197,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         LinearLayout optionLayout = new LinearLayout(this);
         LinearLayout.LayoutParams optionLayoutParam = new LinearLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        ViewUtil.setPadding(optionLayout, null, PADDING_DIP, null, null);
+        ViewUtil.setPadding(optionLayout, null, PADDING_DIP, null, PADDING_DIP);
         optionLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         boolean requireExpiry = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false);
@@ -332,6 +336,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         }
 
         mainLayout.addView(optionLayout, optionLayoutParam);
+
+        addNameOnCardIfNeeded(mainLayout);
+
         wrapperLayout.addView(mainLayout, mainParams);
         ViewUtil.setMargins(mainLayout, Appearance.CONTAINER_MARGIN_HORIZONTAL,
                 Appearance.CONTAINER_MARGIN_VERTICAL, Appearance.CONTAINER_MARGIN_HORIZONTAL,
@@ -422,7 +429,8 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         }
 
         CreditCard result = new CreditCard(numberValidator.getValue(), capture.expiryMonth,
-                capture.expiryYear, cvvValidator.getValue(), postalCodeValidator.getValue());
+                capture.expiryYear, cvvValidator.getValue(), postalCodeValidator.getValue(),
+                nameOnCardValidator.getValue());
         Intent dataIntent = new Intent();
         dataIntent.putExtra(CardIOActivity.EXTRA_SCAN_RESULT, result);
         if(getIntent().hasExtra(CardIOActivity.EXTRA_CAPTURED_CARD_IMAGE)){
@@ -455,7 +463,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             advanceToNextEmptyField();
         }
 
-        if (numberEdit != null || expiryEdit != null || cvvEdit != null || postalCodeEdit != null) {
+        if (numberEdit != null || expiryEdit != null || cvvEdit != null || postalCodeEdit != null || nameOnCardEdit != null) {
             getWindow()
                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
@@ -479,12 +487,14 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
 
     private void validateAndEnableDoneButtonIfValid() {
         doneBtn.setEnabled(numberValidator.isValid() && expiryValidator.isValid()
-                && cvvValidator.isValid() && postalCodeValidator.isValid());
+                && cvvValidator.isValid() && postalCodeValidator.isValid()
+                && nameOnCardValidator.isValid());
 
         Log.d(TAG, "setting doneBtn.enabled=" + doneBtn.isEnabled());
 
         if (autoAcceptDone && numberValidator.isValid() && expiryValidator.isValid()
-                && cvvValidator.isValid() && postalCodeValidator.isValid()) {
+                && cvvValidator.isValid() && postalCodeValidator.isValid()
+                && nameOnCardValidator.isValid()) {
             completed();
         }
     }
@@ -539,10 +549,19 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
                     postalCodeEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
                 } else {
                     setDefaultColor(postalCodeEdit);
-                    advanceToNextEmptyField();
                 }
             } else {
                 setDefaultColor(postalCodeEdit);
+            }
+        } else if (nameOnCardEdit != null && et == nameOnCardEdit.getText()) {
+            if (nameOnCardValidator.hasFullLength()) {
+                if (!nameOnCardValidator.isValid()) {
+                    nameOnCardEdit.setTextColor(Appearance.TEXT_COLOR_ERROR);
+                } else {
+                    setDefaultColor(nameOnCardEdit);
+                }
+            } else {
+                setDefaultColor(nameOnCardEdit);
             }
         }
 
@@ -566,5 +585,47 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
     public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
         // leave empty
 
+    }
+
+    private void addNameOnCardIfNeeded(ViewGroup mainLayout) {
+        boolean requireNameOnCard = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_NAME_ON_CARD, false);
+        if (requireNameOnCard) {
+            LinearLayout nameOnCardLayout = new LinearLayout(this);
+            ViewUtil.setPadding(nameOnCardLayout, null, PADDING_DIP, null, null);
+            nameOnCardLayout.setOrientation(LinearLayout.VERTICAL);
+
+            TextView nameOnCardLabel = new TextView(this);
+            if(! useApplicationTheme ) {
+                nameOnCardLabel.setTextColor(Appearance.TEXT_COLOR_LABEL);
+            }
+            ViewUtil.setPadding(nameOnCardLabel, labelLeftPadding, null, null, null);
+            nameOnCardLabel.setText(LocalizedStrings.getString(StringKey.ENTRY_NAME_ON_CARD));
+
+            nameOnCardLayout
+                    .addView(nameOnCardLabel, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+            nameOnCardEdit = new EditText(this);
+            nameOnCardEdit.setId(editTextIdCounter++);
+            nameOnCardEdit.setMaxLines(1);
+            nameOnCardEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            nameOnCardEdit.setTextAppearance(getApplicationContext(),
+                    android.R.attr.textAppearanceLarge);
+            nameOnCardEdit.setInputType(InputType.TYPE_CLASS_TEXT);
+            if(! useApplicationTheme ) {
+                nameOnCardEdit.setHintTextColor(Appearance.TEXT_COLOR_EDIT_TEXT_HINT);
+            }
+
+            nameOnCardValidator = new MaxLengthValidator(MAX_NAME_ON_CARD_LENGTH);
+            nameOnCardEdit.addTextChangedListener(nameOnCardValidator);
+            nameOnCardEdit.addTextChangedListener(this);
+
+            nameOnCardLayout.addView(nameOnCardEdit, LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT);
+
+            mainLayout.addView(nameOnCardLayout, LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT);
+        } else {
+            nameOnCardValidator = new AlwaysValid();
+        }
     }
 }

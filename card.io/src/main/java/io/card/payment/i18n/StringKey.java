@@ -18,6 +18,7 @@ public enum StringKey {
     DONE,
     ENTRY_CVV,
     ENTRY_POSTAL_CODE,
+    ENTRY_NAME_ON_CARD,
     ENTRY_EXPIRES,
     EXPIRES_PLACEHOLDER,
     SCAN_GUIDE,

@@ -40,6 +40,7 @@ public class LocalizedStringsNB implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "Fullført");
         mDisplay.put(StringKey.ENTRY_CVV, "CVV");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "Postnummer");
+        mDisplay.put(StringKey.ENTRY_NAME_ON_CARD, "Navn på kort");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "Utløper");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/ÅÅ");
         mDisplay.put(StringKey.SCAN_GUIDE, "Hold kortet her.\nDet skannes automatisk.");

@@ -40,6 +40,7 @@ public class LocalizedStringsRU implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "Готово");
         mDisplay.put(StringKey.ENTRY_CVV, "Код безопасности");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "Индекс");
+        mDisplay.put(StringKey.ENTRY_NAME_ON_CARD, "Имя на карте");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "Действительна до");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "ММ/ГГ");
         mDisplay.put(StringKey.SCAN_GUIDE, "Держите карту внутри рамки.\nОна будет считана\nавтоматически.");

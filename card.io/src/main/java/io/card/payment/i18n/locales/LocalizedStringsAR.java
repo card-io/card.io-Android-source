@@ -40,6 +40,7 @@ public class LocalizedStringsAR implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "تم");
         mDisplay.put(StringKey.ENTRY_CVV, "CVV‏");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "الرمز البريدي");
+        mDisplay.put(StringKey.ENTRY_NAME_ON_CARD, "الاسم على البطاقة");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "تاريخ انتهاء الصلاحية");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/YY‏");
         mDisplay.put(StringKey.SCAN_GUIDE, "امسك البطاقة هنا.\n ستمسح تلقائيا.");

@@ -40,6 +40,7 @@ public class LocalizedStringsPT implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "Concluído");
         mDisplay.put(StringKey.ENTRY_CVV, "CSC");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "Código Postal");
+        mDisplay.put(StringKey.ENTRY_NAME_ON_CARD, "Nome no cartão");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "Validade");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/AA");
         mDisplay.put(StringKey.SCAN_GUIDE, "Segure o cartão aqui.\nSerá lido automaticamente.");

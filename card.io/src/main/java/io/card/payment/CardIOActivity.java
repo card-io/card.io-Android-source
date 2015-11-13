@@ -89,6 +89,12 @@ public final class CardIOActivity extends Activity {
     public static final String EXTRA_REQUIRE_POSTAL_CODE = "io.card.payment.requirePostalCode";
 
     /**
+     * Boolean extra. Optional. Defaults to <code>false</code>. If set, the user will be prompted
+     * for the name on the card.
+     */
+    public static final String EXTRA_REQUIRE_NAME_ON_CARD = "io.card.payment.requireNameOnCard";
+
+    /**
      * Boolean extra. Optional. Defaults to <code>false</code>. If set, the card.io logo will be
      * shown instead of the PayPal logo.
      */
