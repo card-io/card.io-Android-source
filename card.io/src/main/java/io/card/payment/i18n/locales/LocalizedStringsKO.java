@@ -40,6 +40,7 @@ public class LocalizedStringsKO implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "완료");
         mDisplay.put(StringKey.ENTRY_CVV, "CVV");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "우편번호");
+        mDisplay.put(StringKey.ENTRY_NAME_ON_CARD, "카드에 이름");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "유효기간");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM / YY");
         mDisplay.put(StringKey.SCAN_GUIDE, "카드를 여기에 갖다 대세요.\n자동으로 스캔됩니다.");

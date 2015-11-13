@@ -40,6 +40,7 @@ public class LocalizedStringsIS implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "Lokið");
         mDisplay.put(StringKey.ENTRY_CVV, "CVV");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "Póstnúmer");
+        mDisplay.put(StringKey.ENTRY_NAME_ON_CARD, "Nafn á korti");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "Rennur út");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/ÁÁ");
         mDisplay.put(StringKey.SCAN_GUIDE, "Haltu kortinu kyrru hér.\nÞað verður sjálvirkt skannað.");

@@ -40,6 +40,7 @@ public class LocalizedStringsHE implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "בוצע");
         mDisplay.put(StringKey.ENTRY_CVV, "קוד אימות כרטיס");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "מיקוד");
+        mDisplay.put(StringKey.ENTRY_NAME_ON_CARD, "שם על כרטיס");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "תאריך תפוגה");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/YY‏");
         mDisplay.put(StringKey.SCAN_GUIDE, "החזק את הכרטיס כאן.\nהסריקה תתבצע באופן אוטומטי.");

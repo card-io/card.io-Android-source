@@ -40,6 +40,7 @@ public class LocalizedStringsES_MX implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "Listo");
         mDisplay.put(StringKey.ENTRY_CVV, "CVV");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "Código postal");
+        mDisplay.put(StringKey.ENTRY_NAME_ON_CARD, "Nombre en la tarjeta");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "Caduca");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/AA");
         mDisplay.put(StringKey.SCAN_GUIDE, "Sostenga la tarjeta aquí.\nSe escaneará automáticamente.");
