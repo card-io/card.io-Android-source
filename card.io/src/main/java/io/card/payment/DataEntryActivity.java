@@ -49,7 +49,10 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
      * PayPal REST Apis only handle max 20 chars postal code, so we'll do the same here.
      */
     private static final int MAX_POSTAL_CODE_LENGTH = 20;
-    private static final int MAX_NAME_ON_CARD_LENGTH = 50;
+    /**
+     * PayPal REST Apis accept max of 175 chars for cardholder name
+     */
+    private static final int MAX_NAME_ON_CARD_LENGTH = 175;
     private static final String PADDING_DIP = "4dip";
     private static final String LABEL_LEFT_PADDING_DEFAULT = "2dip";
     private static final String LABEL_LEFT_PADDING_HOLO = "12dip";
