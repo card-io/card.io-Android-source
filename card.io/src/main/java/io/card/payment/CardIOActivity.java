@@ -846,8 +846,10 @@ public final class CardIOActivity extends Activity {
         final Intent origIntent = getIntent();
         if (origIntent != null && origIntent.getBooleanExtra(EXTRA_SUPPRESS_CONFIRMATION, false)) {
             Intent dataIntent = new Intent(CardIOActivity.this, DataEntryActivity.class);
-            dataIntent.putExtra(EXTRA_SCAN_RESULT, mDetectedCard);
-            mDetectedCard = null;
+            if (mDetectedCard != null) {
+                dataIntent.putExtra(EXTRA_SCAN_RESULT, mDetectedCard);
+                mDetectedCard = null;
+            }
 
             Util.writeCapturedCardImageIfNecessary(origIntent, dataIntent, mOverlay);
 
