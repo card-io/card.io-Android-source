@@ -54,7 +54,7 @@ public class CardIOSimpleExampleActivity extends Activity {
     private CheckBox mScanExpiryToggle;
     private CheckBox mCvvToggle;
     private CheckBox mPostalCodeToggle;
-    private CheckBox mNameOnCardToggle;
+    private CheckBox mCardholderNameToggle;
     private CheckBox mSuppressManualToggle;
     private CheckBox mSuppressConfirmationToggle;
     private CheckBox mSuppressScanToggle;
@@ -97,7 +97,7 @@ public class CardIOSimpleExampleActivity extends Activity {
         mScanExpiryToggle = (CheckBox) findViewById(R.id.scanExpiry);
         mCvvToggle = (CheckBox) findViewById(R.id.gatherCvv);
         mPostalCodeToggle = (CheckBox) findViewById(R.id.gatherPostalCode);
-        mNameOnCardToggle = (CheckBox) findViewById(R.id.gatherNameOnCard);
+        mCardholderNameToggle = (CheckBox) findViewById(R.id.gatherCardholderName);
         mSuppressManualToggle = (CheckBox) findViewById(R.id.suppressManual);
         mSuppressConfirmationToggle = (CheckBox) findViewById(R.id.suppressConfirmation);
         mSuppressScanToggle = (CheckBox) findViewById(R.id.detectOnly);
@@ -192,8 +192,8 @@ public class CardIOSimpleExampleActivity extends Activity {
                     intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, mCvvToggle.isChecked());
                     intent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE,
                             mPostalCodeToggle.isChecked());
-                    intent.putExtra(CardIOActivity.EXTRA_REQUIRE_NAME_ON_CARD,
-                            mNameOnCardToggle.isChecked());
+                    intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME,
+                            mCardholderNameToggle.isChecked());
 
                     CardIOSimpleExampleActivity.this.startActivityForResult(intent, REQUEST_SCAN);
                 }
@@ -225,7 +225,7 @@ public class CardIOSimpleExampleActivity extends Activity {
         intent.putExtra(CardIOActivity.EXTRA_SCAN_EXPIRY, mScanExpiryToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, mCvvToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, mPostalCodeToggle.isChecked());
-        intent.putExtra(CardIOActivity.EXTRA_REQUIRE_NAME_ON_CARD, mNameOnCardToggle.isChecked());
+        intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME, mCardholderNameToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_SUPPRESS_MANUAL_ENTRY,
                 mSuppressManualToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_USE_CARDIO_LOGO, mUseCardIOLogoToggle.isChecked());
@@ -275,7 +275,7 @@ public class CardIOSimpleExampleActivity extends Activity {
         intent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false);
         intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, false);
         intent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false);
-        intent.putExtra(CardIOActivity.EXTRA_REQUIRE_NAME_ON_CARD, false);
+        intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME, false);
         intent.putExtra("debug_autoAcceptResult", true);
 
         CardIOSimpleExampleActivity.this.startActivityForResult(intent, REQUEST_AUTOTEST);
@@ -321,8 +321,8 @@ public class CardIOSimpleExampleActivity extends Activity {
                     outStr += "Postal Code: " + result.postalCode + "\n";
                 }
 
-                if (mNameOnCardToggle.isChecked()) {
-                    outStr += "Name on Card: " + result.nameOnCard + "\n";
+                if (mCardholderNameToggle.isChecked()) {
+                    outStr += "Cardholder Name: " + result.cardholderName + "\n";
                 }
             }
 

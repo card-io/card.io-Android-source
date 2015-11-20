@@ -40,7 +40,7 @@ public class LocalizedStringsTH implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "เสร็จแล้ว");
         mDisplay.put(StringKey.ENTRY_CVV, "CVV");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "รหัสไปรษณีย์");
-        mDisplay.put(StringKey.ENTRY_NAME_ON_CARD, "ชื่อบนบัตร");
+        mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "ชื่อผู้ถือบัตร");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "หมดอายุ");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "ดด/ปป");
         mDisplay.put(StringKey.SCAN_GUIDE, "ถือบัตรไว้ตรงนี้\nเครื่องจะสแกนโดยอัตโนมัติ");

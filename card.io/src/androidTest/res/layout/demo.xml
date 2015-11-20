@@ -39,12 +39,12 @@
                     android:text="Postal Code"/>
 
             <CheckBox
-                    android:id="@+id/gatherNameOnCard"
+                    android:id="@+id/gatherCardholderName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:checked="false"
-                    android:text="Name on Card"/>
+                    android:text="Cardholder Name"/>
         </LinearLayout>
 
         <CheckBox
