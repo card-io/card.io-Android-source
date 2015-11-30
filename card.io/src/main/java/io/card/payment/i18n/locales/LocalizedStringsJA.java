@@ -40,7 +40,7 @@ public class LocalizedStringsJA implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "完了");
         mDisplay.put(StringKey.ENTRY_CVV, "カード確認コード");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "郵便番号");
-        mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "クレジットカード名義人氏名");
+        mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "カード保有者の名前");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "有効期限");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/YY");
         mDisplay.put(StringKey.SCAN_GUIDE, "ここでカードをお持ちください。\n自動的にスキャンされます。");
