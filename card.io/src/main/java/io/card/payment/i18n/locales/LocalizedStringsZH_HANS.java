@@ -41,7 +41,7 @@ public class LocalizedStringsZH_HANS implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.ENTRY_CVV, "CVV");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "邮政编码");
         mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "持卡人姓名");
-        mDisplay.put(StringKey.ENTRY_EXPIRES, "失效日期：");
+        mDisplay.put(StringKey.ENTRY_EXPIRES, "有效期限：");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/YY");
         mDisplay.put(StringKey.SCAN_GUIDE, "持卡置于此处。\n设备会自动扫描卡。");
         mDisplay.put(StringKey.KEYBOARD, "键盘…");

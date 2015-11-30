@@ -40,12 +40,12 @@ public class LocalizedStringsES_MX implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "Listo");
         mDisplay.put(StringKey.ENTRY_CVV, "CVV");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "Código postal");
-        mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "Nombre del Tarjetahabiente");
-        mDisplay.put(StringKey.ENTRY_EXPIRES, "Caduca");
+        mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "Nombre del titular");
+        mDisplay.put(StringKey.ENTRY_EXPIRES, "Vence");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/AA");
-        mDisplay.put(StringKey.SCAN_GUIDE, "Sostenga la tarjeta aquí.\nSe escaneará automáticamente.");
+        mDisplay.put(StringKey.SCAN_GUIDE, "Coloque la tarjeta aquí.\nSe escaneará automáticamente.");
         mDisplay.put(StringKey.KEYBOARD, "Teclado…");
-        mDisplay.put(StringKey.ENTRY_CARD_NUMBER, "Número de tarjeta");
+        mDisplay.put(StringKey.ENTRY_CARD_NUMBER, "N.° de tarjeta");
         mDisplay.put(StringKey.MANUAL_ENTRY_TITLE, "Detalles de la tarjeta");
         mDisplay.put(StringKey.ERROR_NO_DEVICE_SUPPORT, "Este dispositivo no puede usar la cámara para leer números de tarjeta.");
         mDisplay.put(StringKey.ERROR_CAMERA_CONNECT_FAIL, "La cámara del dispositivo no está disponible.");
