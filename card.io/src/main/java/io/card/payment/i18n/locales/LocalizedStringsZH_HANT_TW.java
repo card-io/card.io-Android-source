@@ -40,6 +40,7 @@ public class LocalizedStringsZH_HANT_TW implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "完成");
         mDisplay.put(StringKey.ENTRY_CVV, "信用卡驗證碼");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "郵遞區號");
+        mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "持卡人姓名");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "到期日");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "月 / 年");
         mDisplay.put(StringKey.SCAN_GUIDE, "將信用卡放在此處。\n系統將自動掃描。");

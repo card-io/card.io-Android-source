@@ -38,8 +38,9 @@ public class LocalizedStringsDE implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.CARDTYPE_MASTERCARD, "MasterCard");
         mDisplay.put(StringKey.CARDTYPE_VISA, "Visa");
         mDisplay.put(StringKey.DONE, "Fertig");
-        mDisplay.put(StringKey.ENTRY_CVV, "Kartenprüfnr.");
+        mDisplay.put(StringKey.ENTRY_CVV, "Prüfnr.");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "PLZ");
+        mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "Karteninhaber");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "Gültig bis");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/JJ");
         mDisplay.put(StringKey.SCAN_GUIDE, "Kreditkarte hierhin halten.\nSie wird automatisch gelesen.");

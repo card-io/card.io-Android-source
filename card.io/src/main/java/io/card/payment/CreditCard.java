@@ -48,6 +48,11 @@ public class CreditCard implements Parcelable {
      */
     public String postalCode;
 
+    /**
+     * Cardholder name.
+     */
+    public String cardholderName;
+
     // these should NOT be public
     String scanId;
     boolean flipped = false;
@@ -60,12 +65,13 @@ public class CreditCard implements Parcelable {
         scanId = UUID.randomUUID().toString();
     }
 
-    public CreditCard(String number, int month, int year, String code, String postalCode) {
+    public CreditCard(String number, int month, int year, String code, String postalCode, String cardholderName) {
         this.cardNumber = number;
         this.expiryMonth = month;
         this.expiryYear = year;
         this.cvv = code;
         this.postalCode = postalCode;
+        this.cardholderName = cardholderName;
     }
 
     // parcelable
@@ -75,6 +81,7 @@ public class CreditCard implements Parcelable {
         expiryYear = src.readInt();
         cvv = src.readString();
         postalCode = src.readString();
+        cardholderName = src.readString();
         scanId = src.readString();
         yoff = src.readInt();
         xoff = src.createIntArray();
@@ -92,6 +99,7 @@ public class CreditCard implements Parcelable {
         dest.writeInt(expiryYear);
         dest.writeString(cvv);
         dest.writeString(postalCode);
+        dest.writeString(cardholderName);
         dest.writeString(scanId);
         dest.writeInt(yoff);
         dest.writeIntArray(xoff);
@@ -173,6 +181,9 @@ public class CreditCard implements Parcelable {
         }
         if (postalCode != null) {
             s += "  postalCode:" + postalCode;
+        }
+        if (cardholderName != null) {
+            s += "  cardholderName:" + cardholderName;
         }
         if (cvv != null) {
             s += "  cvvLength:" + ((cvv != null) ? cvv.length() : 0);
