@@ -37,9 +37,10 @@ public class LocalizedStringsPT implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.CARDTYPE_JCB, "JCB");
         mDisplay.put(StringKey.CARDTYPE_MASTERCARD, "MasterCard");
         mDisplay.put(StringKey.CARDTYPE_VISA, "Visa");
-        mDisplay.put(StringKey.DONE, "Concluído");
+        mDisplay.put(StringKey.DONE, "Concluir");
         mDisplay.put(StringKey.ENTRY_CVV, "CSC");
-        mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "Código Postal");
+        mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "Código postal");
+        mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "Nome do titular do cartão");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "Validade");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/AA");
         mDisplay.put(StringKey.SCAN_GUIDE, "Segure o cartão aqui.\nSerá lido automaticamente.");

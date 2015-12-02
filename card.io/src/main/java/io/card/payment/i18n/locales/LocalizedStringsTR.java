@@ -40,6 +40,7 @@ public class LocalizedStringsTR implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.DONE, "Bitti");
         mDisplay.put(StringKey.ENTRY_CVV, "CVV");
         mDisplay.put(StringKey.ENTRY_POSTAL_CODE, "Posta Kodu");
+        mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "Kart sahibinin adı");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "Son kullanma tarihi");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "AA/YY");
         mDisplay.put(StringKey.SCAN_GUIDE, "Kartınızı buraya tutun.\nOtomatik olarak taranacaktır.");
