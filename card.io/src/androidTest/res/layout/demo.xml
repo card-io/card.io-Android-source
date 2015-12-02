@@ -38,14 +38,13 @@
                     android:checked="false"
                     android:text="Postal Code"/>
 
-            <CheckBox
-                    android:id="@+id/gatherCardholderName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="false"
-                    android:text="Cardholder Name"/>
         </LinearLayout>
+
+        <CheckBox
+                android:id="@+id/gatherCardholderName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cardholder Name"/>
 
         <CheckBox
                 android:id="@+id/scanExpiry"
