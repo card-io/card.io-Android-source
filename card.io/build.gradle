@@ -12,10 +12,6 @@ def getBuildVersion = { ->
 }
 
 ext {
-    sdkDir = android.plugin.sdkFolder
-    ndkDir = android.plugin.ndkFolder
-    adb = new File("${sdkDir}/platform-tools/adb")
-
     build_time = new Date().format("MM/dd/yyyy HH:mm:ss Z")
     build_year = new Date().format("yyyy")
     product_name = "card.io-Android-SDK"
@@ -53,14 +49,14 @@ android {
     }
 
     task cleanNative(type: Exec, description: 'Clean JNI object files') {
-        commandLine "$ndkDir/ndk-build",
+        commandLine "$android.ndkDirectory/ndk-build",
                 '-C', file('src/main/jni').absolutePath,
                 'clean'
     }
     clean.dependsOn cleanNative
 
     task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
-        commandLine "$ndkDir/ndk-build",
+        commandLine "$android.ndkDirectory/ndk-build",
                 '-C', file('src/main/jni').absolutePath,
                 '-j', Runtime.runtime.availableProcessors(),
                 'all'
@@ -95,7 +91,7 @@ android.libraryVariants.all { variant ->
         return;
     }
 
-    task "${variantName}Doc"(dependsOn: "compile${variantName.capitalize()}Java", type: Javadoc) {
+    task "${variantName}Doc"(dependsOn: "compile${variantName.capitalize()}JavaWithJavac", type: Javadoc) {
         description = "Generates javadoc for build $name"
         destinationDir = new File(destinationDir, variantName)
         source = variant.javaCompile.source
@@ -103,7 +99,7 @@ android.libraryVariants.all { variant ->
         classpath = files(
                 variant.javaCompile.classpath,
                 variantCompiledClassesDir,
-                project.plugins.findPlugin("com.android.library").bootClasspath
+                android.bootClasspath
         )
 
         include 'io/card/payment/*.java'
@@ -121,7 +117,7 @@ android.libraryVariants.all { variant ->
         // enables links to Java 7 docs
         options.links("http://docs.oracle.com/javase/7/docs/api/")
         // enables links to Android docs.
-        options.linksOffline("http://d.android.com/reference", "${sdkDir}/docs/reference")
+        options.linksOffline("http://d.android.com/reference", "${android.sdkDirectory}/docs/reference")
     }
 
     task javadocJar(type: Jar, dependsOn: "${variantName}Doc") {
