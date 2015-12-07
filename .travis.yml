@@ -25,7 +25,7 @@ before_install:
 - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_NDK_HOME}
 - echo "sdk.dir=$ANDROID_HOME" > local.properties
 - echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties
-script: ./gradlew clean assembleDebug assembleDebugTest :card.io:assembleRelease releaseDoc
+script: ./gradlew clean test assembleAndroidTest :card.io:assembleRelease releaseDoc
 notifications:
   webhooks:
     urls:
