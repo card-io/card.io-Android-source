@@ -11,7 +11,9 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
+import android.os.Build;
 import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 
 import java.io.IOException;
@@ -222,7 +224,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
                 Log.v(TAG, "camera is connected");
             }
 
-            mCamera.setDisplayOrientation(90);
+            setCameraDisplayOrientation(mCamera);
 
             Camera.Parameters parameters = mCamera.getParameters();
 
@@ -614,5 +616,50 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             }
         }
         return false;
+    }
+
+    private void setCameraDisplayOrientation(Camera mCamera) {
+        int result;
+
+        /* check API level. If upper API level 21, re-calculate orientation. */
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            android.hardware.Camera.CameraInfo info =
+                    new android.hardware.Camera.CameraInfo();
+            android.hardware.Camera.getCameraInfo(0, info);
+            int rotation = getDeviceOrientation();
+
+            int degrees = 0;
+            switch (rotation) {
+                case Surface.ROTATION_0:
+                    degrees = 0;
+                    break;
+                case Surface.ROTATION_90:
+                    degrees = 90;
+                    break;
+                case Surface.ROTATION_180:
+                    degrees = 180;
+                    break;
+                case Surface.ROTATION_270:
+                    degrees = 270;
+                    break;
+            }
+
+            int cameraOrientation = info.orientation + 90;
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                /* compensate the mirror */
+                result = (cameraOrientation + degrees) % 360;
+                result = (360 - result) % 360;
+            } else {
+                result = (cameraOrientation - degrees + 360) % 360;
+            }
+
+        } else {
+            /* if API level is lower than 21, use the default value */
+            result = 90;
+        }
+
+        /*set display orientation*/
+        mCamera.setDisplayOrientation(result);
     }
 }
