@@ -4,6 +4,7 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.view.WindowManager;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -648,7 +650,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             int cameraOrientation = info.orientation + 90;
             if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                 /* compensate the mirror */
-                result = (cameraOrientation + degrees) % 360;
+                result = (cameraOrientation + degrees + getRotationalOffset()) % 360;
                 result = (360 - result) % 360;
             } else {
                 result = (cameraOrientation - degrees + 360) % 360;
@@ -661,5 +663,30 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
 
         /*set display orientation*/
         mCamera.setDisplayOrientation(result);
+    }
+
+    /**
+     * @see <a
+     * href="http://stackoverflow.com/questions/12216148/android-screen-orientation-differs-between-devices">SO
+     * post</a>
+     */
+       int getRotationalOffset() {
+        final int rotationOffset;
+        // Check "normal" screen orientation and adjust accordingly
+        int naturalOrientation = ((WindowManager) mScanActivityRef.get().getSystemService(Context.WINDOW_SERVICE))
+                .getDefaultDisplay().getRotation();
+        if (naturalOrientation == Surface.ROTATION_0) {
+            rotationOffset = 0;
+        } else if (naturalOrientation == Surface.ROTATION_90) {
+            rotationOffset = 90;
+        } else if (naturalOrientation == Surface.ROTATION_180) {
+            rotationOffset = 180;
+        } else if (naturalOrientation == Surface.ROTATION_270) {
+            rotationOffset = 270;
+        } else {
+            // just hope for the best (shouldn't happen)
+            rotationOffset = 0;
+        }
+        return rotationOffset;
     }
 }
