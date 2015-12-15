@@ -642,15 +642,9 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
                     break;
             }
 
+            degrees += getRotationalOffset();
             int cameraOrientation = info.orientation + 90;
-            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                /* compensate the mirror */
-                result = (cameraOrientation + degrees + getRotationalOffset()) % 360;
-                result = (360 - result) % 360;
-            } else {
-                result = (cameraOrientation - degrees + 360) % 360;
-            }
-
+            result = (cameraOrientation - degrees + 360) % 360;
         } else {
             /* if API level is lower than 21, use the default value */
             result = 90;
