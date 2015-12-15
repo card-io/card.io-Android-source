@@ -11,8 +11,6 @@ import android.text.Spanned;
  * Validates that a field is exactly a certain length.
  */
 class FixedLengthValidator implements Validator {
-    // private final String TAG = this.getClass().getName();
-
     public int requiredLength;
     private String value;
 
@@ -46,7 +44,6 @@ class FixedLengthValidator implements Validator {
     @Override
     public boolean isValid() {
         if (value != null && value.length() == requiredLength) {
-            // Log.v(TAG, "number has length " + requiredLength);
             return true;
         } else {
             return false;

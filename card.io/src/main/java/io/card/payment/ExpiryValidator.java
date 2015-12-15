@@ -12,7 +12,7 @@ import java.util.Date;
 
 class ExpiryValidator implements Validator {
     @SuppressWarnings("unused")
-    private final String TAG = this.getClass().getName();
+    private static final String TAG = ExpiryValidator.class.getSimpleName();
 
     public int month;
     public int year;

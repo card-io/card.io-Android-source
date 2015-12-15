@@ -11,7 +11,7 @@ import io.card.payment.i18n.SupportedLocale;
 // /Users/twhipple/Documents/buffalo/lib-i18n/i18n/script/generate_android_i18n.py -java_src_path src/ -java_gen_path gen/ -stringkey_path io/card/payment/i18n/ -strings_path ../strings/projects/card.io/strings/ --strict
 
 public class LocalizedStringsList {
-    public static final List<SupportedLocale<StringKey>> ALL_LOCALES = new ArrayList<SupportedLocale<StringKey>>();
+    public static final List<SupportedLocale<StringKey>> ALL_LOCALES = new ArrayList<>();
 
     static {
         ALL_LOCALES.add(new LocalizedStringsAR());

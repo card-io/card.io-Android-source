@@ -16,7 +16,7 @@ class CardNumberValidator implements Validator {
 
     final static int[] AMEX_SPACER = { 4, 11 };
     final static int[] NORMAL_SPACER = { 4, 9, 14 };
-    private int spacerToDelete = 0;
+    private int spacerToDelete;
 
     public CardNumberValidator() {
     }

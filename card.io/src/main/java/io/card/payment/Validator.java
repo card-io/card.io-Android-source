@@ -8,7 +8,7 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 
 interface Validator extends TextWatcher, InputFilter {
-    public String getValue();
+    String getValue();
 
     boolean isValid();
 

@@ -86,7 +86,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
     private boolean useApplicationTheme;
     private int defaultTextColor;
 
-    private final String TAG = this.getClass().getName();
+    private static final String TAG = DataEntryActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -110,7 +110,7 @@ public enum CardType {
      * @return 15 for AmEx, -1 for unknown, 16 for others.
      */
     public int numberLength() {
-        int result = -1;
+        int result;
         switch (this) {
             case AMEX:
                 result = 15;
@@ -140,7 +140,7 @@ public enum CardType {
      * @return 4 for Amex, 3 for others, -1 for unknown
      */
     public int cvvLength() {
-        int result = -1;
+        int result;
         switch (this) {
             case AMEX:
                 result = 4;

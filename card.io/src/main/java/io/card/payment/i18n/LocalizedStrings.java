@@ -54,7 +54,7 @@ public final class LocalizedStrings {
         /**
          * TODO optimize this for lazy loading. Should be relatively easy.
          */
-        i18nManager = new I18nManager<StringKey>(StringKey.class, LocalizedStringsList.ALL_LOCALES);
+        i18nManager = new I18nManager<>(StringKey.class, LocalizedStringsList.ALL_LOCALES);
     }
 
     /**

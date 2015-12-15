@@ -98,7 +98,7 @@ class OverlayView extends View {
     private int mState;
     private int guideColor;
 
-    private boolean hideCardIOLogo = false;
+    private boolean hideCardIOLogo;
     private String scanInstructions;
 
     // Keep paint objects around for high frequency methods to avoid re-allocating them.

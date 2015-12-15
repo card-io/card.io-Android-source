@@ -49,9 +49,6 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     private static final int CAMERA_CONNECT_RETRY_INTERVAL = 50;
 
     static final int ORIENTATION_PORTRAIT = 1;
-    //static final int ORIENTATION_PORTRAIT_UPSIDE_DOWN = 2;
-    //static final int ORIENTATION_LANDSCAPE_RIGHT = 3;
-    //static final int ORIENTATION_LANDSCAPE_LEFT = 4;
 
     // these values MUST match those in dmz_constants.h
     static final int CREDIT_CARD_TARGET_WIDTH = 428; // kCreditCardTargetWidth
@@ -79,7 +76,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
 
     private Bitmap detectedBitmap;
 
-    private static boolean manualFallbackForError = false;
+    private static boolean manualFallbackForError;
 
     // member data
     protected WeakReference<CardIOActivity> mScanActivityRef;
@@ -94,18 +91,16 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
 
     private boolean mFirstPreviewFrame = true;
     private long captureStart;
-    private long mAutoFocusStartedAt = 0;
-    private long mAutoFocusCompletedAt = 0;
+    private long mAutoFocusStartedAt;
+    private long mAutoFocusCompletedAt;
 
-    private DetectionInfo mLastDetectionInfo;
-
-    private Camera mCamera = null;
+    private Camera mCamera;
     private byte[] mPreviewBuffer;
 
     // accessed by test harness subclass.
     protected boolean useCamera = true;
 
-    private boolean isSurfaceValid = false;
+    private boolean isSurfaceValid;
 
     private int numManualRefocus;
     private int numAutoRefocus;
@@ -168,7 +163,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             mScanExpiry = scanIntent.getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false)
                     && scanIntent.getBooleanExtra(CardIOActivity.EXTRA_SCAN_EXPIRY, true);
         }
-        mScanActivityRef = new WeakReference<CardIOActivity>(scanActivity);
+        mScanActivityRef = new WeakReference<>(scanActivity);
         mFrameOrientation = currentFrameOrientation;
         nSetup(mSuppressScan, MIN_FOCUS_SCORE);
     }
@@ -670,7 +665,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
      * href="http://stackoverflow.com/questions/12216148/android-screen-orientation-differs-between-devices">SO
      * post</a>
      */
-       int getRotationalOffset() {
+    int getRotationalOffset() {
         final int rotationOffset;
         // Check "normal" screen orientation and adjust accordingly
         int naturalOrientation = ((WindowManager) mScanActivityRef.get().getSystemService(Context.WINDOW_SERVICE))

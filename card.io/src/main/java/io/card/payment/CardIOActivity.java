@@ -279,8 +279,8 @@ public final class CardIOActivity extends Activity {
     private Rect mGuideFrame;
     private int mLastDegrees;
     private int mFrameOrientation;
-    private boolean suppressManualEntry = false;
-    private boolean mDetectOnly = false;
+    private boolean suppressManualEntry;
+    private boolean mDetectOnly;
     private LinearLayout customOverlayLayout;
     private boolean waitingForPermission;
 
@@ -288,7 +288,7 @@ public final class CardIOActivity extends Activity {
     private FrameLayout mMainLayout;
     private boolean useApplicationTheme;
 
-    static private int numActivityAllocations = 0;
+    static private int numActivityAllocations;
 
     private CardScanner mCardScanner;
 
