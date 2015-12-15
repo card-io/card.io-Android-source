@@ -507,7 +507,7 @@ public final class CardIOActivity extends Activity {
             return;
         }
 
-        orientation += getRotationalOffset();
+        orientation += mCardScanner.getRotationalOffset();
 
         // Check if we have gone too far forward with
         // rotation adjustment, keep the result between 0-360
@@ -544,31 +544,6 @@ public final class CardIOActivity extends Activity {
                 rotateCustomOverlay(degrees);
             }
         }
-    }
-
-    /**
-     * @see <a
-     * href="http://stackoverflow.com/questions/12216148/android-screen-orientation-differs-between-devices">SO
-     * post</a>
-     */
-    private int getRotationalOffset() {
-        final int rotationOffset;
-        // Check "normal" screen orientation and adjust accordingly
-        int naturalOrientation = ((WindowManager) getSystemService(Context.WINDOW_SERVICE))
-                .getDefaultDisplay().getRotation();
-        if (naturalOrientation == Surface.ROTATION_0) {
-            rotationOffset = 0;
-        } else if (naturalOrientation == Surface.ROTATION_90) {
-            rotationOffset = 90;
-        } else if (naturalOrientation == Surface.ROTATION_180) {
-            rotationOffset = 180;
-        } else if (naturalOrientation == Surface.ROTATION_270) {
-            rotationOffset = 270;
-        } else {
-            // just hope for the best (shouldn't happen)
-            rotationOffset = 0;
-        }
-        return rotationOffset;
     }
 
     /**
