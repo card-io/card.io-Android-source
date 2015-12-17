@@ -19,6 +19,8 @@ import android.text.method.DateKeyListener;
 import android.text.method.DigitsKeyListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -472,6 +474,25 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         }
 
         Log.i(TAG, "ready for manual entry"); // used by tests. don't delete.
+    }
+
+    // TODO need to localize title "Camera"
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuItem item = menu.add("Camera");
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getTitle().equals("Camera")) {
+            finish();
+        }
+        return true;
     }
 
     private EditText advanceToNextEmptyField() {
