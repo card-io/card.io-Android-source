@@ -54,6 +54,7 @@ public class CardIOSimpleExampleActivity extends Activity {
     private CheckBox mScanExpiryToggle;
     private CheckBox mCvvToggle;
     private CheckBox mPostalCodeToggle;
+    private CheckBox mPostalCodeNumericOnlyToggle;
     private CheckBox mCardholderNameToggle;
     private CheckBox mSuppressManualToggle;
     private CheckBox mSuppressConfirmationToggle;
@@ -97,6 +98,7 @@ public class CardIOSimpleExampleActivity extends Activity {
         mScanExpiryToggle = (CheckBox) findViewById(R.id.scanExpiry);
         mCvvToggle = (CheckBox) findViewById(R.id.gatherCvv);
         mPostalCodeToggle = (CheckBox) findViewById(R.id.gatherPostalCode);
+        mPostalCodeNumericOnlyToggle = (CheckBox) findViewById(R.id.postalCodeNumericOnly);
         mCardholderNameToggle = (CheckBox) findViewById(R.id.gatherCardholderName);
         mSuppressManualToggle = (CheckBox) findViewById(R.id.suppressManual);
         mSuppressConfirmationToggle = (CheckBox) findViewById(R.id.suppressConfirmation);
@@ -192,6 +194,8 @@ public class CardIOSimpleExampleActivity extends Activity {
                     intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, mCvvToggle.isChecked());
                     intent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE,
                             mPostalCodeToggle.isChecked());
+                    intent.putExtra(CardIOActivity.EXTRA_RESTRICT_POSTAL_CODE_TO_NUMERIC_ONLY,
+                            mPostalCodeNumericOnlyToggle.isChecked());
                     intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME,
                             mCardholderNameToggle.isChecked());
 
@@ -225,6 +229,8 @@ public class CardIOSimpleExampleActivity extends Activity {
         intent.putExtra(CardIOActivity.EXTRA_SCAN_EXPIRY, mScanExpiryToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, mCvvToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, mPostalCodeToggle.isChecked());
+        intent.putExtra(CardIOActivity.EXTRA_RESTRICT_POSTAL_CODE_TO_NUMERIC_ONLY,
+                mPostalCodeNumericOnlyToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME, mCardholderNameToggle.isChecked());
         intent.putExtra(CardIOActivity.EXTRA_SUPPRESS_MANUAL_ENTRY,
                 mSuppressManualToggle.isChecked());

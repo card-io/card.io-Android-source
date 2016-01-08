@@ -46,6 +46,13 @@
                 android:layout_height="wrap_content"
                 android:text="Cardholder Name"/>
 
+
+        <CheckBox
+                android:id="@+id/postalCodeNumericOnly"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Restrict Postal Code to Numeric Only"/>
+
         <CheckBox
                 android:id="@+id/scanExpiry"
                 android:layout_width="match_parent"

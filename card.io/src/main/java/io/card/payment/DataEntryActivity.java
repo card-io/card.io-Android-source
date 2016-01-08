@@ -314,13 +314,21 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             postalCodeLayout
                     .addView(zipLabel, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
+            boolean postalCodeNumericOnly =
+                    getIntent().getBooleanExtra(CardIOActivity.EXTRA_RESTRICT_POSTAL_CODE_TO_NUMERIC_ONLY, false);
+
             postalCodeEdit = new EditText(this);
             postalCodeEdit.setId(editTextIdCounter++);
             postalCodeEdit.setMaxLines(1);
             postalCodeEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
             postalCodeEdit.setTextAppearance(getApplicationContext(),
                     android.R.attr.textAppearanceLarge);
-            postalCodeEdit.setInputType(InputType.TYPE_CLASS_TEXT);
+            if (postalCodeNumericOnly) {
+                // class is phone to be consistent with other numeric fields.  Perhaps this could be improved.
+                postalCodeEdit.setInputType(InputType.TYPE_CLASS_PHONE);
+            } else {
+                postalCodeEdit.setInputType(InputType.TYPE_CLASS_TEXT);
+            }
             if(! useApplicationTheme ) {
                 postalCodeEdit.setHintTextColor(Appearance.TEXT_COLOR_EDIT_TEXT_HINT);
             }

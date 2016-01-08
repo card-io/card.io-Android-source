@@ -89,6 +89,13 @@ public final class CardIOActivity extends Activity {
     public static final String EXTRA_REQUIRE_POSTAL_CODE = "io.card.payment.requirePostalCode";
 
     /**
+     * Boolean extra. Optional. Defaults to <code>false</code>. If set, the postal code will only collect numeric
+     * input. Set this if you know the <a href="https://en.wikipedia.org/wiki/Postal_code">expected country's
+     * postal code</a> has only numeric postal codes.
+     */
+    public static final String EXTRA_RESTRICT_POSTAL_CODE_TO_NUMERIC_ONLY = "io.card.payment.restrictPostalCodeToNumericOnly";
+
+    /**
      * Boolean extra. Optional. Defaults to <code>false</code>. If set, the user will be prompted
      * for the cardholder name.
      */
