@@ -619,31 +619,12 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         int result;
 
         /* check API level. If upper API level 21, re-calculate orientation. */
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             android.hardware.Camera.CameraInfo info =
                     new android.hardware.Camera.CameraInfo();
             android.hardware.Camera.getCameraInfo(0, info);
-            int rotation = getDeviceOrientation();
-
-            int degrees = 0;
-            switch (rotation) {
-                case Surface.ROTATION_0:
-                    degrees = 0;
-                    break;
-                case Surface.ROTATION_90:
-                    degrees = 90;
-                    break;
-                case Surface.ROTATION_180:
-                    degrees = 180;
-                    break;
-                case Surface.ROTATION_270:
-                    degrees = 270;
-                    break;
-            }
-
-            degrees += getRotationalOffset();
-            int cameraOrientation = info.orientation + 90;
+            int degrees = getRotationalOffset();
+            int cameraOrientation = info.orientation;
             result = (cameraOrientation - degrees + 360) % 360;
         } else {
             /* if API level is lower than 21, use the default value */
