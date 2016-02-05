@@ -80,16 +80,6 @@ compile 'io.card:android-sdk:REPLACE_VERSION'
     <activity android:name="io.card.payment.DataEntryActivity" />
     ```
 
-##### Note: Before you build in release mode, make sure to adjust your proguard configuration by adding the following to `proguard.cnf`:
-
-```
--keep class io.card.**
--keepclassmembers class io.card.** {
-    *;
-}
--dontwarn io.card.**
-```
-
 ### Sample code  (See the SampleApp for an example)
 
 First, we'll assume that you're going to launch the scanner from a button,
@@ -154,6 +144,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 ### Hints &amp; Tips
 
 * [Javadocs](http://card-io.github.io/card.io-Android-SDK/) are provided in this repo for a complete reference.
+* Note: the correct proguard file is automatically imported into your gradle project from the `aar` package.  Anyone not using gradle will need to extract the proguard file and add it to their proguard config.
 * card.io errors and warnings will be logged to the "card.io" tag.
 * If upgrading the card.io SDK, first remove all card.io libraries so that you don't accidentally ship obsolete or unnecessary libraries. The bundled libraries may change.
 * Processing images can be memory intensive.

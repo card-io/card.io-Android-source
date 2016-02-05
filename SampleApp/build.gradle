@@ -33,7 +33,7 @@ android {
 
         release {
             minifyEnabled true
-            proguardFile file('proguard.cfg')
+            proguardFile getDefaultProguardFile('proguard-android.txt')
             signingConfig signingConfigs.myConfig
         }
     }
