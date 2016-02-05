@@ -30,6 +30,8 @@ android {
         buildConfigField "String", "PRODUCT_VERSION", "\"${product_version}\""
         buildConfigField "String", "BUILD_TIME", "\"${build_time}\""
 
+        consumerProguardFiles 'release-proguard.cfg'
+
         testApplicationId 'io.card.development'
     }
 
