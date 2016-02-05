@@ -1,6 +1,10 @@
 card.io Android SDK change log and release notes
 ================================================
 
+5.3.1
+-----
+* Fix issue where the camera was flipped when the app was backgrounded with card.io open [#118](https://github.com/card-io/card.io-Android-SDK/issues/118).
+
 5.3.0
 -----
 * Add option for only numeric input for postal code, `EXTRA_RESTRICT_POSTAL_CODE_TO_NUMERIC_ONLY` [#100](https://github.com/card-io/card.io-Android-SDK/issues/100).
