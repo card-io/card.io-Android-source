@@ -87,6 +87,7 @@ compile 'io.card:android-sdk:REPLACE_VERSION'
 -keepclassmembers class io.card.** {
     *;
 }
+-dontwarn io.card.**
 ```
 
 ### Sample code  (See the SampleApp for an example)
