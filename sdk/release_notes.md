@@ -4,6 +4,7 @@ card.io Android SDK change log and release notes
 5.3.1
 -----
 * Fix issue where the camera was flipped when the app was backgrounded with card.io open [#118](https://github.com/card-io/card.io-Android-SDK/issues/118).
+* Add proguard config to `aar` file [112](https://github.com/card-io/card.io-Android-SDK/issues/112), [#117](https://github.com/card-io/card.io-Android-SDK/issues/117).
 
 5.3.0
 -----
