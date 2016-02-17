@@ -174,7 +174,7 @@ We are continuing to work to improve expiry-scanning accuracy.
 * Work around a crash in some Qualcomm camera drivers. (e.g. Samsung Galaxy II S running Android 4.0.4)
 * Improve efficiency of internal API.
 
-2.4 - June 25, 2012
+2.4.0 - June 25, 2012
 --------------------
 * Charges are no longer supported.
 
@@ -214,7 +214,7 @@ Note that if your app is not targeting x86 or MIPS, you can safely leave out the
 * Repackage library jar to avoid proguard parsing problems in client apps.
 * Fix string display bug in the charge screens.
 
-2.2 - April 11, 2012
+2.2.0 - April 11, 2012
 --------------------
 
 *************************
@@ -231,7 +231,7 @@ IMPORTANT: You should delete libs/armeabi*/libcardio.so from your project direct
 --------------------
 * Fix NullPointerException on manual entry press in scan only mode.
 
-2.1 - April 4, 2012
+2.1.0 - April 4, 2012
 --------------------
 * Made the charge screens more beautiful.
 * Add support for JCB cards.
@@ -268,7 +268,7 @@ IMPORTANT: You should delete libs/armeabi*/libcardio.so from your project direct
 * Add connection status messages to logs.
 * Correctly report network type. Fixes problems associated with networks other than WiFi or mobile.
 
-2.0 - January 18, 2012
+2.0.0 - January 18, 2012
 -------------------
 * (new!) Support processing charges
 * Rename package io.card.scan to io.card.payments
@@ -276,7 +276,7 @@ IMPORTANT: You should delete libs/armeabi*/libcardio.so from your project direct
 * Updated HTTPS library for better performance while scanning.
 * Fixed crashes in Android 4.0/Ice Cream Sandwich.
 
-1.0 - Wednesday, 8/24/2011
+1.0.0 - Wednesday, 8/24/2011
 -------------------
 * First release
 
