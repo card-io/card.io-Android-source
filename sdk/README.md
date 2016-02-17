@@ -150,3 +150,13 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 * Processing images can be memory intensive.
     * [Memory Analysis for Android Applications](http://android-developers.blogspot.com/2011/03/memory-analysis-for-android.html) provides some useful information about how to track and reduce your app's memory useage.
 * card.io recommends the use of [SSL pinning](http://blog.thoughtcrime.org/authenticity-is-broken-in-ssl-but-your-app-ha) when transmitting sensitive information to protect against man-in-the-middle attacks.
+
+Contributing
+------------
+
+Please read our [contributing guidelines](CONTRIBUTING.md) prior to submitting a Pull Request.
+
+License
+-------
+
+Please refer to this repo's [license file](LICENSE.txt).
