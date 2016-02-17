@@ -159,6 +159,10 @@ We are continuing to work to improve expiry-scanning accuracy.
 --------------------
 * Client side scanning!
 
+3.0.0
+--------------------
+* Skipped
+
 2.4.3 - Aug 31, 2012
 --------------------
 * Correct layouts for high resolution cameras & xhdpi displays
@@ -207,6 +211,14 @@ The bundled libraries are:
 Note that if your app is not targeting x86 or MIPS, you can safely leave out these libraries. However, doing so will cause Google Play to filter out your app for users of those devices.
 
 *************************
+
+2.3.1
+--------------------
+* Skipped
+
+2.3.0
+--------------------
+* Skipped
 
 2.2.1 - April 20, 2012
 --------------------
