@@ -44,6 +44,8 @@ opencv/OpenCV-*
 
 *.pyc
 distribution-repo/
+downstream_repos/
 
 gradle.properties
 secring.gpg
+
