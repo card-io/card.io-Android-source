@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'signing'
-
+apply plugin: 'io.codearte.nexus-staging'
 
 repositories {
     mavenCentral()
@@ -147,6 +147,12 @@ android.libraryVariants.all { variant ->
     // systemProp.sonatypePassword=yyyyyyy
     def sonatypeUsername = System.properties.containsKey('sonatypeUsername') ? System.properties['sonatypeUsername'] : ''
     def sonatypePassword = System.properties.containsKey('sonatypePassword') ? System.properties['sonatypePassword'] : ''
+
+    nexusStaging {
+        packageGroup = "io.card"
+        username = sonatypeUsername
+        password = sonatypePassword
+    }
 
     uploadArchives {
         doFirst {
