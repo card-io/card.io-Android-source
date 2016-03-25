@@ -25,17 +25,6 @@ configatron.custom_validation_methods = [
 # The directory where all distributed docs are.  Default is '.'.
 configatron.base_docs_dir = 'sdk'
 
-def run_command_with_live_output(command)
-  puts "running:" + " #{command}".bold + " with live output"
-
-  r, io = IO.pipe
-  fork do
-    system(command, out: io, err: :out)
-  end
-  io.close
-  r.each_line{|l| puts l}
-end
-
 def build_cardio()
   run_command_with_live_output("./gradlew clean :card.io:assembleRelease releaseDoc")
 end
@@ -45,10 +34,10 @@ configatron.build_method = method(:build_cardio)
 
 
 def publish_to_maven()
-  run_command_with_live_output("./gradlew :card.io:uploadArchives")
-  #run_command_with_live_output("./gradlew :card.io:closeRepository")
+  command("./gradlew :card.io:uploadArchives", live_output=true)
+  #command("./gradlew :card.io:closeRepository", live_output=true)
   #sleep 60
-  #run_command_with_live_output("./gradlew :card.io:promoteRepository")
+  #command("./gradlew :card.io:promoteRepository", live_output=true)
   #sleep 600
 end
 
@@ -63,7 +52,7 @@ end
 
 def compile_sample_app()
   Dir.chdir("SampleApp") do
-    run_command_with_live_output("gradlew clean assembleDebug")
+    command("gradlew clean assembleDebug", live_output=true)
   end
 end
 
