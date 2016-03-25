@@ -66,11 +66,21 @@ configatron.downstream_repos = [
       CopyFile.new("card.io/build/outputs/aar/card.io-release.aar", "card.io-__VERSION__.aar", "aars"),
       CopyFile.new("SampleApp", "SampleApp", ".")
     ],
-    build_methods=[
-      method(:compile_sample_app)
-    ],
     post_copy_methods=[
       method(:replace_version)
     ]
+    build_methods=[
+      method(:compile_sample_app)
+    ],
   )
+]
+
+def build_docs()
+  command("./gradlew releaseDoc", live_output=true)
+end
+
+configatron.doc_build_method = method(:build_docs)
+configatron.doc_target_dir = "downstream_repos/card.io-Android-SDK"
+configatron.doc_files_to_copy = [
+  CopyFile.new("card.io/build/docs/javadoc/release/*", ".", ".")
 ]
