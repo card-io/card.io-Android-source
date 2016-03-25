@@ -26,7 +26,7 @@ configatron.custom_validation_methods = [
 configatron.base_docs_dir = 'sdk'
 
 def build_cardio()
-  run_command_with_live_output("./gradlew clean :card.io:assembleRelease releaseDoc")
+  command("./gradlew clean :card.io:assembleRelease releaseDoc", live_output=true)
 end
 
 # The method that builds the sdk.  Required.
