@@ -32,13 +32,12 @@ end
 # The method that builds the sdk.  Required.
 configatron.build_method = method(:build_cardio)
 
-
-def publish_to_maven()
+def publish_to_maven(version)
   command("./gradlew :card.io:uploadArchives", live_output=true)
   command("./gradlew :card.io:closeRepository", live_output=true)
-  sleep 60
+  command("sleep 60")
   command("./gradlew :card.io:promoteRepository", live_output=true)
-  sleep 600
+  wait_for("wget -U \"non-empty-user-agent\" -qO- http://central.maven.org/maven2/io/card/android-sdk/ | grep #{version}")
 end
 
 # The method that publishes the sdk to the package manager.  Required.
