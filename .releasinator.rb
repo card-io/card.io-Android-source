@@ -35,10 +35,10 @@ configatron.build_method = method(:build_cardio)
 
 def publish_to_maven()
   command("./gradlew :card.io:uploadArchives", live_output=true)
-  #command("./gradlew :card.io:closeRepository", live_output=true)
-  #sleep 60
-  #command("./gradlew :card.io:promoteRepository", live_output=true)
-  #sleep 600
+  command("./gradlew :card.io:closeRepository", live_output=true)
+  sleep 60
+  command("./gradlew :card.io:promoteRepository", live_output=true)
+  sleep 600
 end
 
 # The method that publishes the sdk to the package manager.  Required.
