@@ -68,10 +68,10 @@ configatron.downstream_repos = [
     ],
     post_copy_methods=[
       method(:replace_version)
-    ]
+    ],
     build_methods=[
       method(:compile_sample_app)
-    ],
+    ]
   )
 ]
 
