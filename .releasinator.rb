@@ -70,7 +70,8 @@ configatron.downstream_repos = [
     ],
     build_methods=[
       method(:compile_sample_app)
-    ]
+    ],
+    release_to_github=true
   )
 ]
 
