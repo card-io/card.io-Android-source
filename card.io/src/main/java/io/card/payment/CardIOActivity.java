@@ -366,6 +366,9 @@ public final class CardIOActivity extends Activity {
         if (clientData.getBooleanExtra(EXTRA_NO_CAMERA, false)) {
             Log.i(Util.PUBLIC_LOG_TAG, "EXTRA_NO_CAMERA set to true. Skipping camera.");
             manualEntryFallbackOrForced = true;
+        } else if (!CardScanner.processorSupported()){
+            Log.i(Util.PUBLIC_LOG_TAG, "Processor not Supported. Skipping camera.");
+            manualEntryFallbackOrForced = true;
         } else {
             try {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
