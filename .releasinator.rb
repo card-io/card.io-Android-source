@@ -61,6 +61,7 @@ configatron.downstream_repos = [
     name="card.io-Android-SDK",
     url="git@github.com:card-io/card.io-Android-SDK.git",
     branch="master",
+    release_to_github=true,
     files_to_copy=[
       CopyFile.new("card.io/build/outputs/aar/card.io-release.aar", "card.io-__VERSION__.aar", "aars"),
       CopyFile.new("SampleApp", "SampleApp", ".")
@@ -70,8 +71,7 @@ configatron.downstream_repos = [
     ],
     build_methods=[
       method(:compile_sample_app)
-    ],
-    release_to_github=true
+    ]
   )
 ]
 
