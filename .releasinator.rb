@@ -1,4 +1,5 @@
 #### releasinator config ####
+configatron.product_name = "card.io Android SDK"
 
 # List of items to confirm from the person releasing.  Required, but empty list is ok.
 configatron.prerelease_checklist_items = [
@@ -24,6 +25,8 @@ configatron.custom_validation_methods = [
 
 # The directory where all distributed docs are.  Default is '.'.
 configatron.base_docs_dir = 'sdk'
+
+configatron.release_to_github = false
 
 def build_cardio()
   command("./gradlew clean :card.io:assembleRelease releaseDoc", live_output=true)
@@ -61,15 +64,15 @@ configatron.downstream_repos = [
     name="card.io-Android-SDK",
     url="git@github.com:card-io/card.io-Android-SDK.git",
     branch="master",
-    release_to_github=true,
-    files_to_copy=[
+    :release_to_github => true,
+    :files_to_copy => [
       CopyFile.new("card.io/build/outputs/aar/card.io-release.aar", "card.io-__VERSION__.aar", "aars"),
       CopyFile.new("SampleApp", "SampleApp", ".")
     ],
-    post_copy_methods=[
+    :post_copy_methods => [
       method(:replace_version)
     ],
-    build_methods=[
+    :build_methods => [
       method(:compile_sample_app)
     ]
   )
