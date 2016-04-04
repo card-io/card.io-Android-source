@@ -315,7 +315,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
     orientation = dmz_opposite_orientation(orientation);
   }
 
-  FrameScanResult result = {0};
+  FrameScanResult frameResult = {0};
 
   IplImage *image = cvCreateImageHeader(cvSize(width, height), IPL_DEPTH_8U, 1);
   jbyte *jBytes = env->GetByteArrayElements(jb, 0);
@@ -326,7 +326,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
   dmz_trace_log("focus score: %f", focusScore);
 
   if (focusScore >= minFocusScore) {
-    result.scan_progress = SCAN_PROGRESS_FOCUS;
+    frameResult.scan_progress = SCAN_PROGRESS_FOCUS;
 
     IplImage *cbcr = cvCreateImageHeader(cvSize(width / 2, height / 2), IPL_DEPTH_8U, 2);
     cbcr->imageData = ((char *)jBytes) + width * height;
@@ -347,24 +347,23 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
     updateEdgeDetectDisplay(env, thiz, dinfo, found_edges);
 
     if (cardDetected) {
-      result.scan_progress = SCAN_PROGRESS_EDGES;
+      frameResult.scan_progress = SCAN_PROGRESS_EDGES;
       IplImage *cardY = NULL;
       dmz_transform_card(NULL, image, corner_points, orientation, false, &cardY);
 
       if (!detectOnly) {
-        result.focus_score = focusScore;
-        result.flipped = flipped;
-        scanner_add_frame_with_expiry(&scannerState, cardY, jScanExpiry, &result);
-        if (result.usable) {
-          ScannerResult scanResult;
-          scanner_result(&scannerState, &scanResult);
+        frameResult.focus_score = focusScore;
+        frameResult.flipped = flipped;
+        scanner_add_frame_with_expiry(&scannerState, cardY, jScanExpiry, &frameResult);
+        if (frameResult.usable) {
+          ScannerResult scanResult = {0};
+          scanner_frame_result(&scannerState, &scanResult, &frameResult);
 
           if (scanResult.complete) {
             setScanCardNumberResult(env, dinfo, &scanResult);
             logDinfo(env, dinfo);
           }
-        }
-        else if (result.upside_down) {
+        } else if (frameResult.upside_down) {
           flipped = !flipped;
         }
       }
@@ -378,7 +377,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
   }
 
   // set scan progress
-  env->SetIntField(dinfo, detectionInfoId.scanProgress, result.scan_progress);
+  env->SetIntField(dinfo, detectionInfoId.scanProgress, frameResult.scan_progress);
 
   cvReleaseImageHeader(&image);
   env->ReleaseByteArrayElements(jb, jBytes, 0);
