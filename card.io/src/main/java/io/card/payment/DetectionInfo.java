@@ -37,7 +37,8 @@ class DetectionInfo {
 
     boolean sameEdgesAs(DetectionInfo other) {
         return other.topEdge == this.topEdge && other.bottomEdge == this.bottomEdge
-                && other.leftEdge == this.leftEdge && other.rightEdge == this.rightEdge;
+                && other.leftEdge == this.leftEdge && other.rightEdge == this.rightEdge && 
+                this.scanProgress == other.scanProgress;
     }
 
     boolean detected() {
