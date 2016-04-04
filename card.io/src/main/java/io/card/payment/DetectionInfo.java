@@ -20,9 +20,11 @@ class DetectionInfo {
     public int expiry_month;
     public int expiry_year;
     public CreditCard detectedCard;
+    public int scanProgress; // enum scan completion: edge detect, vseg, hseg, scores, stability, expiry ...
 
     public DetectionInfo() {
         complete = false;
+        scanProgress = 0;
         
         prediction = new int[16];
         prediction[0] = -1;

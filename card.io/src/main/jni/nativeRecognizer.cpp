@@ -50,6 +50,7 @@ static struct {
   jfieldID expiry_month;
   jfieldID expiry_year;
   jfieldID detectedCard;
+  jfieldID scanProgress;
 } detectionInfoId;
 
 static struct {
@@ -135,12 +136,13 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
   detectionInfoId.expiry_month = env->GetFieldID(dInfoClass, "expiry_month", "I");
   detectionInfoId.expiry_year = env->GetFieldID(dInfoClass, "expiry_year", "I");
   detectionInfoId.detectedCard = env->GetFieldID(dInfoClass, "detectedCard", "Lio/card/payment/CreditCard;");
+  detectionInfoId.scanProgress = env->GetFieldID(dInfoClass, "scanProgress", "I");
 
   if (!(detectionInfoId.complete && detectionInfoId.topEdge && detectionInfoId.bottomEdge
         && detectionInfoId.leftEdge && detectionInfoId.rightEdge
         && detectionInfoId.focusScore && detectionInfoId.prediction
         && detectionInfoId.expiry_month && detectionInfoId.expiry_year
-        && detectionInfoId.detectedCard
+        && detectionInfoId.detectedCard && detectionInfoId.scanProgress
        )) {
     dmz_error_log("at least one field was not found for DetectionInfo");
     return -1;
