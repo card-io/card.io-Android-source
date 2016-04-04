@@ -378,7 +378,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
   }
 
   // set scan progress
-  
+  env->SetIntField(dinfo, detectionInfoId.scanProgress, result.scan_progress);
 
   cvReleaseImageHeader(&image);
   env->ReleaseByteArrayElements(jb, jBytes, 0);
