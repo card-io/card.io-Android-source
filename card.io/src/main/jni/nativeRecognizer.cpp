@@ -315,7 +315,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
     orientation = dmz_opposite_orientation(orientation);
   }
 
-  FrameScanResult result;
+  FrameScanResult result = {0};
 
   IplImage *image = cvCreateImageHeader(cvSize(width, height), IPL_DEPTH_8U, 1);
   jbyte *jBytes = env->GetByteArrayElements(jb, 0);
@@ -324,7 +324,9 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
   float focusScore = dmz_focus_score(image, false);
   env->SetFloatField(dinfo, detectionInfoId.focusScore, focusScore);
   dmz_trace_log("focus score: %f", focusScore);
+
   if (focusScore >= minFocusScore) {
+    result.scan_progress = SCAN_PROGRESS_FOCUS;
 
     IplImage *cbcr = cvCreateImageHeader(cvSize(width / 2, height / 2), IPL_DEPTH_8U, 2);
     cbcr->imageData = ((char *)jBytes) + width * height;
@@ -345,6 +347,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
     updateEdgeDetectDisplay(env, thiz, dinfo, found_edges);
 
     if (cardDetected) {
+      result.scan_progress = SCAN_PROGRESS_EDGES;
       IplImage *cardY = NULL;
       dmz_transform_card(NULL, image, corner_points, orientation, false, &cardY);
 
@@ -373,6 +376,9 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
     cvReleaseImage(&cb);
     cvReleaseImage(&cr);
   }
+
+  // set scan progress
+  
 
   cvReleaseImageHeader(&image);
   env->ReleaseByteArrayElements(jb, jBytes, 0);
