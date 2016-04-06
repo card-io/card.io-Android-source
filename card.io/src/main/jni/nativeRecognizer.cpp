@@ -27,7 +27,7 @@ static int dmz_refcount = 0;
 static ScannerState scannerState;
 static bool detectOnly;
 static bool flipped;
-static bool lastFrameWasUsable;
+static bool focusTriggered;
 static float minFocusScore;
 
 static struct {
@@ -161,7 +161,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup(JNIEnv *env, jobj
   detectOnly = shouldOnlyDetectCard;
   minFocusScore = jMinFocusScore;
   flipped = false;
-  lastFrameWasUsable = false;
+  focusTriggered = false;
 
   if (dmz == NULL) {
     dmz = dmz_context_create();
@@ -355,6 +355,14 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
         frameResult.focus_score = focusScore;
         frameResult.flipped = flipped;
         scanner_add_frame_with_expiry(&scannerState, cardY, jScanExpiry, &frameResult);
+
+        // trigger focus once when scanprogress reaches certain levels
+        if(frameResult.scan_progress >= SCAN_PROGRESS_HSEG && !focusTriggered) {
+            focusTriggered = true;
+            env->SetFloatField(dinfo, detectionInfoId.focusScore, 0.0f);
+            dmz_debug_log("forcing re-focus on scan progress");
+        }
+
         if (frameResult.usable) {
           ScannerResult scanResult = {0};
           scanner_frame_result(&scannerState, &scanResult, &frameResult);
@@ -378,6 +386,8 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 
   // set scan progress
   env->SetIntField(dinfo, detectionInfoId.scanProgress, frameResult.scan_progress);
+  // release focus trigger when frame was shit
+  if (frameResult.scan_progress < SCAN_PROGRESS_VSEG) focusTriggered = false;
 
   cvReleaseImageHeader(&image);
   env->ReleaseByteArrayElements(jb, jBytes, 0);
