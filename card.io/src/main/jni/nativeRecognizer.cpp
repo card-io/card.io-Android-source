@@ -316,6 +316,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
   }
 
   FrameScanResult frameResult = {0};
+  dmz_edges found_edges = {0};
 
   IplImage *image = cvCreateImageHeader(cvSize(width, height), IPL_DEPTH_8U, 1);
   jbyte *jBytes = env->GetByteArrayElements(jb, 0);
@@ -337,14 +338,11 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 
     cvReleaseImageHeader(&cbcr);
 
-    dmz_edges found_edges;
     dmz_corner_points corner_points;
     bool cardDetected = dmz_detect_edges(image, cb, cr,
                                          orientation,
                                          &found_edges, &corner_points
                                         );
-
-    updateEdgeDetectDisplay(env, thiz, dinfo, found_edges);
 
     if (cardDetected) {
       frameResult.scan_progress = SCAN_PROGRESS_EDGES;
@@ -384,10 +382,11 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
     cvReleaseImage(&cr);
   }
 
-  // set scan progress
+  // set scan progress and update edges (on every frame)
   env->SetIntField(dinfo, detectionInfoId.scanProgress, frameResult.scan_progress);
   // release focus trigger when frame was shit
   if (frameResult.scan_progress < SCAN_PROGRESS_VSEG) focusTriggered = false;
+  updateEdgeDetectDisplay(env, thiz, dinfo, found_edges);
 
   cvReleaseImageHeader(&image);
   env->ReleaseByteArrayElements(jb, jBytes, 0);
