@@ -74,13 +74,6 @@ class Util {
     private static boolean hardwareSupportCheck() {
         Log.i(PUBLIC_LOG_TAG, "Checking hardware support...");
 
-        // we currently need froyo or better (aka Android 2.2, API level 8)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-            Log.w(PUBLIC_LOG_TAG,
-                    "- Android SDK too old. Minimum Android 2.2 / API level 8+ (Froyo) required");
-            return false;
-        }
-
         if (!CardScanner.processorSupported()) {
             Log.w(PUBLIC_LOG_TAG, "- Processor type is not supported");
             return false;
