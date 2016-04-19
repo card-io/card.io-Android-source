@@ -16,6 +16,7 @@
 #include "processor_support.h"
 #include "dmz_debug.h"
 #include "cv/warp.h"
+#include "opencv2/imgproc/imgproc.hpp"
 
 #include "scan/scan.h"
 
@@ -257,8 +258,10 @@ void logDinfo(JNIEnv* env, jobject dinfo) {
                 env->GetIntArrayElements(digitArray, NULL)[3]);
 }
 
-void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap, IplImage* cardY, IplImage* cb, IplImage* cr,
-                          dmz_corner_points corner_points, int orientation) {
+void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap,
+        IplImage* cardY, IplImage* cb, IplImage* cr,
+        dmz_corner_points corner_points, int orientation,
+        ScannerState* state) {
 
   char* pixels = NULL;
 
@@ -287,6 +290,19 @@ void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap, IplImage* card
 
     IplImage* cardResult = cvCreateImageHeader(cvSize(bmInfo.width, bmInfo.height), IPL_DEPTH_8U, 4);
     cvSetData(cardResult, pixels, bmInfo.stride);
+
+    // blur cardnumber
+    int num_y = state->mostRecentUsableVSeg.y_offset - 1;
+    int num_h = kNumberHeight + 2;
+    for (int i = 0; i < state->mostRecentUsableHSeg.n_offsets; i++) {
+        int num_x = state->mostRecentUsableHSeg.offsets[i] - 1;
+        int num_w = state->mostRecentUsableHSeg.number_width + 2;
+        cvSetImageROI(cardY, cvRect(num_x, num_y, num_w, num_h));
+        cv::Mat cvmat = cv::Mat(cardY, false);
+        cv::medianBlur(cvmat, cvmat, 25);
+        cvmat.release();
+    }
+    cvResetImageROI(cardY);
 
     dmz_YCbCr_to_RGB(cardY, bigCb, bigCr, &cardResult);
     AndroidBitmap_unlockPixels(env, jCardResultBitmap);
