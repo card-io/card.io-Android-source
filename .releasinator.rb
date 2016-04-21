@@ -9,12 +9,13 @@ configatron.prerelease_checklist_items = [
 ]
 
 def validate_ndk_version()
-  expected_release = "r10e (64-bit)"
-  actual_release = `cat local.properties | sed 's/\\\./_/g' > .properties.file; . .properties.file; x=\`cat $ndk_dir/RELEASE.TXT\`; rm -rf .properties.file; echo $x`.strip
+  expected_release = "Pkg.Desc = Android NDK Pkg.Revision = 11.2.2725575"
+  actual_release = `cat local.properties | sed 's/\\\./_/g' > .properties.file; . .properties.file; x=\`cat $ndk_dir/source.properties\`; rm -rf .properties.file; echo $x`.strip
   if expected_release != actual_release
-    abort("failed ndk version verification".red)
+    Printer.fail("ndk version verification.  Expected:#{expected_release}.  Actual:#{actual_release}.")
+    abort()
   else
-    puts "validate ndk version: found expected version: '#{actual_release}'."
+    Printer.success("validate ndk version: found expected version: '#{actual_release}'.")
   end
 end
 
