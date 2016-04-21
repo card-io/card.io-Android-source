@@ -30,18 +30,18 @@ configatron.base_docs_dir = 'sdk'
 configatron.release_to_github = false
 
 def build_cardio()
-  command("./gradlew clean :card.io:assembleRelease releaseDoc", live_output=true)
+  CommandProcessor.command("./gradlew clean :card.io:assembleRelease releaseDoc", live_output=true)
 end
 
 # The method that builds the sdk.  Required.
 configatron.build_method = method(:build_cardio)
 
 def publish_to_maven(version)
-  command("./gradlew :card.io:uploadArchives", live_output=true)
-  command("./gradlew :card.io:closeRepository", live_output=true)
-  command("sleep 60")
-  command("./gradlew :card.io:promoteRepository", live_output=true)
-  wait_for("wget -U \"non-empty-user-agent\" -qO- http://central.maven.org/maven2/io/card/android-sdk/ | grep #{version}")
+  CommandProcessor.command("./gradlew :card.io:uploadArchives", live_output=true)
+  CommandProcessor.command("./gradlew :card.io:closeRepository", live_output=true)
+  CommandProcessor.command("sleep 60")
+  CommandProcessor.command("./gradlew :card.io:promoteRepository", live_output=true)
+  CommandProcessor.wait_for("wget -U \"non-empty-user-agent\" -qO- http://central.maven.org/maven2/io/card/android-sdk/ | grep #{version}")
 end
 
 # The method that publishes the sdk to the package manager.  Required.
@@ -55,7 +55,7 @@ end
 
 def compile_sample_app()
   Dir.chdir("SampleApp") do
-    command("gradlew clean assembleDebug", live_output=true)
+    CommandProcessor.command("gradlew clean assembleDebug", live_output=true)
   end
 end
 
@@ -81,7 +81,7 @@ configatron.downstream_repos = [
 ]
 
 def build_docs()
-  command("./gradlew releaseDoc", live_output=true)
+  CommandProcessor.command("./gradlew releaseDoc", live_output=true)
 end
 
 configatron.doc_build_method = method(:build_docs)
