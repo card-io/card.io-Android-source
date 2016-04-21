@@ -41,7 +41,7 @@ def publish_to_maven(version)
   CommandProcessor.command("./gradlew :card.io:closeRepository", live_output=true)
   CommandProcessor.command("sleep 60")
   CommandProcessor.command("./gradlew :card.io:promoteRepository", live_output=true)
-  CommandProcessor.wait_for("wget -U \"non-empty-user-agent\" -qO- http://central.maven.org/maven2/io/card/android-sdk/ | grep #{version}")
+  CommandProcessor.wait_for("wget -U \"non-empty-user-agent\" -qO- http://central.maven.org/maven2/io/card/android-sdk/ | grep #{version} | cat")
 end
 
 # The method that publishes the sdk to the package manager.  Required.
