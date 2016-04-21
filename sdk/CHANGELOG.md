@@ -5,6 +5,7 @@ card.io Android SDK change log and release notes
 -----
 * Upgrade gradle to 2.0.0.
 * Upgrade Android Gradle plugin to 2.10.0.
+* Fix newline issue in ES locale [#142](https://github.com/card-io/card.io-Android-SDK/issues/142).
 
 5.3.2
 -----

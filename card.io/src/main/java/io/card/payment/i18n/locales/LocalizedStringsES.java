@@ -43,7 +43,7 @@ public class LocalizedStringsES implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.ENTRY_CARDHOLDER_NAME, "Nombre del titular de la tarjeta");
         mDisplay.put(StringKey.ENTRY_EXPIRES, "Vence");
         mDisplay.put(StringKey.EXPIRES_PLACEHOLDER, "MM/AA");
-        mDisplay.put(StringKey.SCAN_GUIDE, "Mantén la tarjeta aquí.\\nSe escaneará automáticamente.");
+        mDisplay.put(StringKey.SCAN_GUIDE, "Mantén la tarjeta aquí.\nSe escaneará automáticamente.");
         mDisplay.put(StringKey.KEYBOARD, "Teclado…");
         mDisplay.put(StringKey.ENTRY_CARD_NUMBER, "Número de tarjeta");
         mDisplay.put(StringKey.MANUAL_ENTRY_TITLE, "Detalles de la tarjeta");
