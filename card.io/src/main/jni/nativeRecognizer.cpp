@@ -290,6 +290,7 @@ void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap,
 
     IplImage* cardResult = cvCreateImageHeader(cvSize(bmInfo.width, bmInfo.height), IPL_DEPTH_8U, 4);
     cvSetData(cardResult, pixels, bmInfo.stride);
+    dmz_YCbCr_to_RGB(cardY, bigCb, bigCr, &cardResult);
 
     // blur cardnumber
     int num_y = state->mostRecentUsableVSeg.y_offset - 1;
@@ -297,14 +298,13 @@ void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap,
     for (int i = 0; i < state->mostRecentUsableHSeg.n_offsets; i++) {
         int num_x = state->mostRecentUsableHSeg.offsets[i] - 1;
         int num_w = state->mostRecentUsableHSeg.number_width + 2;
-        cvSetImageROI(cardY, cvRect(num_x, num_y, num_w, num_h));
-        cv::Mat cvmat = cv::Mat(cardY, false);
-        cv::medianBlur(cvmat, cvmat, 25);
-        cvmat.release();
+        cvSetImageROI(cardResult, cvRect(num_x, num_y, num_w, num_h));
+        cv::Mat blurMat = cv::Mat(cardResult, false);
+        cv::medianBlur(blurMat, blurMat, 25);
+        blurMat.release();
     }
-    cvResetImageROI(cardY);
+    cvResetImageROI(cardResult);
 
-    dmz_YCbCr_to_RGB(cardY, bigCb, bigCr, &cardResult);
     AndroidBitmap_unlockPixels(env, jCardResultBitmap);
 
     cvReleaseImageHeader(&cardResult);
