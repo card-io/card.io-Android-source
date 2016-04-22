@@ -641,8 +641,8 @@ public final class CardIOActivity extends Activity {
         switch (requestCode) {
             case PERMISSION_REQUEST_ID: {
                 waitingForPermission = false;
-                if (grantResults[0] ==
-                        PackageManager.PERMISSION_GRANTED){
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     showCameraScannerOverlay();
 
                 } else {
