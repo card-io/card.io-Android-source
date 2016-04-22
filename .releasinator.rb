@@ -41,12 +41,14 @@ def publish_to_maven(version)
   CommandProcessor.command("./gradlew :card.io:closeRepository", live_output=true)
   CommandProcessor.command("sleep 60")
   CommandProcessor.command("./gradlew :card.io:promoteRepository", live_output=true)
-  CommandProcessor.wait_for("wget -U \"non-empty-user-agent\" -qO- http://central.maven.org/maven2/io/card/android-sdk/ | grep #{version} | cat")
 end
-
 # The method that publishes the sdk to the package manager.  Required.
 configatron.publish_to_package_manager_method = method(:publish_to_maven)
 
+def wait_for_maven(version)
+  CommandProcessor.wait_for("wget -U \"non-empty-user-agent\" -qO- http://central.maven.org/maven2/io/card/android-sdk/ | grep #{version} | cat")
+end
+configatron.wait_for_package_manager_method = method(:wait_for_maven)
 
 def replace_version(new_tag)
   replace_string("./SampleApp/build.gradle", "REPLACE_VERSION", "#{new_tag}")
