@@ -28,7 +28,7 @@ static int dmz_refcount = 0;
 static ScannerState scannerState;
 static bool detectOnly;
 static bool flipped;
-static bool lastFrameWasUsable;
+static int blur;
 static float minFocusScore;
 
 static struct {
@@ -151,14 +151,15 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
 }
 
 extern "C"
-JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup(JNIEnv *env, jobject thiz,
-    jboolean shouldOnlyDetectCard, jfloat jMinFocusScore) {
+JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup__ZFI(JNIEnv *env, jobject thiz,
+    jboolean shouldOnlyDetectCard, jfloat jMinFocusScore, jint jBlur) {
   dmz_debug_log("Java_io_card_payment_CardScanner_nSetup");
   dmz_trace_log("dmz trace enabled");
 
 
   detectOnly = shouldOnlyDetectCard;
   minFocusScore = jMinFocusScore;
+  blur = jBlur;
   flipped = false;
   lastFrameWasUsable = false;
 
@@ -172,6 +173,12 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup(JNIEnv *env, jobj
   dmz_refcount++;
 
   cvSetErrMode(CV_ErrModeParent);
+}
+
+extern "C"
+JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup__ZF(JNIEnv *env, jobject thiz,
+    jboolean shouldOnlyDetectCard, jfloat jMinFocusScore) {
+    return Java_io_card_payment_CardScanner_nSetup__ZFI(env, thiz, shouldOnlyDetectCard, jMinFocusScore, 12);
 }
 
 extern "C"
@@ -295,7 +302,7 @@ void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap,
     // blur cardnumber
     int num_y = state->mostRecentUsableVSeg.y_offset - 1;
     int num_h = kNumberHeight + 2;
-    for (int i = 0; i < state->mostRecentUsableHSeg.n_offsets; i++) {
+    for (int i = 0; i < state->mostRecentUsableHSeg.n_offsets && i < blur; i++) {
         int num_x = state->mostRecentUsableHSeg.offsets[i] - 1;
         int num_w = state->mostRecentUsableHSeg.number_width + 2;
         cvSetImageROI(cardResult, cvRect(num_x, num_y, num_w, num_h));
