@@ -300,11 +300,12 @@ void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap,
     dmz_YCbCr_to_RGB(cardY, bigCb, bigCr, &cardResult);
 
     // blur cardnumber
-    int num_y = state->mostRecentUsableVSeg.y_offset - 1;
-    int num_h = kNumberHeight + 2;
     for (int i = 0; i < state->mostRecentUsableHSeg.n_offsets && i < blur; i++) {
         int num_x = state->mostRecentUsableHSeg.offsets[i] - 1;
+        int num_y = state->mostRecentUsableVSeg.y_offset - 1;
         int num_w = state->mostRecentUsableHSeg.number_width + 2;
+        int num_h = kNumberHeight + 2;
+        if (i < 4) num_h *= 2;
         cvSetImageROI(cardResult, cvRect(num_x, num_y, num_w, num_h));
         cv::Mat blurMat = cv::Mat(cardResult, false);
         cv::medianBlur(blurMat, blurMat, 25);
