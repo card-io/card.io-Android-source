@@ -82,7 +82,7 @@ public final class CardIOActivity extends Activity {
      * Setting it to i.e. <code>12</code> will blur out the first twelve digits,
      * leaving the remaining visible on the card picture. Privacy feature.
      */
-    public static final String EXTRA_BLUR = "io.card.payment.blur";
+    public static final String EXTRA_BLUR_DIGITS = "io.card.payment.blurDigits";
 
     /**
      * Boolean extra. Optional. Defaults to <code>false</code>. If set, the user will be prompted
