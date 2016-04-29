@@ -46,7 +46,7 @@ end
 configatron.publish_to_package_manager_method = method(:publish_to_maven)
 
 def wait_for_maven(version)
-  CommandProcessor.wait_for("wget -U \"non-empty-user-agent\" -qO- http://central.maven.org/maven2/io/card/android-sdk/#{version}/ | cat")
+  CommandProcessor.wait_for("wget -U \"non-empty-user-agent\" -qO- http://central.maven.org/maven2/io/card/android-sdk/#{version}/android-sdk-#{version}.pom | cat")
 end
 configatron.wait_for_package_manager_method = method(:wait_for_maven)
 
