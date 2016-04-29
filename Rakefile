@@ -1,0 +1,1 @@
+import "../releasinator/lib/tasks/releasinator.rake"
