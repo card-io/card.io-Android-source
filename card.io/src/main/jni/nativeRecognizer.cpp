@@ -161,7 +161,6 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup__ZFI(JNIEnv *env,
   minFocusScore = jMinFocusScore;
   blur = jBlur;
   flipped = false;
-  lastFrameWasUsable = false;
 
   if (dmz == NULL) {
     dmz = dmz_context_create();
@@ -305,7 +304,7 @@ void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap,
         int num_y = state->mostRecentUsableVSeg.y_offset - 1;
         int num_w = state->mostRecentUsableHSeg.number_width + 2;
         int num_h = kNumberHeight + 2;
-        if (i < 4) num_h *= 2;
+        if (i < 4) num_h *= 2; // blur smaller four digits below first bucket
         cvSetImageROI(cardResult, cvRect(num_x, num_y, num_w, num_h));
         cv::Mat blurMat = cv::Mat(cardResult, false);
         cv::medianBlur(blurMat, blurMat, 25);
@@ -388,7 +387,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
         }
       }
 
-      setDetectedCardImage(env, jCardResultBitmap, cardY, cb, cr, corner_points, orientation);
+      setDetectedCardImage(env, jCardResultBitmap, cardY, cb, cr, corner_points, orientation, &scannerState);
       cvReleaseImage(&cardY);
     }
 
