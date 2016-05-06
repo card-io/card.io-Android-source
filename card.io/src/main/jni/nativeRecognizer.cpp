@@ -28,7 +28,7 @@ static int dmz_refcount = 0;
 static ScannerState scannerState;
 static bool detectOnly;
 static bool flipped;
-static int blur;
+static int unblur = 4;
 static float minFocusScore;
 
 static struct {
@@ -151,15 +151,15 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
 }
 
 extern "C"
-JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup__ZFI(JNIEnv *env, jobject thiz,
-    jboolean shouldOnlyDetectCard, jfloat jMinFocusScore, jint jBlur) {
+JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup__ZFI(JNIEnv *env,
+        jobject thiz, jboolean shouldOnlyDetectCard, jfloat jMinFocusScore, jint jUnblur) {
   dmz_debug_log("Java_io_card_payment_CardScanner_nSetup");
   dmz_trace_log("dmz trace enabled");
 
 
   detectOnly = shouldOnlyDetectCard;
   minFocusScore = jMinFocusScore;
-  blur = jBlur;
+  unblur = jUnblur;
   flipped = false;
 
   if (dmz == NULL) {
@@ -175,9 +175,9 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup__ZFI(JNIEnv *env,
 }
 
 extern "C"
-JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup__ZF(JNIEnv *env, jobject thiz,
-    jboolean shouldOnlyDetectCard, jfloat jMinFocusScore) {
-    return Java_io_card_payment_CardScanner_nSetup__ZFI(env, thiz, shouldOnlyDetectCard, jMinFocusScore, 12);
+JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup__ZF(JNIEnv *env,
+        jobject thiz, jboolean shouldOnlyDetectCard, jfloat jMinFocusScore) {
+    return Java_io_card_payment_CardScanner_nSetup__ZFI(env, thiz, shouldOnlyDetectCard, jMinFocusScore, unblur);
 }
 
 extern "C"
@@ -299,7 +299,8 @@ void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap,
     dmz_YCbCr_to_RGB(cardY, bigCb, bigCr, &cardResult);
 
     // blur cardnumber
-    for (int i = 0; i < state->mostRecentUsableHSeg.n_offsets && i < blur; i++) {
+    int blurCount = state->mostRecentUsableHSeg.n_offsets - unblur;
+    for (int i = 0; i < state->mostRecentUsableHSeg.n_offsets && i < blurCount ; i++) {
         int num_x = state->mostRecentUsableHSeg.offsets[i] - 1;
         int num_y = state->mostRecentUsableVSeg.y_offset - 1;
         int num_w = state->mostRecentUsableHSeg.number_width + 2;
