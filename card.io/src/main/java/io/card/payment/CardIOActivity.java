@@ -78,7 +78,7 @@ public final class CardIOActivity extends Activity {
 
     /**
      * Integer extra. Optional. Defaults to <code>0</code>. 
-     * How many of the Card number digits to blur on the resuilting image.
+     * How many of the Card number digits to blur on the resulting image.
      * Setting it to i.e. <code>12</code> will blur out the first twelve digits,
      * leaving the remaining visible on the card picture. Privacy feature.
      */
