@@ -24,10 +24,12 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.EditText;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.NumberFormatException;
 
 import io.card.development.recording.Recording;
 import io.card.payment.CardIOActivity;
@@ -73,6 +75,7 @@ public class CardIOSimpleExampleActivity extends Activity {
     private CheckBox mShowPayPalActionBarIconToggle;
     private CheckBox mKeepApplicationThemeToggle;
     private Spinner mLanguageSpinner;
+    private EditText mUnblurEdit;
 
     @Override
     public void onCreate(Bundle b) {
@@ -109,6 +112,7 @@ public class CardIOSimpleExampleActivity extends Activity {
         mKeepApplicationThemeToggle = (CheckBox) findViewById(R.id.keepApplicationTheme);
 
         mLanguageSpinner = (Spinner) findViewById(R.id.languageSpinner);
+        mUnblurEdit = (EditText) findViewById(R.id.unblurEdit);
 
         List<String> languages = new ArrayList<String>();
         // add null string for device level testing
@@ -249,6 +253,10 @@ public class CardIOSimpleExampleActivity extends Activity {
                 mSuppressConfirmationToggle.isChecked());
 
         intent.putExtra(CardIOActivity.EXTRA_SUPPRESS_SCAN, mSuppressScanToggle.isChecked());
+        try {
+            int unblur = Integer.parseInt(mUnblurEdit.getText().toString());
+            intent.putExtra(CardIOActivity.EXTRA_UNBLUR_DIGITS, unblur);
+        } catch(NumberFormatException e) { }
 
         intent.putExtra(CardIOActivity.EXTRA_RETURN_CARD_IMAGE, true);
 
