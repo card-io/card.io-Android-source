@@ -1,3 +1,3 @@
 source 'https://rubygems.org'
 
-gem 'releasinator', '~> 0.2'
+gem 'releasinator', '~> 0.3'
