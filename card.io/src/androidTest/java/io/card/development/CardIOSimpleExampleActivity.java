@@ -254,8 +254,8 @@ public class CardIOSimpleExampleActivity extends Activity {
 
         intent.putExtra(CardIOActivity.EXTRA_SUPPRESS_SCAN, mSuppressScanToggle.isChecked());
         try {
-            int unblur = Integer.parseInt(mUnblurEdit.getText().toString());
-            intent.putExtra(CardIOActivity.EXTRA_UNBLUR_DIGITS, unblur);
+            int unblurDigits = Integer.parseInt(mUnblurEdit.getText().toString());
+            intent.putExtra(CardIOActivity.EXTRA_UNBLUR_DIGITS, unblurDigits);
         } catch(NumberFormatException e) { }
 
         intent.putExtra(CardIOActivity.EXTRA_RETURN_CARD_IMAGE, true);

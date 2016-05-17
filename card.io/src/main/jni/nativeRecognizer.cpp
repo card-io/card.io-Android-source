@@ -27,7 +27,7 @@ static int dmz_refcount = 0;
 static ScannerState scannerState;
 static bool detectOnly;
 static bool flipped;
-static int unblur = 4;
+static int unblurDigits;
 static float minFocusScore;
 
 static struct {
@@ -151,14 +151,14 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
 
 extern "C"
 JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup__ZFI(JNIEnv *env,
-        jobject thiz, jboolean shouldOnlyDetectCard, jfloat jMinFocusScore, jint jUnblur) {
+        jobject thiz, jboolean shouldOnlyDetectCard, jfloat jMinFocusScore, jint jUnblurDigits) {
   dmz_debug_log("Java_io_card_payment_CardScanner_nSetup");
   dmz_trace_log("dmz trace enabled");
 
 
   detectOnly = shouldOnlyDetectCard;
   minFocusScore = jMinFocusScore;
-  unblur = jUnblur;
+  unblurDigits = jUnblurDigits;
   flipped = false;
 
   if (dmz == NULL) {
@@ -176,7 +176,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup__ZFI(JNIEnv *env,
 extern "C"
 JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup__ZF(JNIEnv *env,
         jobject thiz, jboolean shouldOnlyDetectCard, jfloat jMinFocusScore) {
-    return Java_io_card_payment_CardScanner_nSetup__ZFI(env, thiz, shouldOnlyDetectCard, jMinFocusScore, unblur);
+    return Java_io_card_payment_CardScanner_nSetup__ZFI(env, thiz, shouldOnlyDetectCard, jMinFocusScore, unblurDigits);
 }
 
 extern "C"
@@ -296,7 +296,7 @@ void setDetectedCardImage(JNIEnv* env, jobject jCardResultBitmap,
     cvSetData(cardResult, pixels, bmInfo.stride);
     dmz_YCbCr_to_RGB(cardY, bigCb, bigCr, &cardResult);
 
-    dmz_blur_card(cardResult, &scannerState, unblur);
+    dmz_blur_card(cardResult, &scannerState, unblurDigits);
 
     AndroidBitmap_unlockPixels(env, jCardResultBitmap);
 
