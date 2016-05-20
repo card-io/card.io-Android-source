@@ -55,6 +55,36 @@ def replace_version(new_tag)
   replace_string("./README.md", "REPLACE_VERSION", "#{new_tag}")
 end
 
+def replace_gradle_package(filename, package_id, version)
+  regex = /#{package_id}:\d\d*\.\d\d*\.\d\d*/
+  replace_string(filename, regex, "#{package_id}:#{version}")
+end
+
+def replace_version_in_cordova(version)
+  replace_gradle_package("src/android/build.gradle", "io.card:android-sdk", version)
+end
+
+def add_new_line (filepath, location, new_content)
+  require 'fileutils'
+  tempfile=File.open("file.tmp", 'w')
+  File.open(filepath, 'r') do |f|
+    f.each_line do |line|
+      tempfile<<line
+      if line.strip == location.strip
+        tempfile << new_content
+      end
+    end
+  end
+  tempfile.close
+  FileUtils.mv("file.tmp", filepath)
+end
+
+def update_release_notes(new_version)
+  add_new_line("CHANGELOG.md", "===================================", "TODO\n")
+  add_new_line("CHANGELOG.md", "TODO", "-----\n")
+  add_new_line("CHANGELOG.md", "-----", (@current_release.changelog.gsub! /^\*/,'* Android:')+"\n\n")
+end
+
 def compile_sample_app()
   Dir.chdir("SampleApp") do
     CommandProcessor.command("gradlew clean assembleDebug", live_output=true)
@@ -78,6 +108,17 @@ configatron.downstream_repos = [
     ],
     :build_methods => [
       method(:compile_sample_app)
+    ]
+  ),
+  DownstreamRepo.new(
+    name="cordova",
+    url="git@github.com:card-io/card.io-Cordova-Plugin.git",
+    branch="master",
+    :full_file_sync => false,
+    :new_branch_name => "android-__VERSION__",
+    :post_copy_methods => [
+      method(:replace_version_in_cordova),
+      method(:update_release_notes)
     ]
   )
 ]
