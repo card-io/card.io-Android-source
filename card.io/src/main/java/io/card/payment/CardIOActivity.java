@@ -146,8 +146,8 @@ public final class CardIOActivity extends Activity {
      * <br><br>
      * These localizations are currently included:
      * <br><br>
-     * da, de, en, en_AU, en_GB, es, es_MX, fr, he, is, it, ja, ko, nb, nl, pl, pt, pt_BR, ru,
-     * sv, tr, zh-Hans, zh-Hant, zh-Hant_TW.
+     * ar, da, de, en, en_AU, en_GB, es, es_MX, fr, he, is, it, ja, ko, ms, nb, nl, pl, pt, pt_BR, ru,
+     * sv, th, tr, zh-Hans, zh-Hant, zh-Hant_TW.
      */
     public static final String EXTRA_LANGUAGE_OR_LOCALE = "io.card.payment.languageOrLocale";
 
