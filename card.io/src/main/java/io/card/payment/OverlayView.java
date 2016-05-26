@@ -298,7 +298,7 @@ class OverlayView extends View {
             int width  = (int) (GUIDE_STROKE_WIDTH / 2 * mScale); 
             int height = (int) (50 * mScale);
             int offset = (int) (10 * mScale); 
-            for ( int i = 0; i < scanProgress; i++) {
+            for (int i = 0; i < scanProgress; i++) {
                 int x1 = offset + (offset + width) * i;
                 int y1 = offset;
                 int x2 = x1 + width ;
