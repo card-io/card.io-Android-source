@@ -84,8 +84,12 @@ class Util {
         try {
             c = Camera.open();
         } catch (RuntimeException e) {
-            Log.w(PUBLIC_LOG_TAG, "- Error opening camera: " + e);
-            throw new CameraUnavailableException();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return true;
+            } else {
+                Log.w(PUBLIC_LOG_TAG, "- Error opening camera: " + e);
+                throw new CameraUnavailableException();
+            }
         }
         if (c == null) {
             Log.w(PUBLIC_LOG_TAG, "- No camera found");
