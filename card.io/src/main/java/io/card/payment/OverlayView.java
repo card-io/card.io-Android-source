@@ -288,6 +288,23 @@ class OverlayView extends View {
         mGuidePaint.setStyle(Paint.Style.FILL);
         mGuidePaint.setColor(guideColor);
 
+        // draw Progress Indicator Bar
+        if (mDInfo != null) {
+            Paint mProgressPaint = new Paint(mGuidePaint);
+            int width  = (int) (GUIDE_STROKE_WIDTH / 2 * mScale); 
+            int height = (int) (50 * mScale);
+            int offset = (int) (10 * mScale); 
+            for (int i = 0; i < mDInfo.scanProgress; i++) {
+                int x1 = offset + (offset + width) * i;
+                int y1 = offset;
+                int x2 = x1 + width ;
+                int y2 = y1 + height;
+                // set red -> green color based on progress
+                mProgressPaint.setColor(Color.HSVToColor(new float[]{(float)(i / 8f) * 120f,1f,1f}));
+                canvas.drawRect(x1, y1, x2, y2, mProgressPaint);
+            }
+        }
+
         // top left
         canvas.drawRect(
                 guideStrokeRect(mGuide.left, mGuide.top, mGuide.left + tickLength, mGuide.top),

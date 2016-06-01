@@ -27,7 +27,7 @@ static int dmz_refcount = 0;
 static ScannerState scannerState;
 static bool detectOnly;
 static bool flipped;
-static bool lastFrameWasUsable;
+static bool focusTriggered;
 static float minFocusScore;
 
 static struct {
@@ -50,6 +50,7 @@ static struct {
   jfieldID expiry_month;
   jfieldID expiry_year;
   jfieldID detectedCard;
+  jfieldID scanProgress;
 } detectionInfoId;
 
 static struct {
@@ -135,12 +136,13 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
   detectionInfoId.expiry_month = env->GetFieldID(dInfoClass, "expiry_month", "I");
   detectionInfoId.expiry_year = env->GetFieldID(dInfoClass, "expiry_year", "I");
   detectionInfoId.detectedCard = env->GetFieldID(dInfoClass, "detectedCard", "Lio/card/payment/CreditCard;");
+  detectionInfoId.scanProgress = env->GetFieldID(dInfoClass, "scanProgress", "I");
 
   if (!(detectionInfoId.complete && detectionInfoId.topEdge && detectionInfoId.bottomEdge
         && detectionInfoId.leftEdge && detectionInfoId.rightEdge
         && detectionInfoId.focusScore && detectionInfoId.prediction
         && detectionInfoId.expiry_month && detectionInfoId.expiry_year
-        && detectionInfoId.detectedCard
+        && detectionInfoId.detectedCard && detectionInfoId.scanProgress
        )) {
     dmz_error_log("at least one field was not found for DetectionInfo");
     return -1;
@@ -159,7 +161,7 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup(JNIEnv *env, jobj
   detectOnly = shouldOnlyDetectCard;
   minFocusScore = jMinFocusScore;
   flipped = false;
-  lastFrameWasUsable = false;
+  focusTriggered = false;
 
   if (dmz == NULL) {
     dmz = dmz_context_create();
@@ -313,7 +315,8 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
     orientation = dmz_opposite_orientation(orientation);
   }
 
-  FrameScanResult result;
+  FrameScanResult frameResult = {0};
+  dmz_edges found_edges = {0};
 
   IplImage *image = cvCreateImageHeader(cvSize(width, height), IPL_DEPTH_8U, 1);
   jbyte *jBytes = env->GetByteArrayElements(jb, 0);
@@ -322,7 +325,9 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
   float focusScore = dmz_focus_score(image, false);
   env->SetFloatField(dinfo, detectionInfoId.focusScore, focusScore);
   dmz_trace_log("focus score: %f", focusScore);
+
   if (focusScore >= minFocusScore) {
+    frameResult.scan_progress = SCAN_PROGRESS_FOCUS;
 
     IplImage *cbcr = cvCreateImageHeader(cvSize(width / 2, height / 2), IPL_DEPTH_8U, 2);
     cbcr->imageData = ((char *)jBytes) + width * height;
@@ -333,33 +338,38 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
 
     cvReleaseImageHeader(&cbcr);
 
-    dmz_edges found_edges;
     dmz_corner_points corner_points;
     bool cardDetected = dmz_detect_edges(image, cb, cr,
                                          orientation,
                                          &found_edges, &corner_points
                                         );
 
-    updateEdgeDetectDisplay(env, thiz, dinfo, found_edges);
-
     if (cardDetected) {
+      frameResult.scan_progress = SCAN_PROGRESS_EDGES;
       IplImage *cardY = NULL;
       dmz_transform_card(NULL, image, corner_points, orientation, false, &cardY);
 
       if (!detectOnly) {
-        result.focus_score = focusScore;
-        result.flipped = flipped;
-        scanner_add_frame_with_expiry(&scannerState, cardY, jScanExpiry, &result);
-        if (result.usable) {
-          ScannerResult scanResult;
-          scanner_result(&scannerState, &scanResult);
+        frameResult.focus_score = focusScore;
+        frameResult.flipped = flipped;
+        scanner_add_frame_with_expiry(&scannerState, cardY, jScanExpiry, &frameResult);
+
+        // trigger focus once when scanprogress reaches certain levels
+        if(frameResult.scan_progress >= SCAN_PROGRESS_HSEG && !focusTriggered) {
+            focusTriggered = true;
+            env->SetFloatField(dinfo, detectionInfoId.focusScore, 0.0f);
+            dmz_debug_log("forcing re-focus on scan progress");
+        }
+
+        if (frameResult.usable) {
+          ScannerResult scanResult = {0};
+          scanner_frame_result(&scannerState, &scanResult, &frameResult);
 
           if (scanResult.complete) {
             setScanCardNumberResult(env, dinfo, &scanResult);
             logDinfo(env, dinfo);
           }
-        }
-        else if (result.upside_down) {
+        } else if (frameResult.upside_down) {
           flipped = !flipped;
         }
       }
@@ -371,6 +381,12 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
     cvReleaseImage(&cb);
     cvReleaseImage(&cr);
   }
+
+  // set scan progress and update edges (on every frame)
+  env->SetIntField(dinfo, detectionInfoId.scanProgress, frameResult.scan_progress);
+  // release focus trigger when frame was shit
+  if (frameResult.scan_progress < SCAN_PROGRESS_VSEG) focusTriggered = false;
+  updateEdgeDetectDisplay(env, thiz, dinfo, found_edges);
 
   cvReleaseImageHeader(&image);
   env->ReleaseByteArrayElements(jb, jBytes, 0);

@@ -20,9 +20,11 @@ class DetectionInfo {
     public int expiry_month;
     public int expiry_year;
     public CreditCard detectedCard;
+    public int scanProgress; // enum scan completion: edge detect, vseg, hseg, scores, stability, expiry ...
 
     public DetectionInfo() {
         complete = false;
+        scanProgress = 0;
         
         prediction = new int[16];
         prediction[0] = -1;
@@ -35,7 +37,8 @@ class DetectionInfo {
 
     boolean sameEdgesAs(DetectionInfo other) {
         return other.topEdge == this.topEdge && other.bottomEdge == this.bottomEdge
-                && other.leftEdge == this.leftEdge && other.rightEdge == this.rightEdge;
+                && other.leftEdge == this.leftEdge && other.rightEdge == this.rightEdge && 
+                this.scanProgress == other.scanProgress;
     }
 
     boolean detected() {
