@@ -56,7 +56,7 @@ def replace_version(new_tag)
 end
 
 def replace_gradle_package(filename, package_id, version)
-  regex = /#{package_id}:\d\d*\.\d\d*\.\d\d*/
+  regex = /#{package_id}:\d+\.\d+\.\d+/
   replace_string(filename, regex, "#{package_id}:#{version}")
 end
 
