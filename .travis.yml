@@ -4,14 +4,14 @@ addons:
     packages:
     - p7zip-full
 language: android
-jdk: oraclejdk7
+jdk: oraclejdk8
 env:
   matrix:
   - ANDROID_TARGET=android-23  ANDROID_ABI=armeabi-v7a
 android:
   components:
   - android-23
-  - build-tools-23.0.1
+  - build-tools-23.0.3
   - platform-tools
   - tools
 before_install:
