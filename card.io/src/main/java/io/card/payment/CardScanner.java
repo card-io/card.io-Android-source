@@ -45,6 +45,8 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     // value based on phone? or
     // change focus behavior?
 
+    private static final int DEFAULT_UNBLUR_DIGITS = -1; // no blur per default
+
     private static final int CAMERA_CONNECT_TIMEOUT = 5000;
     private static final int CAMERA_CONNECT_RETRY_INTERVAL = 50;
 
@@ -62,6 +64,8 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     public static native boolean nUseX86();
 
     private native void nSetup(boolean shouldDetectOnly, float minFocusScore);
+
+    private native void nSetup(boolean shouldDetectOnly, float minFocusScore, int unBlur);
 
     private native void nResetAnalytics();
 
@@ -82,6 +86,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     protected WeakReference<CardIOActivity> mScanActivityRef;
     private boolean mSuppressScan = false;
     private boolean mScanExpiry;
+    private int mUnblurDigits = DEFAULT_UNBLUR_DIGITS;
 
     // read by CardIOActivity to set up Preview
     final int mPreviewWidth = 640;
@@ -162,10 +167,11 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             mSuppressScan = scanIntent.getBooleanExtra(CardIOActivity.EXTRA_SUPPRESS_SCAN, false);
             mScanExpiry = scanIntent.getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false)
                     && scanIntent.getBooleanExtra(CardIOActivity.EXTRA_SCAN_EXPIRY, true);
+            mUnblurDigits = scanIntent.getIntExtra(CardIOActivity.EXTRA_UNBLUR_DIGITS, DEFAULT_UNBLUR_DIGITS);
         }
         mScanActivityRef = new WeakReference<>(scanActivity);
         mFrameOrientation = currentFrameOrientation;
-        nSetup(mSuppressScan, MIN_FOCUS_SCORE);
+        nSetup(mSuppressScan, MIN_FOCUS_SCORE, mUnblurDigits);
     }
 
     /**

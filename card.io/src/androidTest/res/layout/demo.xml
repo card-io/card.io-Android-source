@@ -105,18 +105,36 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:focusableInTouchMode="true">
 
             <TextView
                     android:id="@+id/languageTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Language "/>
+                    android:text="Language:"/>
             <Spinner
                     android:id="@+id/languageSpinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:gravity="center"/>
+
+            <!-- set cardnumber digits not to blur -->
+            <TextView
+                    android:id="@+id/unblurTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingLeft="50dp"
+                    android:text="Digits not blurred:"/>
+            <EditText
+                    android:id="@+id/unblurEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="4"
+                    android:gravity="center"
+                    android:inputType="number"/>
         </LinearLayout>
 
         <LinearLayout
