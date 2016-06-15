@@ -77,7 +77,7 @@ public final class CardIOActivity extends Activity {
     public static final String EXTRA_SCAN_EXPIRY = "io.card.payment.scanExpiry";
 
     /**
-     * Integer extra. Optional. Defaults to <code>4</code>. Privacy feature.
+     * Integer extra. Optional. Defaults to <code>-1</code> (no blur). Privacy feature.
      * How many of the Card number digits NOT to blur on the resulting image.
      * Setting it to <code>4</code> will blur all digits except the last four.
      */
