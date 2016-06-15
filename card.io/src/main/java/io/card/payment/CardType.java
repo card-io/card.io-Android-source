@@ -79,9 +79,9 @@ public enum CardType {
 
     /**
      * Convenience method to return a CardType string (e.g. "Visa", "American Express", "JCB",
-     * "MasterCard", or "Discover") suitable for display. This string will be translated into the
-     * language specified. See {@link CardIOActivity#EXTRA_LANGUAGE_OR_LOCALE} for a detailed
-     * explanation of languageOrLocale.
+     * "Maestro", "MasterCard", or "Discover") suitable for display. This string will be translated
+     * into the language specified. See {@link CardIOActivity#EXTRA_LANGUAGE_OR_LOCALE} for a
+     * detailed explanation of languageOrLocale.
      *
      * @param languageOrLocale See {@link CardIOActivity#EXTRA_LANGUAGE_OR_LOCALE}.
      * @return the display name of the card
@@ -97,6 +97,8 @@ public enum CardType {
                 return LocalizedStrings.getString(StringKey.CARDTYPE_JCB, languageOrLocale);
             case MASTERCARD:
                 return LocalizedStrings.getString(StringKey.CARDTYPE_MASTERCARD, languageOrLocale);
+            case MAESTRO:
+                return LocalizedStrings.getString(StringKey.CARDTYPE_MAESTRO, languageOrLocale);
             case VISA:
                 return LocalizedStrings.getString(StringKey.CARDTYPE_VISA, languageOrLocale);
             default:
@@ -117,6 +119,7 @@ public enum CardType {
                 break;
             case JCB:
             case MASTERCARD:
+            case MAESTRO:
             case VISA:
             case DISCOVER:
                 result = 16;
@@ -147,6 +150,7 @@ public enum CardType {
                 break;
             case JCB:
             case MASTERCARD:
+            case MAESTRO:
             case VISA:
             case DISCOVER:
             case DINERSCLUB:
@@ -196,7 +200,7 @@ public enum CardType {
             }
             default: {
                 // use generic cc image by default? nah, because if it's not one of the above, it's not
-                // valid.
+                // valid, or it's maestro.
                 // cardImageData = Base64EncodedImages.paypal_sdk_icon_jcb_large;
                 break;
             }

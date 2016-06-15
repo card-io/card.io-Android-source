@@ -36,6 +36,7 @@ public class LocalizedStringsEN implements SupportedLocale<StringKey> {
         mDisplay.put(StringKey.CARDTYPE_DISCOVER, "Discover");
         mDisplay.put(StringKey.CARDTYPE_JCB, "JCB");
         mDisplay.put(StringKey.CARDTYPE_MASTERCARD, "MasterCard");
+        mDisplay.put(StringKey.CARDTYPE_MAESTRO, "Maestro");
         mDisplay.put(StringKey.CARDTYPE_VISA, "Visa");
         mDisplay.put(StringKey.DONE, "Done");
         mDisplay.put(StringKey.ENTRY_CVV, "CVV");
