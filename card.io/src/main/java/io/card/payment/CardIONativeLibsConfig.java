@@ -7,7 +7,7 @@ package io.card.payment;
 /**
  * A config class that is used to specify an alternative search path for the native libraries.
  *
- * It's primary use case is for when the libraries are loaded over the network instead of being
+ * Its primary use case is for when the libraries are loaded over the network instead of being
  * shipped with the APK and are stored in the app's data folder.
  */
 public class CardIONativeLibsConfig {
