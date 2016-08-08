@@ -101,7 +101,7 @@ public class CardIOSimpleExampleActivityTest extends
         String btnText = LocalizedStrings.getString(StringKey.DONE);
         solo.clickOnButton(btnText);
 
-        solo.sleep(250);
+        solo.sleep(1000);
 
         solo.assertCurrentActivity("Expected completion", CardIOSimpleExampleActivity.class);
         solo.takeScreenshot("completion");
@@ -119,7 +119,7 @@ public class CardIOSimpleExampleActivityTest extends
         solo.sleep(250);
         solo.clickOnButton("Scan Credit Card using Card.io");
 
-        solo.sleep(500);
+        solo.sleep(1000);
 
         solo.assertCurrentActivity("Expected DataEntryActivity", DataEntryActivity.class);
 
