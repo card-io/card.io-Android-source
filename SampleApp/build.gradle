@@ -14,8 +14,8 @@ repositories {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
 
     signingConfigs {
         myConfig {

@@ -1,6 +1,11 @@
 card.io Android SDK change log and release notes
 ================================================
 
+TODO
+-----
+* Updated gradle plugin and wrapper versions.
+* Bump compile SDK to 24.
+
 5.4.0
 -----
 * Add ability to blur all digits in the scanned card image, minus any number of digits to remain unblurred, enabled via `CardIOActivity.EXTRA_UNBLUR_DIGITS`. Thank you Michael Schmoock!
