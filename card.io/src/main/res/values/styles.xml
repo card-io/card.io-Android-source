@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="LightTheme" parent="Theme.AppCompat.Light">
+        <!--   color for the app bar -->
+        <item name="colorPrimary">@color/light_theme_primary</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">@color/light_theme_primary_dark</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/light_theme_accent</item>
+    </style>
+</resources>

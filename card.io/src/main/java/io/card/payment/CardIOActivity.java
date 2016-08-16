@@ -843,7 +843,7 @@ public final class CardIOActivity extends Activity {
 
         final Intent origIntent = getIntent();
         if (origIntent != null && origIntent.getBooleanExtra(EXTRA_SUPPRESS_CONFIRMATION, false)) {
-            Intent dataIntent = new Intent(CardIOActivity.this, DataEntryActivity.class);
+            Intent dataIntent = new Intent(CardIOActivity.this, ManualActivity.class);
             if (mDetectedCard != null) {
                 dataIntent.putExtra(EXTRA_SCAN_RESULT, mDetectedCard);
                 mDetectedCard = null;
@@ -861,7 +861,7 @@ public final class CardIOActivity extends Activity {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-                    Intent dataIntent = new Intent(CardIOActivity.this, DataEntryActivity.class);
+                    Intent dataIntent = new Intent(CardIOActivity.this, ManualActivity.class);
                     Util.writeCapturedCardImageIfNecessary(origIntent, dataIntent, mOverlay);
 
                     if (mOverlay != null) {

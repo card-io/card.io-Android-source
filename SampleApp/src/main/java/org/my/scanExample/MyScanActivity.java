@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
+import io.card.payment.ManualActivity;
 
 public class MyScanActivity extends Activity {
     final String TAG = getClass().getName();
@@ -102,6 +103,10 @@ public class MyScanActivity extends Activity {
         }
         resultTextView.setText(resultStr);
 
+    }
+
+    public void onManualClick(View view) {
+        startActivity(new Intent(this, ManualActivity.class));
     }
 }
 

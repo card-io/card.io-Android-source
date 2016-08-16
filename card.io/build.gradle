@@ -5,6 +5,12 @@ apply plugin: 'io.codearte.nexus-staging'
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/releases/'
+    }
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
 }
 
 def getBuildVersion = { ->
@@ -23,7 +29,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion 9
         targetSdkVersion 23
 
         buildConfigField "String", "PRODUCT_NAME", "\"${product_name}\""
@@ -76,6 +82,7 @@ android {
 }
 
 dependencies {
+    compile 'com.braintreepayments:card-form:3.0.0-SNAPSHOT'
     androidTestCompile "com.jayway.android.robotium:robotium-solo:5.2.1"
 }
 
