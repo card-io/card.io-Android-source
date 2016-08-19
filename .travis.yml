@@ -7,13 +7,14 @@ language: android
 jdk: oraclejdk8
 env:
   matrix:
-  - ANDROID_TARGET=android-23  ANDROID_ABI=armeabi-v7a
+  - ANDROID_TARGET=android-24  ANDROID_ABI=armeabi-v7a
 android:
   components:
-  - android-23
-  - build-tools-23.0.1
-  - platform-tools
   - tools
+  - tools
+  - android-24
+  - build-tools-24.0.1
+  - platform-tools
 before_install:
 - export ANDROID_HOME=/usr/local/android-sdk
 - if [ `uname -m` = x86_64 ]; then wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86_64.bin
