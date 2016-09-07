@@ -82,9 +82,7 @@ end
 
 def update_release_notes(new_version)
   current_changelog = @current_release.changelog.dup
-  add_new_line("CHANGELOG.md", "===================================", "TODO\n")
-  add_new_line("CHANGELOG.md", "TODO", "-----\n")
-  add_new_line("CHANGELOG.md", "-----", (current_changelog.gsub! /^\*/,'* Android:')+"\n\n")
+  add_new_line("CHANGELOG.md", "===================================", "TODO\n-----\n" + (current_changelog.gsub! /^\*/,'* Android:')+"\n\n")
 end
 
 def compile_sample_app()
