@@ -18,6 +18,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -120,26 +121,26 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         Log.i(Util.PUBLIC_LOG_TAG, "card.io " + BuildConfig.PRODUCT_VERSION + " " + BuildConfig.BUILD_TIME);
 
         try {
-            System.loadLibrary("cardioDecider");
+            loadLibrary("cardioDecider");
             Log.d(Util.PUBLIC_LOG_TAG, "Loaded card.io decider library.");
             Log.d(Util.PUBLIC_LOG_TAG, "    nUseNeon(): " + nUseNeon());
             Log.d(Util.PUBLIC_LOG_TAG, "    nUseTegra():" + nUseTegra());
             Log.d(Util.PUBLIC_LOG_TAG, "    nUseX86():  " + nUseX86());
 
             if (usesSupportedProcessorArch()) {
-                System.loadLibrary("opencv_core");
+                loadLibrary("opencv_core");
                 Log.d(Util.PUBLIC_LOG_TAG, "Loaded opencv core library");
-                System.loadLibrary("opencv_imgproc");
+                loadLibrary("opencv_imgproc");
                 Log.d(Util.PUBLIC_LOG_TAG, "Loaded opencv imgproc library");
             }
             if (nUseNeon()) {
-                System.loadLibrary("cardioRecognizer");
+                loadLibrary("cardioRecognizer");
                 Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io NEON library");
             } else if (nUseX86()) {
-                System.loadLibrary("cardioRecognizer");
+                loadLibrary("cardioRecognizer");
                 Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io x86 library");
             } else if (nUseTegra()) {
-                System.loadLibrary("cardioRecognizer_tegra2");
+                loadLibrary("cardioRecognizer_tegra2");
                 Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io Tegra2 library");
             } else {
                 Log.w(Util.PUBLIC_LOG_TAG,
@@ -150,6 +151,35 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             String error = "Failed to load native library: " + e.getMessage();
             Log.e(Util.PUBLIC_LOG_TAG, error);
             manualFallbackForError = true;
+        }
+    }
+
+    /**
+     * Custom loadLibrary method that first tries to load the libraries from the built-in libs
+     * directory and if it fails, tries to use the alternative libs path if one is set.
+     *
+     * No checks are performed to ensure that the native libraries match the cardIO library version.
+     * This needs to be handled by the consuming application.
+     */
+    private static void loadLibrary(String libraryName) throws UnsatisfiedLinkError {
+        try {
+            System.loadLibrary(libraryName);
+        } catch (UnsatisfiedLinkError e) {
+            String altLibsPath = CardIONativeLibsConfig.getAlternativeLibsPath();
+            if (altLibsPath == null || altLibsPath.length() == 0) {
+                throw e;
+            }
+            if (!File.separator.equals(altLibsPath.charAt(altLibsPath.length() - 1))) {
+                altLibsPath += File.separator;
+            }
+            String fullPath = altLibsPath + Build.CPU_ABI + File.separator +
+                    System.mapLibraryName(libraryName);
+            Log.d(
+                    Util.PUBLIC_LOG_TAG,
+                    "loadLibrary failed for library " + libraryName + ". Trying " + fullPath);
+            // If we couldn't find the library in the normal places and we have an additional
+            // search path, try loading from there.
+            System.load(fullPath);
         }
     }
 
