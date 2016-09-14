@@ -12,6 +12,14 @@
             android:text="Scan a credit card with card.io"
             android:onClick="onScanPress"/>
 
+    <Button
+        android:id="@+id/manual_entry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:text="Manual"
+        android:onClick="onManualClick" />
+
     <TextView
             android:id="@+id/resultTextView"
             android:layout_width="match_parent"

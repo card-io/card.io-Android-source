@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
+import io.card.payment.ManualActivity;
 
 public class MyScanActivity extends Activity {
     final String TAG = getClass().getName();
@@ -51,7 +52,7 @@ public class MyScanActivity extends Activity {
 
         // customize these values to suit your needs.
         scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, true); // default: false
-        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, false); // default: false
+        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, true); // default: false
         scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false); // default: false
         scanIntent.putExtra(CardIOActivity.EXTRA_RESTRICT_POSTAL_CODE_TO_NUMERIC_ONLY, false); // default: false
         scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME, false); // default: false
@@ -102,6 +103,10 @@ public class MyScanActivity extends Activity {
         }
         resultTextView.setText(resultStr);
 
+    }
+
+    public void onManualClick(View view) {
+        startActivity(new Intent(this, ManualActivity.class));
     }
 }
 
