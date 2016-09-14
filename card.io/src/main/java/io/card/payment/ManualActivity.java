@@ -14,6 +14,7 @@ import com.braintreepayments.cardform.view.ErrorEditText;
 import com.braintreepayments.cardform.view.SupportedCardTypesView;
 
 import io.card.payment.i18n.LocalizedStrings;
+import io.card.payment.i18n.StringKey;
 import io.card.payment.ui.ActivityHelper;
 
 public class ManualActivity extends AppCompatActivity implements OnCardFormSubmitListener,
@@ -25,21 +26,16 @@ public class ManualActivity extends AppCompatActivity implements OnCardFormSubmi
     private SupportedCardTypesView mSupportedCardTypesView;
 
     protected CardForm mCardForm;
-    private CreditCard capture;
-
-    private boolean useApplicationTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        useApplicationTheme = getIntent().getBooleanExtra(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME, false);
-        ActivityHelper.setActivityTheme(this, useApplicationTheme);
+        ActivityHelper.setActivityTheme(this, getIntent().getBooleanExtra(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME, false));
 
         LocalizedStrings.setLanguage(getIntent());
-        capture = getIntent().getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT);
-        autoAcceptDone = getIntent().getBooleanExtra("debug_autoAcceptResult", false);
+        CreditCard capture = getIntent().getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT);
 
         setContentView(R.layout.card_form);
 
@@ -60,6 +56,16 @@ public class ManualActivity extends AppCompatActivity implements OnCardFormSubmi
                 .setup(this);
         mCardForm.setOnCardFormSubmitListener(this);
         mCardForm.setOnCardTypeChangedListener(this);
+
+
+        String cvvText = LocalizedStrings.getString(StringKey.ENTRY_CVV);
+        mCardForm.getCvvEditText().setHint(cvvText);
+
+        if (mCardForm.getCvvEditText().getTextInputLayoutParent() != null) {
+            mCardForm.getCvvEditText().getTextInputLayoutParent().setHint(cvvText);
+        } else {
+            mCardForm.getCvvEditText().setHint(cvvText);
+        }
 
         if (capture != null) {
             ((ErrorEditText)mCardForm.findViewById(R.id.bt_card_form_card_number)).setText(capture.cardNumber);
