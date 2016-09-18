@@ -121,26 +121,26 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         Log.i(Util.PUBLIC_LOG_TAG, "card.io " + BuildConfig.PRODUCT_VERSION + " " + BuildConfig.BUILD_TIME);
 
         try {
-            loadLibrary("cardioDecider");
+            System.loadLibrary("cardioDecider");
             Log.d(Util.PUBLIC_LOG_TAG, "Loaded card.io decider library.");
             Log.d(Util.PUBLIC_LOG_TAG, "    nUseNeon(): " + nUseNeon());
             Log.d(Util.PUBLIC_LOG_TAG, "    nUseTegra():" + nUseTegra());
             Log.d(Util.PUBLIC_LOG_TAG, "    nUseX86():  " + nUseX86());
 
             if (usesSupportedProcessorArch()) {
-                loadLibrary("opencv_core");
+                System.loadLibrary("opencv_core");
                 Log.d(Util.PUBLIC_LOG_TAG, "Loaded opencv core library");
-                loadLibrary("opencv_imgproc");
+                System.loadLibrary("opencv_imgproc");
                 Log.d(Util.PUBLIC_LOG_TAG, "Loaded opencv imgproc library");
             }
             if (nUseNeon()) {
-                loadLibrary("cardioRecognizer");
+                System.loadLibrary("cardioRecognizer");
                 Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io NEON library");
             } else if (nUseX86()) {
-                loadLibrary("cardioRecognizer");
+                System.loadLibrary("cardioRecognizer");
                 Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io x86 library");
             } else if (nUseTegra()) {
-                loadLibrary("cardioRecognizer_tegra2");
+                System.loadLibrary("cardioRecognizer_tegra2");
                 Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io Tegra2 library");
             } else {
                 Log.w(Util.PUBLIC_LOG_TAG,

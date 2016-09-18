@@ -18,6 +18,7 @@
 #include "cv/warp.h"
 
 #include "scan/scan.h"
+#include <stdlib.h>
 
 #define DEBUG_TAG "card.io native"
 
@@ -164,9 +165,13 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nSetup__ZFI(JNIEnv *env,
   if (dmz == NULL) {
     dmz = dmz_context_create();
     scanner_initialize(&scannerState);
+    //Set this string to match your package name!
+    setenv("TESSDATA_PREFIX","/storage/emulated/0/Android/data/org.my.scanExample.debug/files/Tesseract/",1);
+    ocre_scanner_init();
   }
   else {
     scanner_reset(&scannerState);
+    ocre_scanner_reset();
   }
   dmz_refcount++;
 
@@ -359,8 +364,9 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
         result.focus_score = focusScore;
         result.flipped = flipped;
         scanner_add_frame_with_expiry(&scannerState, cardY, jScanExpiry, &result);
+        ScannerResult scanResult;
         if (result.usable) {
-          ScannerResult scanResult;
+
           scanner_result(&scannerState, &scanResult);
 
           if (scanResult.complete) {
@@ -368,8 +374,31 @@ JNIEXPORT void JNICALL Java_io_card_payment_CardScanner_nScanFrame(JNIEnv *env, 
             logDinfo(env, dinfo);
           }
         }
-        else if (result.upside_down) {
+        else if(result.upside_down) {
           flipped = !flipped;
+        }
+        if(result.focus_score >= 9.0f && !result.usable && !flipped) {
+            ocre_scanner_scan(cardY);
+            if(ocre_scanner_complete()) {
+                ScannerResult * scannerResult = (ScannerResult*)malloc(sizeof(ScannerResult));
+                scannerResult->n_numbers = 16;
+                char* cardNumber = ocre_scanner_result();
+
+                for(int i = 0; i < scannerResult->n_numbers; i++) {
+                  scannerResult->predictions[i] = cardNumber[i] - '0';
+                }
+
+                scannerResult->expiry_month = 0;
+                scannerResult->expiry_year = 0;
+                scannerResult->complete = true;
+                scannerState.timeOfCardNumberCompletionInMilliseconds = 1;
+                scannerState.successfulCardNumberResult = *scannerResult;
+                result.usable = true;
+                scanner_result(&scannerState, &scanResult);
+                setScanCardNumberResult(env, dinfo, &scanResult);
+                logDinfo(env, dinfo);
+                ocre_scanner_reset();
+            }
         }
       }
 
