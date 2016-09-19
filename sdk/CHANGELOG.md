@@ -1,8 +1,9 @@
 card.io Android SDK change log and release notes
 ================================================
 
-TODO
+5.4.1
 -----
+* Add ability to specify an alternative search path for the native libraries via `CardIONativeLibsConfig` [card.io-Android-source#86](https://github.com/card-io/card.io-Android-source/pull/86). Thank you Thorben Primke!
 * Updated gradle plugin and wrapper versions.
 * Bump compile SDK to 24.
 
