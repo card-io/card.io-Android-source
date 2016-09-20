@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="io.card.payment" android:versionCode="2"
-          android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18"/>
+          package="io.card.payment">
 
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
