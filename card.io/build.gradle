@@ -142,11 +142,14 @@ android.libraryVariants.all { variant ->
         sign configurations.archives
     }
 
-    // these should be specified in the gradle.properties file as:
-    // systemProp.sonatypeUsername=xxxxxxx
-    // systemProp.sonatypePassword=yyyyyyy
-    def sonatypeUsername = System.properties.containsKey('sonatypeUsername') ? System.properties['sonatypeUsername'] : ''
-    def sonatypePassword = System.properties.containsKey('sonatypePassword') ? System.properties['sonatypePassword'] : ''
+    // these should be specified in the local.properties file as:
+    // sonatypeUsername=xxxxxxx
+    // sonatypePassword=yyyyyyy
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def sonatypeUsername = properties.getProperty('sonatypeUsername')
+    def sonatypePassword = properties.getProperty('sonatypePassword')
 
     nexusStaging {
         packageGroup = "io.card"
@@ -156,6 +159,7 @@ android.libraryVariants.all { variant ->
 
     uploadArchives {
         doFirst {
+            assert sonatypeUsername != null && sonatypePassword != null : "Please set sonatypeUsername and sonatypePassword in local.properties"
             println "***"
             println "uploading archives using username: '" + sonatypeUsername + "'"
             println "***"
