@@ -43,7 +43,6 @@ opencv/OpenCV-*
 /out/
 
 *.pyc
-distribution-repo/
 downstream_repos/
 
 secring.gpg
