@@ -11,7 +11,7 @@ buildscript {
 task assemble {}
 
 ext {
-    compileSdkVersion = 24
+    sdkVersion = 24
     buildToolsVersion = '24.0.1'
 }
 

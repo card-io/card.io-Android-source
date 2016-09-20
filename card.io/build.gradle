@@ -19,12 +19,12 @@ ext {
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.sdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 23
+        targetSdkVersion rootProject.ext.sdkVersion
 
         buildConfigField "String", "PRODUCT_NAME", "\"${product_name}\""
         buildConfigField "String", "PRODUCT_VERSION", "\"${product_version}\""
