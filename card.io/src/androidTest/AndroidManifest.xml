@@ -12,16 +12,18 @@
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
 
     <application
-            android:name="io.card.development.BuffaloApplication"
-            android:label="card.io demo"
-            android:theme="@android:style/Theme.Material">
-        <activity android:name="io.card.development.CardIOSimpleExampleActivity" android:icon="@drawable/buffalo_icon"
-                  android:label="card.io demo">
+        android:theme="@android:style/Theme.Material">
+
+        <activity
+            android:name="io.card.development.CardIOSimpleExampleActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
+
     </application>
 
 </manifest>
