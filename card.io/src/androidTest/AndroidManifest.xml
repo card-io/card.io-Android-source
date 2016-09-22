@@ -2,12 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="io.card.development">
 
-    <!-- for robotium screen capture functionality -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-    <!-- for robotium testing -->
-    <uses-permission android:name="android.permission.READ_LOGS"/>
-
     <!-- for command line testing -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
 
