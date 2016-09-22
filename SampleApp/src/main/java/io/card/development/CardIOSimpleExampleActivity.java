@@ -98,17 +98,15 @@ public class CardIOSimpleExampleActivity extends Activity {
         mLanguageSpinner = (Spinner) findViewById(R.id.languageSpinner);
         mUnblurEdit = (EditText) findViewById(R.id.unblurEdit);
 
-        List<String> languages = new ArrayList<String>();
-        // add null string for device level testing
-        languages.add(null);
+        List<String> languages = new ArrayList<>();
         for (SupportedLocale<StringKey> locale : LocalizedStringsList.ALL_LOCALES) {
             languages.add(locale.getName());
         }
 
-        GenericStringListAdapter sa = new GenericStringListAdapter(this,
-                R.layout.generic_list_item, R.id.text, languages);
-        mLanguageSpinner.setAdapter(sa);
-        mLanguageSpinner.setSelection(sa.getIndexForName("en"));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, languages);
+        mLanguageSpinner.setAdapter(adapter);
+        mLanguageSpinner.setSelection(adapter.getPosition("en"));
 
         mResultLabel = (TextView) findViewById(R.id.resultText);
         mResultLabel.setText("card.io library:\n" + CardIOActivity.sdkVersion() + "\n"
