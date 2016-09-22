@@ -5,17 +5,8 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
-import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.assertion.ViewAssertions;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 
-import com.lukekorth.deviceautomator.DeviceAutomator;
-
-import org.hamcrest.Matchers;
-import org.hamcrest.core.AllOf;
-import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,6 +15,20 @@ import io.card.development.CardIOSimpleExampleActivity;
 import io.card.development.R;
 import io.card.payment.i18n.LocalizedStrings;
 import io.card.payment.i18n.StringKey;
+
+import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.lukekorth.deviceautomator.DeviceAutomator.onDevice;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.Is.is;
 
 public class CardIOSimpleExampleActivityTest {
 
@@ -43,69 +48,69 @@ public class CardIOSimpleExampleActivityTest {
 
     @Test
     public void cancelInManualEntryExistsActivity() {
-        Espresso.onView(ViewMatchers.withText("Force keyboard entry (bypass scan)")).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withText("Scan Credit Card using Card.io")).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withText("Card Number")).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        onView(withText("Force keyboard entry (bypass scan)")).perform(click());
+        onView(withText("Scan Credit Card using Card.io")).perform(click());
+        onView(withText("Card Number")).check(matches(isDisplayed()));
 
-        Espresso.onView(ViewMatchers.withText(LocalizedStrings.getString(StringKey.CANCEL))).perform(ViewActions.click());
+        onView(withText(LocalizedStrings.getString(StringKey.CANCEL))).perform(click());
 
-        Espresso.onView(ViewMatchers.withText("Force keyboard entry (bypass scan)")).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        onView(withText("Force keyboard entry (bypass scan)")).check(matches(isDisplayed()));
     }
 
     @Test
     public void manualEntryReturnsCardData() {
-        Espresso.onView(ViewMatchers.withText("Expiry")).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withText("CVV")).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withText("Postal Code")).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withText("Cardholder Name")).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withText("Force keyboard entry (bypass scan)")).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withText("Scan Credit Card using Card.io")).perform(ViewActions.click());
+        onView(withText("Expiry")).perform(click());
+        onView(withText("CVV")).perform(click());
+        onView(withText("Postal Code")).perform(click());
+        onView(withText("Cardholder Name")).perform(click());
+        onView(withText("Force keyboard entry (bypass scan)")).perform(click());
+        onView(withText("Scan Credit Card using Card.io")).perform(click());
 
         fillInCardForm();
-        Espresso.onView(ViewMatchers.withText(LocalizedStrings.getString(StringKey.DONE))).perform(ViewActions.click());
+        onView(withText(LocalizedStrings.getString(StringKey.DONE))).perform(click());
 
-        Espresso.onView(ViewMatchers.withId(R.id.resultText)).check(ViewAssertions.matches(ViewMatchers.withText(Matchers.containsString("1111"))));
-        Espresso.onView(ViewMatchers.withId(R.id.resultText)).check(ViewAssertions.matches(ViewMatchers.withText(Matchers.containsString("Expiry: 12/2022"))));
-        Espresso.onView(ViewMatchers.withId(R.id.resultText)).check(ViewAssertions.matches(ViewMatchers.withText(Matchers.containsString("CVV: 123"))));
-        Espresso.onView(ViewMatchers.withId(R.id.resultText)).check(ViewAssertions.matches(ViewMatchers.withText(Matchers.containsString("Postal Code: 95131"))));
-        Espresso.onView(ViewMatchers.withId(R.id.resultText)).check(ViewAssertions.matches(ViewMatchers.withText(Matchers.containsString("Cardholder Name: John Doe"))));
+        onView(withId(R.id.result)).check(matches(withText(containsString("1111"))));
+        onView(withId(R.id.result)).check(matches(withText(containsString("Expiry: 12/2022"))));
+        onView(withId(R.id.result)).check(matches(withText(containsString("CVV: 123"))));
+        onView(withId(R.id.result)).check(matches(withText(containsString("Postal Code: 95131"))));
+        onView(withId(R.id.result)).check(matches(withText(containsString("Cardholder Name: John Doe"))));
     }
 
     @Test
     public void canEnterManualEntryFromScanActivity() {
-        Espresso.onView(ViewMatchers.withText("Expiry")).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withText("CVV")).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withText("Postal Code")).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withText("Cardholder Name")).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withText("Scan Credit Card using Card.io")).perform(ViewActions.click());
+        onView(withText("Expiry")).perform(click());
+        onView(withText("CVV")).perform(click());
+        onView(withText("Postal Code")).perform(click());
+        onView(withText("Cardholder Name")).perform(click());
+        onView(withText("Scan Credit Card using Card.io")).perform(click());
 
-        DeviceAutomator.onDevice().acceptRuntimePermission(Manifest.permission.CAMERA);
+        onDevice().acceptRuntimePermission(Manifest.permission.CAMERA);
 
-        Espresso.onView(ViewMatchers.withText(LocalizedStrings.getString(StringKey.KEYBOARD))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-        Espresso.onView(ViewMatchers.withText(LocalizedStrings.getString(StringKey.KEYBOARD))).perform(ViewActions.click());
+        onView(withText(LocalizedStrings.getString(StringKey.KEYBOARD))).check(matches(isDisplayed()));
+        onView(withText(LocalizedStrings.getString(StringKey.KEYBOARD))).perform(click());
 
         fillInCardForm();
-        Espresso.onView(ViewMatchers.withText(LocalizedStrings.getString(StringKey.DONE))).perform(ViewActions.click());
+        onView(withText(LocalizedStrings.getString(StringKey.DONE))).perform(click());
     }
 
     @Test
     public void recordingPlayback() {
-        Espresso.onView(ViewMatchers.withText("Expiry")).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withId(R.id.recordingSpinner)).perform(ViewActions.click());
-        Espresso.onData(AllOf.allOf(Is.is(Matchers.instanceOf(String.class)), Is.is("recording_320455133.550273.zip"))).perform(ViewActions.click());
+        onView(withText("Expiry")).perform(click());
+        onView(withId(R.id.recordings)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("recording_320455133.550273.zip"))).perform(click());
 
         SystemClock.sleep(5000);
-        Espresso.onView(ViewMatchers.withId(100)).perform(ViewActions.click(), ViewActions.typeText("1222"));
-        Espresso.onView(ViewMatchers.withText(LocalizedStrings.getString(StringKey.DONE))).perform(ViewActions.click());
+        onView(withId(100)).perform(click(), typeText("1222"));
+        onView(withText(LocalizedStrings.getString(StringKey.DONE))).perform(click());
 
-        Espresso.onView(ViewMatchers.withId(R.id.resultText)).check(ViewAssertions.matches(ViewMatchers.withText(Matchers.containsString("Expiry: 12/2022"))));
+        onView(withId(R.id.result)).check(matches(withText(containsString("Expiry: 12/2022"))));
     }
 
     private void fillInCardForm() {
-        Espresso.onView(ViewMatchers.withId(100)).perform(ViewActions.click(), ViewActions.typeText("4111111111111111"));
-        Espresso.onView(ViewMatchers.withId(101)).perform(ViewActions.click(), ViewActions.typeText("1222"));
-        Espresso.onView(ViewMatchers.withId(102)).perform(ViewActions.click(), ViewActions.typeText("123"));
-        Espresso.onView(ViewMatchers.withId(103)).perform(ViewActions.click(), ViewActions.typeText("95131"));
-        Espresso.onView(ViewMatchers.withId(104)).perform(ViewActions.click(), ViewActions.typeText("John Doe"));
+        onView(withId(100)).perform(click(), typeText("4111111111111111"));
+        onView(withId(101)).perform(click(), typeText("1222"));
+        onView(withId(102)).perform(click(), typeText("123"));
+        onView(withId(103)).perform(click(), typeText("95131"));
+        onView(withId(104)).perform(click(), typeText("John Doe"));
     }
 }
