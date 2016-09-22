@@ -9,6 +9,9 @@ buildscript {
 
 repositories {
     jcenter()
+    maven {
+        url "https://jitpack.io"
+    }
 }
 
 apply plugin: 'com.android.application'
@@ -16,6 +19,15 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.1"
+
+    defaultConfig {
+        applicationId "io.card.sample"
+        minSdkVersion 18
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0.0"
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    }
 
     signingConfigs {
         myConfig {
@@ -54,6 +66,9 @@ dependencies {
     } else {
         compile 'io.card:android-sdk:REPLACE_VERSION'
     }
+
+    androidTestCompile "com.android.support.test.espresso:espresso-core:2.2.2"
+    androidTestCompile "com.github.lkorth:device-automator:01d85912ec"
 }
 
 task wrapper(type: Wrapper) {

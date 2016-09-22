@@ -21,15 +21,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.EditText;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.NumberFormatException;
 
 import io.card.development.recording.Recording;
 import io.card.payment.CardIOActivity;
@@ -39,6 +38,7 @@ import io.card.payment.CreditCard;
 import io.card.payment.i18n.StringKey;
 import io.card.payment.i18n.SupportedLocale;
 import io.card.payment.i18n.locales.LocalizedStringsList;
+import io.card.sample.R;
 
 public class CardIOSimpleExampleActivity extends Activity {
     protected static final String TAG = CardIOSimpleExampleActivity.class.getSimpleName();

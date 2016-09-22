@@ -5,9 +5,6 @@ apply plugin: 'io.codearte.nexus-staging'
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://jitpack.io"
-    }
 }
 
 def getBuildVersion = { ->
@@ -35,7 +32,6 @@ android {
 
         consumerProguardFiles 'release-proguard.cfg'
 
-        testApplicationId 'io.card.development'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -80,9 +76,6 @@ android {
 }
 
 dependencies {
-    androidTestCompile "com.android.support.test.espresso:espresso-core:2.2.2"
-    androidTestCompile "com.github.lkorth:device-automator:01d85912ec"
-
     testCompile "junit:junit:4.12"
     testCompile "org.robolectric:robolectric:3.1.2"
 }
