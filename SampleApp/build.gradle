@@ -63,6 +63,8 @@ dependencies {
         compile 'io.card:android-sdk:REPLACE_VERSION'
     }
 
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4'
+
     androidTestCompile "com.android.support.test.espresso:espresso-core:2.2.2"
     androidTestCompile "com.github.lkorth:device-automator:01d85912ec"
 }

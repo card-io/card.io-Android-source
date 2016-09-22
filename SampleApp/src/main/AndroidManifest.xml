@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
 
     <application
+        android:name=".SampleApplication"
         android:label="card.io Sample App"
         android:theme="@style/MyTheme">
 

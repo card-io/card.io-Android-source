@@ -76,22 +76,8 @@ public class CardIOSimpleExampleActivity extends Activity {
     private EditText mUnblurEdit;
 
     @Override
-    public void onCreate(Bundle b) {
-        super.onCreate(b);
-        Log.d(TAG, "onCreate()");
-
-        // debugging. Requires android-9, but preferably android-11 or 14
-        // StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-        // .detectAll()
-        // .penaltyLog()
-        // .build());
-        // StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-        // .detectAll()
-        // .penaltyLog()
-        // .penaltyDeath()
-        // .build());
-        // --------------
-
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.demo);
 
         mManualToggle = (CheckBox) findViewById(R.id.forceManual);

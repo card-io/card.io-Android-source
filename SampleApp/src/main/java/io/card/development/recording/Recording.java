@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -53,8 +52,8 @@ public class Recording implements Iterator<byte[]> {
     public Recording(Context context, String zipfile) {
         try {
             InputStream inputStream = context.getAssets().open(zipfile);
-            BufferedInputStream bufStream = new BufferedInputStream(inputStream);
-            recordingContents = unzipFiles(bufStream);
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            recordingContents = unzipFiles(bufferedInputStream);
 
             assert recordingContents != null;
 
@@ -62,10 +61,8 @@ public class Recording implements Iterator<byte[]> {
             Log.d(TAG, "keys: ");
 
             manifestEntries = ManifestEntry.getManifest(recordingContents);
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, e.getMessage());
         } catch (IOException e) {
-            Log.e(TAG, e.getMessage(), e);
+            Log.e(TAG, e.getMessage());
         }
     }
 
@@ -137,7 +134,7 @@ public class Recording implements Iterator<byte[]> {
             throws IOException {
         ZipEntry zipEntry;
         ZipInputStream zis = new ZipInputStream(recordingStream);
-        Hashtable<String, byte[]> fileHash = new Hashtable<String, byte[]>();
+        Hashtable<String, byte[]> fileHash = new Hashtable<>();
         byte[] buffer = new byte[512];
 
         while ((zipEntry = zis.getNextEntry()) != null) {
@@ -156,6 +153,8 @@ public class Recording implements Iterator<byte[]> {
                 fileHash.put(zipEntry.getName(), fileData);
             }
         }
+
+        zis.close();
 
         return fileHash;
     }
