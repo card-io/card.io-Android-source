@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import io.card.development.CardIOSimpleExampleActivity;
+import io.card.development.SampleActivity;
 import io.card.development.R;
 import io.card.payment.i18n.LocalizedStrings;
 import io.card.payment.i18n.StringKey;
@@ -30,11 +30,11 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
 
-public class CardIOSimpleExampleActivityTest {
+public class SampleActivityTest {
 
     @Rule
-    public final ActivityTestRule<CardIOSimpleExampleActivity> mActivityTestRule =
-            new ActivityTestRule<>(CardIOSimpleExampleActivity.class);
+    public final ActivityTestRule<SampleActivity> mActivityTestRule =
+            new ActivityTestRule<>(SampleActivity.class);
 
     @SuppressWarnings("MissingPermission")
     @Before
@@ -42,7 +42,7 @@ public class CardIOSimpleExampleActivityTest {
         mActivityTestRule.getActivity();
         KeyguardManager mKeyGuardManager = (KeyguardManager) InstrumentationRegistry.getTargetContext()
                 .getSystemService(Context.KEYGUARD_SERVICE);
-        mKeyGuardManager.newKeyguardLock("CardIOSimpleExampleActivityTest")
+        mKeyGuardManager.newKeyguardLock("SampleActivityTest")
                 .disableKeyguard();
     }
 

@@ -10,7 +10,7 @@
         android:label="card.io Sample App"
         android:theme="@style/MyTheme">
 
-        <activity android:name=".CardIOSimpleExampleActivity">
+        <activity android:name=".SampleActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
