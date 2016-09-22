@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="io.card.sample">
+          package="io.card.development">
 
     <!-- for testing -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
@@ -9,7 +9,7 @@
         android:label="card.io sample app"
         android:theme="@style/MyTheme">
 
-        <activity android:name="io.card.development.CardIOSimpleExampleActivity">
+        <activity android:name=".CardIOSimpleExampleActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

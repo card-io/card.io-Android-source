@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import io.card.sample.R;
-
 /**
  * TODO document this class
  */

@@ -21,7 +21,7 @@ android {
     buildToolsVersion "24.0.1"
 
     defaultConfig {
-        applicationId "io.card.sample"
+        applicationId "io.card.development"
         minSdkVersion 18
         targetSdkVersion 24
         versionCode 1
@@ -39,10 +39,6 @@ android {
     }
 
     buildTypes {
-        debug {
-            applicationIdSuffix ".debug"
-        }
-
         release {
             minifyEnabled true
             proguardFile getDefaultProguardFile('proguard-android.txt')

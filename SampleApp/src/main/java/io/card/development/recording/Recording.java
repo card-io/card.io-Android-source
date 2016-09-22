@@ -4,6 +4,7 @@ package io.card.development.recording;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
+import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -12,8 +13,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,10 +50,10 @@ public class Recording implements Iterator<byte[]> {
     private int currentFrameIdx = 0;
     private Hashtable<String, byte[]> recordingContents;
 
-    public Recording(File zipfile) {
+    public Recording(Context context, String zipfile) {
         try {
-            FileInputStream fileStream = new FileInputStream(zipfile);
-            BufferedInputStream bufStream = new BufferedInputStream(fileStream);
+            InputStream inputStream = context.getAssets().open(zipfile);
+            BufferedInputStream bufStream = new BufferedInputStream(inputStream);
             recordingContents = unzipFiles(bufStream);
 
             assert recordingContents != null;
@@ -63,7 +62,6 @@ public class Recording implements Iterator<byte[]> {
             Log.d(TAG, "keys: ");
 
             manifestEntries = ManifestEntry.getManifest(recordingContents);
-
         } catch (FileNotFoundException e) {
             Log.e(TAG, e.getMessage());
         } catch (IOException e) {

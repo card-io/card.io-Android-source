@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,13 +37,12 @@ import io.card.payment.CreditCard;
 import io.card.payment.i18n.StringKey;
 import io.card.payment.i18n.SupportedLocale;
 import io.card.payment.i18n.locales.LocalizedStringsList;
-import io.card.sample.R;
 
 public class CardIOSimpleExampleActivity extends Activity {
+
     protected static final String TAG = CardIOSimpleExampleActivity.class.getSimpleName();
 
-    private static final String RECORDING_DIR = Environment.getExternalStorageDirectory().getPath()
-            + "/card_recordings";
+    private static final String RECORDING_DIR = "recordings";
 
     private static int unique = 10; // bigger than known Android statuses
     static final int REQUEST_SCAN = unique++;
@@ -149,70 +147,59 @@ public class CardIOSimpleExampleActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume()");
 
         KeyguardManager mKeyGuardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         KeyguardLock mLock = mKeyGuardManager.newKeyguardLock(getClass().getName());
         mLock.disableKeyguard();
 
         mRecordingListSpinner = (Spinner) findViewById(R.id.recordingSpinner);
-        File dir = new File(RECORDING_DIR);
-        File[] allFiles = dir.listFiles();
-        final ArrayList<CharSequence> recordingNames = new ArrayList<CharSequence>(
-                ((allFiles != null) ? allFiles.length : 0) + 1);
-        recordingNames.add("Select a recording");
-        if (allFiles != null && allFiles.length > 0) {
+        try {
+            String[] allFiles = getAssets().list(RECORDING_DIR);
+            final ArrayList<String> recordingNames = new ArrayList<>();
+            recordingNames.add("Select a recording");
 
-            Log.d(TAG, "Recordings in " + dir.getPath());
-            for (File f : allFiles) {
-                String name = f.getName();
-                if (f.isFile() && name.startsWith("recording_") && name.endsWith(".zip")) {
-                    Log.d(TAG, "\t" + name);
-                    recordingNames.add(name);
+            if (allFiles != null && allFiles.length > 0) {
+                for (String name : allFiles) {
+                    if (name.startsWith("recording_") && name.endsWith(".zip")) {
+                        recordingNames.add(name);
+                    }
                 }
             }
-        }
-        if (recordingNames.size() > 1) {
-            ArrayAdapter<CharSequence> aa = new ArrayAdapter<CharSequence>(this,
-                    android.R.layout.simple_dropdown_item_1line, recordingNames);
-            mRecordingListSpinner.setAdapter(aa);
-            mRecordingListSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View content, int pos, long id) {
-                    if (pos <= 0) {
-                        return;
+            if (recordingNames.size() > 1) {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                        android.R.layout.simple_dropdown_item_1line, recordingNames);
+                mRecordingListSpinner.setAdapter(adapter);
+                mRecordingListSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View content, int pos, long id) {
+                        if (pos <= 0) {
+                            return;
+                        }
+
+                        String path = RECORDING_DIR + "/" + recordingNames.get(pos);
+                        Recording recording = new Recording(CardIOSimpleExampleActivity.this, path);
+                        CardScannerTester.setRecording(recording);
+
+                        Intent intent = new Intent(CardIOSimpleExampleActivity.this, CardIOActivity.class)
+                                .putExtra("io.card.payment.cameraBypassTestMode", true)
+                                .putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, mEnableExpiryToggle.isChecked())
+                                .putExtra(CardIOActivity.EXTRA_SCAN_EXPIRY, mScanExpiryToggle.isChecked())
+                                .putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, mCvvToggle.isChecked())
+                                .putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, mPostalCodeToggle.isChecked())
+                                .putExtra(CardIOActivity.EXTRA_RESTRICT_POSTAL_CODE_TO_NUMERIC_ONLY, mPostalCodeNumericOnlyToggle.isChecked())
+                                .putExtra(CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME, mCardholderNameToggle.isChecked());
+
+                        startActivityForResult(intent, REQUEST_SCAN);
                     }
 
-                    String filename = String.valueOf(recordingNames.get(pos));
-                    Log.i(TAG, "chose recording: " + filename);
-                    String path = RECORDING_DIR + "/" + String.valueOf(filename);
-                    Recording rec = new Recording(new File(path));
-                    CardScannerTester.setRecording(rec);
-
-                    Intent intent = new Intent(CardIOSimpleExampleActivity.this,
-                            CardIOActivity.class);
-                    intent.putExtra("io.card.payment.cameraBypassTestMode", true);
-                    intent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, mEnableExpiryToggle.isChecked());
-                    intent.putExtra(CardIOActivity.EXTRA_SCAN_EXPIRY, mScanExpiryToggle.isChecked());
-                    intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, mCvvToggle.isChecked());
-                    intent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE,
-                            mPostalCodeToggle.isChecked());
-                    intent.putExtra(CardIOActivity.EXTRA_RESTRICT_POSTAL_CODE_TO_NUMERIC_ONLY,
-                            mPostalCodeNumericOnlyToggle.isChecked());
-                    intent.putExtra(CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME,
-                            mCardholderNameToggle.isChecked());
-
-                    CardIOSimpleExampleActivity.this.startActivityForResult(intent, REQUEST_SCAN);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                    // nothing should happen.
-                }
-
-            });
-        } else {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
+            } else {
+                mRecordingListSpinner.setVisibility(View.GONE);
+            }
+        } catch (IOException e) {
             mRecordingListSpinner.setVisibility(View.GONE);
         }
     }

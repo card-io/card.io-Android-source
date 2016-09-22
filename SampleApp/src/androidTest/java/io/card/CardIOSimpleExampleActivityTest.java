@@ -21,9 +21,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import io.card.development.CardIOSimpleExampleActivity;
+import io.card.development.R;
 import io.card.payment.i18n.LocalizedStrings;
 import io.card.payment.i18n.StringKey;
-import io.card.sample.R;
 
 public class CardIOSimpleExampleActivityTest {
 
