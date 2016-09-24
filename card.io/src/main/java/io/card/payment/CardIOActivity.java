@@ -4,9 +4,9 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
-import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -18,11 +18,15 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.hardware.SensorManager;
+import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
@@ -32,8 +36,6 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -41,6 +43,11 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.Date;
 
@@ -49,18 +56,6 @@ import io.card.payment.i18n.StringKey;
 import io.card.payment.ui.ActivityHelper;
 import io.card.payment.ui.Appearance;
 import io.card.payment.ui.ViewUtil;
-
-
-/* Tesseract Imports */
-import android.os.Environment;
-import android.content.Context;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-
 
 /**
  * This is the entry point {@link android.app.Activity} for a card.io client to use <a
@@ -1134,13 +1129,11 @@ public final class CardIOActivity extends Activity {
      * Entry point for tessdata adapted from TessTwo
      */
     private void tessSetup() {
-        DATA_PATH = getExternalFilesDir(null) + "/Tesseract/";//getFilesDir()+ "/Tesseract/";//getExternalFilesDir(null) + "/Tesseract/";//Environment.getExternalStorageDirectory().toString() + "/Tesseract/";
+        DATA_PATH = getExternalFilesDir(null) + "/Tesseract/";
         Log.i(TAG, "Attempting to copy tessdata");
         Log.i(TAG, "Accessing: "+ DATA_PATH);
         prepareTesseract();
     }
-
-
 
     /**
      * Prepare directory on external storage
@@ -1149,7 +1142,6 @@ public final class CardIOActivity extends Activity {
      * @throws Exception
      */
     private void prepareDirectory(String path) {
-
         File dir = new File(path);
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
@@ -1160,7 +1152,6 @@ public final class CardIOActivity extends Activity {
             Log.i(TAG, "Created directory " + path);
         }
     }
-
 
     private void prepareTesseract() {
         try {
@@ -1186,7 +1177,7 @@ public final class CardIOActivity extends Activity {
             for (String fileName : fileList) {
 
                 // open file within the assets folder
-                // if it is not already there copy it to the sdcard
+                // if it is not already there copy it
                 String pathToDataFile = DATA_PATH + path + "/" + fileName;
                 if (!(new File(pathToDataFile)).exists()) {
 
