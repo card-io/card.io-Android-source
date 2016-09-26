@@ -5,6 +5,7 @@ card.io Android SDK change log and release notes
 -----
 * Bump compile SDK to 24 for reals.
 * Compile distributed package with NDK to r12b (previous was r11c).
+* Update Android Gradle plugin to 2.2.0.
 
 5.4.1
 -----
