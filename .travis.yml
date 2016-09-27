@@ -16,16 +16,14 @@ android:
   - build-tools-24.0.1
   - platform-tools
 before_install:
-- export ANDROID_HOME=/usr/local/android-sdk
-- if [ `uname -m` = x86_64 ]; then wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86_64.bin
-  -O ndk.bin; else wget http://dl.google.com/android/ndk/android-ndk-r10d-linux-x86.bin
-  -O ndk.bin; fi
-- 7z x ndk.bin android-ndk-r10d/build/ android-ndk-r10d/ndk-build android-ndk-r10d/platforms/android-21
-  > /dev/null
-- export ANDROID_NDK_HOME=`pwd`/android-ndk-r10d
-- export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_NDK_HOME}
-- echo "sdk.dir=$ANDROID_HOME" > local.properties
-- echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties
+  - export ANDROID_HOME=/usr/local/android-sdk
+  - wget https://dl.google.com/android/repository/android-ndk-r12b-linux-x86_64.zip -O ndk.bin
+  - 7z x ndk.bin > /dev/null
+  - export ANDROID_NDK_HOME=`pwd`/android-ndk-r12b
+  - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_NDK_HOME}
+  - echo "sdk.dir=$ANDROID_HOME" > local.properties
+  - echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties
+  - rm gradle.properties
 script: ./gradlew clean test assembleAndroidTest :card.io:assembleRelease releaseDoc
 notifications:
   webhooks:
