@@ -1,18 +1,17 @@
 package io.card;
 
 import android.Manifest;
-import android.app.KeyguardManager;
-import android.content.Context;
+import android.app.Activity;
 import android.os.SystemClock;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
+import android.view.WindowManager;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import io.card.development.SampleActivity;
 import io.card.development.R;
+import io.card.development.SampleActivity;
 import io.card.payment.i18n.LocalizedStrings;
 import io.card.payment.i18n.StringKey;
 
@@ -36,14 +35,16 @@ public class SampleActivityTest {
     public final ActivityTestRule<SampleActivity> mActivityTestRule =
             new ActivityTestRule<>(SampleActivity.class);
 
-    @SuppressWarnings("MissingPermission")
     @Before
     public void setup() {
-        mActivityTestRule.getActivity();
-        KeyguardManager mKeyGuardManager = (KeyguardManager) InstrumentationRegistry.getTargetContext()
-                .getSystemService(Context.KEYGUARD_SERVICE);
-        mKeyGuardManager.newKeyguardLock("SampleActivityTest")
-                .disableKeyguard();
+        final Activity activity = mActivityTestRule.getActivity();
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+        });
     }
 
     @Test
