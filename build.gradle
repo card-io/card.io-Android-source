@@ -11,8 +11,8 @@ buildscript {
 task assemble {}
 
 ext {
-    sdkVersion = 24
-    buildToolsVersion = '24.0.1'
+    sdkVersion = 25
+    buildToolsVersion = '25.0.0'
 }
 
 task wrapper(type: Wrapper) {
