@@ -2,22 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="io.card.development">
 
-    <!-- for testing -->
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
-
     <application
         android:name=".SampleApplication"
         android:label="card.io Sample App"
         android:theme="@style/MyTheme">
 
         <activity android:name=".SampleActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
         </activity>
+
+        <activity android:name="io.card.test.CardIOTestActivity"/>
 
     </application>
 

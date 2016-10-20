@@ -51,11 +51,6 @@ There are a few bugs in the build process, so these steps are required for the f
 
 You should see the app open and run through some tests.
 
-#### Recordings
-
-Any card recordings present in `SampleApp/src/main/assets/recordings` will be loaded when the sample
-app is run and will be available for testing.
-
 ### Un-official Release
 
 `$ ./gradlew clean :card.io:assembleRelease` Cleans and builds an aar file for distribution.

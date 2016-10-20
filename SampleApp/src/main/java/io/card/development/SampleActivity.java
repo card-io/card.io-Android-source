@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -20,24 +19,19 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.card.development.recording.Recording;
 import io.card.payment.CardIOActivity;
-import io.card.payment.CardScannerTester;
 import io.card.payment.CardType;
 import io.card.payment.CreditCard;
 import io.card.payment.i18n.StringKey;
 import io.card.payment.i18n.SupportedLocale;
 import io.card.payment.i18n.locales.LocalizedStringsList;
 
-public class SampleActivity extends Activity implements AdapterView.OnItemSelectedListener {
+public class SampleActivity extends Activity {
 
     protected static final String TAG = SampleActivity.class.getSimpleName();
-
-    private static final String RECORDING_DIR = "recordings";
 
     private static final int REQUEST_SCAN = 100;
     private static final int REQUEST_AUTOTEST = 200;
@@ -98,7 +92,6 @@ public class SampleActivity extends Activity implements AdapterView.OnItemSelect
 
         setScanExpiryEnabled();
         setupLanguageList();
-        setupRecordingList();
     }
 
     private void setScanExpiryEnabled() {
@@ -227,53 +220,4 @@ public class SampleActivity extends Activity implements AdapterView.OnItemSelect
         mLanguageSpinner.setAdapter(adapter);
         mLanguageSpinner.setSelection(adapter.getPosition("en"));
     }
-
-    private void setupRecordingList() {
-        Spinner recordingSpinner = (Spinner) findViewById(R.id.recordings);
-        try {
-            String[] allFiles = getAssets().list(RECORDING_DIR);
-            ArrayList<String> recordingNames = new ArrayList<>();
-            recordingNames.add("Select a recording");
-            if (allFiles != null && allFiles.length > 0) {
-                for (String name : allFiles) {
-                    if (name.startsWith("recording_") && name.endsWith(".zip")) {
-                        recordingNames.add(name);
-                    }
-                }
-            }
-
-            if (recordingNames.size() > 1) {
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                        android.R.layout.simple_dropdown_item_1line, recordingNames);
-                recordingSpinner.setAdapter(adapter);
-                recordingSpinner.setOnItemSelectedListener(this);
-                recordingSpinner.setVisibility(View.VISIBLE);
-            }
-        } catch (IOException ignored) {}
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (position <= 0) {
-            return;
-        }
-
-        String path = RECORDING_DIR + "/" + parent.getAdapter().getItem(position);
-        Recording recording = new Recording(SampleActivity.this, path);
-        CardScannerTester.setRecording(recording);
-
-        Intent intent = new Intent(SampleActivity.this, CardIOActivity.class)
-                .putExtra("io.card.payment.cameraBypassTestMode", true)
-                .putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, mEnableExpiryToggle.isChecked())
-                .putExtra(CardIOActivity.EXTRA_SCAN_EXPIRY, mScanExpiryToggle.isChecked())
-                .putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, mCvvToggle.isChecked())
-                .putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, mPostalCodeToggle.isChecked())
-                .putExtra(CardIOActivity.EXTRA_RESTRICT_POSTAL_CODE_TO_NUMERIC_ONLY, mPostalCodeNumericOnlyToggle.isChecked())
-                .putExtra(CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME, mCardholderNameToggle.isChecked());
-
-        startActivityForResult(intent, REQUEST_SCAN);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {}
 }
