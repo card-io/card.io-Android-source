@@ -1,9 +1,6 @@
 package io.card.test;
 
 import android.Manifest;
-import android.app.Activity;
-import android.support.test.rule.ActivityTestRule;
-import android.view.WindowManager;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,19 +24,12 @@ import static org.hamcrest.Matchers.containsString;
 public class SampleActivityTest {
 
     @Rule
-    public final ActivityTestRule<SampleActivity> mActivityTestRule =
-            new ActivityTestRule<>(SampleActivity.class);
+    public final CustomActivityTestRule<SampleActivity> mActivityTestRule =
+            new CustomActivityTestRule<>(SampleActivity.class);
 
     @Before
     public void setup() {
-        final Activity activity = mActivityTestRule.getActivity();
-        activity.runOnUiThread(new Runnable() {
-            public void run() {
-                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
-        });
+        mActivityTestRule.getActivity();
     }
 
     @Test

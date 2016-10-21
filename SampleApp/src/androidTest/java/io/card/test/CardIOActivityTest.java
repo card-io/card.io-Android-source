@@ -3,8 +3,6 @@ package io.card.test;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.support.test.rule.ActivityTestRule;
-import android.view.WindowManager;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,8 +23,8 @@ public class CardIOActivityTest {
     private CardIOTestActivity mActivity;
 
     @Rule
-    public final ActivityTestRule<CardIOTestActivity> mActivityTestRule =
-            new ActivityTestRule<>(CardIOTestActivity.class, false, false);
+    public final CustomActivityTestRule<CardIOTestActivity> mActivityTestRule =
+            new CustomActivityTestRule<>(CardIOTestActivity.class, false, false);
 
     @Test(timeout = 30000)
     public void scansAmexCards() {
@@ -42,13 +40,6 @@ public class CardIOActivityTest {
     private void startScan() {
         mActivityTestRule.launchActivity(null);
         mActivity = mActivityTestRule.getActivity();
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
-        });
 
         onDevice().acceptRuntimePermission(Manifest.permission.CAMERA);
     }

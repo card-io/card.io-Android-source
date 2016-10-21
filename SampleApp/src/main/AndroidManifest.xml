@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="io.card.development">
 
+    <!-- for testing -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+
     <application
         android:name=".SampleApplication"
         android:label="card.io Sample App"
