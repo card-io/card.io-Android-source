@@ -11,7 +11,7 @@ What it does not yet contain is much in the way of documentation. :crying_cat_fa
 
 Note that this is actual production code, which has been iterated upon by multiple developers over several years. If you see something that could benefit from being tidied up, rewritten, or otherwise improved, your Pull Requests will be welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-Brought to you by  
+Brought to you by
 [![PayPal logo](https://raw.githubusercontent.com/card-io/card.io-iOS-source/master/Resources/pp_h_rgb.png)](https://paypal.com/ "PayPal")
 
 
@@ -44,19 +44,12 @@ There are a few bugs in the build process, so these steps are required for the f
 
 ### Testing
 
-#### Setup
-Requires a recording of a capture session. 
-
-1. Connect an Android 4.0 (or better) device. (You can also use a device back to Gingerbread, but some autotests won't work).
-2. Load a card recording by running:
-	`$ adb push test-data/recording_320455133.550273.zip /storage/sdcard0/card_recordings/recording_320455133.550273.zip`
-
 #### Running
 
-1. `$ cd card.io-Android-source`
+1. Connect an Android 18 (or better) device.
 2. `$ ./gradlew connectedAndroidTest`
 
-That's it! You should see the app open and run through some tests.
+You should see the app open and run through some tests.
 
 ### Un-official Release
 
