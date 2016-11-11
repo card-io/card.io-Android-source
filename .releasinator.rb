@@ -9,8 +9,8 @@ configatron.prerelease_checklist_items = [
 ]
 
 def validate_ndk_version()
-  # please use $ wget http://dl.google.com/android/repository/android-ndk-r12b-darwin-x86_64.zip to get old versoins of NDK
-  expected_release = "Pkg.Desc = Android NDK Pkg.Revision = 12.1.2977051"
+  # please use $ wget http://dl.google.com/android/repository/android-ndk-r13b-darwin-x86_64.zip to get old versions of NDK
+  expected_release = "Pkg.Desc = Android NDK Pkg.Revision = 13.1.3345770"
   actual_release = `cat local.properties | sed 's/\\\./_/g' > .properties.file; . .properties.file; x=\`cat $ndk_dir/source.properties\`; rm -rf .properties.file; echo $x`.strip
   if expected_release != actual_release
     Printer.fail("ndk version verification.  Expected:#{expected_release}.  Actual:#{actual_release}.")
@@ -31,6 +31,7 @@ configatron.base_docs_dir = 'sdk'
 configatron.release_to_github = false
 
 def build_cardio()
+  CommandProcessor.command("rm -rf card.io/src/main/libs/* card.io/src/main/obj/*"
   CommandProcessor.command("./gradlew clean :card.io:assembleRelease releaseDoc", live_output=true)
 end
 
