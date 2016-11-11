@@ -65,7 +65,7 @@ do
 	cd $BUILD_DIR
 
 	cmake -C "$WD/CMakeCache.android.initial.cmake" -DANDROID_ABI="$ARCH" \
-	  -DCMAKE_TOOLCHAIN_FILE="$WD/$ANDROID_CMAKE_FILE" \
+	  -DANDROID_NATIVE_API_LEVEL="16" -DCMAKE_TOOLCHAIN_FILE="$WD/$ANDROID_CMAKE_FILE" \
 	  $CV_SRC || exit -1
 
 	# we could specify which libs to make in the cmake args, or we could just build them manually.
