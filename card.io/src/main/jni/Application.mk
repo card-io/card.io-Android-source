@@ -3,7 +3,7 @@
 # See the file "LICENSE.md" for the full license governing this code.
 
 APP_STL := gnustl_static
-APP_PLATFORM := android-8
+APP_PLATFORM := android-16
 
 NDK_TOOLCHAIN_VERSION := clang
 
