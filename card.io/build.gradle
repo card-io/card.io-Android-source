@@ -35,6 +35,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    resourcePrefix 'cio_'
+
     sourceSets.main {
         jni.srcDirs = []
         jniLibs.srcDir 'src/main/libs'

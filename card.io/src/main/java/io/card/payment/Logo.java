@@ -6,13 +6,11 @@ package io.card.payment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.DisplayMetrics;
-
-import io.card.payment.ui.ViewUtil;
 
 // TODO - cache logo drawing as a bitmap and just draw that
 // TODO - get alpha overlay computation working properly with whites. should not look gray.
@@ -38,17 +36,16 @@ class Logo {
         if (mLogo != null && useCardIOLogo == mUseCardIOLogo) {
             return; // no change, don't reload
         }
-        int density = DisplayMetrics.DENSITY_HIGH;
+
         mUseCardIOLogo = useCardIOLogo;
         if (useCardIOLogo) {
-            mLogo = ViewUtil.base64ToBitmap(Base64EncodedImages.card_io_logo, mContext, density);
+            mLogo = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.cio_card_io_logo);
         } else {
-            mLogo = ViewUtil.base64ToBitmap(Base64EncodedImages.paypal_logo, mContext, density);
+            mLogo = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.cio_paypal_logo);
         }
     }
 
     public void draw(Canvas canvas, float maxWidth, float maxHeight) {
-
         if (mLogo == null) {
             loadLogo(false);
         }

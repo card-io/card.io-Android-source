@@ -7,6 +7,7 @@ package io.card.payment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -416,9 +417,8 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         Drawable icon = null;
         boolean usePayPalActionBarIcon = getIntent().getBooleanExtra(CardIOActivity.EXTRA_USE_PAYPAL_ACTIONBAR_ICON, true);
         if (usePayPalActionBarIcon) {
-            Bitmap bitmap = ViewUtil.base64ToBitmap(Base64EncodedImages.paypal_monogram_actionbar_icon, this,
-                    DisplayMetrics.DENSITY_HIGH);
-            icon = new BitmapDrawable(this.getResources(), bitmap);
+            //noinspection deprecation
+            icon = getResources().getDrawable(R.drawable.cio_ic_paypal_monogram);
         }
 
         // update UI to reflect expiry validness
