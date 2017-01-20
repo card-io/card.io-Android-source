@@ -4,7 +4,7 @@ cd `dirname $0`
 WD=`pwd`
 
 CV_SUBMODULE_DIR="$WD/../ThirdParty/opencv"
-CV_VERSION="2.4.11"
+CV_VERSION="2.4.13"
 
 if [ -d "$CV_SUBMODULE_DIR" ] ; then
 	cd $CV_SUBMODULE_DIR
