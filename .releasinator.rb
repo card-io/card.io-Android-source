@@ -88,7 +88,7 @@ end
 
 def compile_sample_app()
   Dir.chdir("SampleApp") do
-    CommandProcessor.command("gradlew clean assembleDebug", live_output=true)
+    CommandProcessor.command("./gradlew clean assembleDebug", live_output=true)
   end
 end
 
