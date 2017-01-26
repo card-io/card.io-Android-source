@@ -10,8 +10,8 @@ configatron.prerelease_checklist_items = [
 
 def validate_ndk_version()
   # please use $ wget http://dl.google.com/android/repository/android-ndk-r13b-darwin-x86_64.zip to get old versions of NDK
-  expected_release = "Pkg.Desc = Android NDK Pkg.Revision = 13.1.3345770"
-  actual_release = `cat local.properties | sed 's/\\\./_/g' > .properties.file; . .properties.file; x=\`cat $ndk_dir/source.properties\`; rm -rf .properties.file; echo $x`.strip
+  expected_release = "Pkg.Revision = 13.1.3345770"
+  actual_release = `grep "Pkg.Revision" "$(cat local.properties | grep ndk.dir | cut -d = -f2 -)/source.properties"`.strip
   if expected_release != actual_release
     Printer.fail("ndk version verification.  Expected:#{expected_release}.  Actual:#{actual_release}.")
     abort()
