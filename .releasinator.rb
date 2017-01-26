@@ -31,7 +31,7 @@ configatron.base_docs_dir = 'sdk'
 configatron.release_to_github = false
 
 def build_cardio()
-  CommandProcessor.command("rm -rf card.io/src/main/libs/* card.io/src/main/obj/*"
+  CommandProcessor.command("rm -rf card.io/src/main/libs/* card.io/src/main/obj/*")
   CommandProcessor.command("./gradlew clean :card.io:assembleRelease releaseDoc", live_output=true)
 end
 
