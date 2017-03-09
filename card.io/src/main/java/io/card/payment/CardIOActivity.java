@@ -26,7 +26,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
-import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -223,6 +222,15 @@ public final class CardIOActivity extends Activity {
 
 
     /**
+     * Boolean extra. Optional. Defaults to <code>false</code>. Defaults to manual entry instead of
+     * scanning card.
+     * <br><br>
+     * If {@link #EXTRA_SUPPRESS_MANUAL_ENTRY} is true this will be ignored.
+     */
+    public static final String EXTRA_DEFAULT_TO_MANUAL_ENTRY = "io.card.payment.defaultToManual";
+
+
+    /**
      * Boolean extra. Used for testing only.
      */
     static final String PRIVATE_EXTRA_CAMERA_BYPASS_TEST_MODE = "io.card.payment.cameraBypassTestMode";
@@ -307,6 +315,7 @@ public final class CardIOActivity extends Activity {
     private CardScanner mCardScanner;
 
     private boolean manualEntryFallbackOrForced = false;
+    private boolean nextActivityOnResume = false;
 
     /**
      * Static variable for the decorated card image. This is ugly, but works. Parceling and
@@ -377,6 +386,9 @@ public final class CardIOActivity extends Activity {
             Log.i(Util.PUBLIC_LOG_TAG, "Processor not Supported. Skipping camera.");
             manualEntryFallbackOrForced = true;
         } else {
+            if (clientData.getBooleanExtra(EXTRA_DEFAULT_TO_MANUAL_ENTRY, false)) {
+                nextActivityOnResume = true;
+            }
             try {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                     if(!waitingForPermission) {
@@ -573,7 +585,8 @@ public final class CardIOActivity extends Activity {
         Log.i(TAG, "onResume()");
 
         if(!waitingForPermission) {
-            if (manualEntryFallbackOrForced) {
+            if (manualEntryFallbackOrForced || (nextActivityOnResume && !suppressManualEntry)) {
+                nextActivityOnResume = false;
                 nextActivity();
                 return;
             }
