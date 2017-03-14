@@ -12,7 +12,7 @@ task assemble {}
 
 ext {
     sdkVersion = 25
-    buildToolsVersion = '25.0.0'
+    buildToolsVersion = '25.0.2'
 }
 
 task wrapper(type: Wrapper) {

@@ -12,7 +12,7 @@ android:
     - android-25
     - android-22
     - sys-img-armeabi-v7a-android-22
-    - build-tools-25.0.0
+    - build-tools-25.0.2
     - platform-tools
     - extra-android-support
     - extra-android-m2repository
