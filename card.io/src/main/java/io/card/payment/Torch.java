@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.drawable.shapes.RoundRectShape;
-import android.util.Log;
 
 import java.util.Arrays;
 
@@ -85,7 +84,6 @@ class Torch {
     }
 
     public void setOn(boolean on) {
-        Log.d(TAG, "Torch " + (on ? "ON" : "OFF"));
         mOn = on;
     }
 

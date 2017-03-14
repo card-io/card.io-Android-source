@@ -7,7 +7,6 @@ package io.card.payment;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
@@ -55,8 +54,6 @@ class Preview extends ViewGroup {
 
     @Override
     public void onDraw(Canvas canvas) {
-        Log.d(TAG, "Preview.onDraw()");
-
         super.onDraw(canvas);
         canvas.drawARGB(255, 255, 0, 0);
     }
@@ -71,15 +68,11 @@ class Preview extends ViewGroup {
     // Why do we startPreview within this method if the surface is valid?
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
         // We purposely disregard child measurements because act as a
         // wrapper to a SurfaceView that centers the camera preview instead
         // of stretching it.
         final int width = resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);
         final int height = resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
-
-        Log.d(TAG, String.format("Preview.onMeasure(w:%d, h:%d) setMeasuredDimension(w:%d, h:%d)",
-                widthMeasureSpec, heightMeasureSpec, width, height));
 
         setMeasuredDimension(width, height);
     }
@@ -88,16 +81,11 @@ class Preview extends ViewGroup {
     // What is the child surface? The camera preview image?
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        Log.d(TAG, "Preview.onLayout()");
-
         if (changed && getChildCount() > 0) {
             assert mSurfaceView != null;
 
             final int width = r - l;
             final int height = b - t;
-
-            // Log.i(TAG, String.format("onLayout() - child measurements: {w:%d, h:%d}",
-            // getMeasuredWidth(), getMeasuredHeight()));
 
             // Center the child SurfaceView within the parent, making sure that the preview is
             // *always* fully contained on the device screen.

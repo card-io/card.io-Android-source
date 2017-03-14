@@ -105,14 +105,10 @@ public class I18nManager<E extends Enum<?>> {
         SupportedLocale<E> locale = supportedLocales.get(localeName);
         List<String> errorMessages = new ArrayList<String>();
 
-        Log.i(TAG, "Checking locale " + localeName);
-
         for (E key : enumClazz.getEnumConstants()) {
             String prettyKeyValue = "[" + localeName + "," + key + "]";
-            // Log.d(TAG, prettyKeyValue);
 
             if (null == locale.getAdaptedDisplay(key, null)) {
-                // Log.e(TAG, "Missing " + prettyKeyValue);
                 errorMessages.add("Missing " + prettyKeyValue);
             }
         }
@@ -127,8 +123,6 @@ public class I18nManager<E extends Enum<?>> {
      * @param localeSpecifier
      */
     public void setLanguage(String localeSpecifier) {
-        Log.d(TAG, "setLanguage(" + localeSpecifier + ")");
-
         // reset current locale since we're trying to set it to something new.
         currentLocale = null;
 
@@ -263,7 +257,6 @@ public class I18nManager<E extends Enum<?>> {
             s = key.toString();
         }
 
-        // Log.d(TAG, "returning [" + key + "," + s + "]");
         return s;
     }
 

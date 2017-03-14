@@ -26,7 +26,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
-import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -326,7 +325,6 @@ public final class CardIOActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate()");
 
         numActivityAllocations++;
         // NOTE: java native asserts are disabled by default on Android.
@@ -473,8 +471,7 @@ public final class CardIOActivity extends Activity {
 
             if (getIntent().getBooleanExtra(PRIVATE_EXTRA_CAMERA_BYPASS_TEST_MODE, false)) {
                 if (!this.getPackageName().contentEquals("io.card.development")) {
-                    Log.e(TAG, this.getPackageName() + " is not correct");
-                    throw new IllegalStateException("illegal access of private extra");
+                    throw new IllegalStateException("Illegal access of private extra");
                 }
                 // use reflection here so that the tester can be safely stripped for release
                 // builds.
@@ -507,8 +504,7 @@ public final class CardIOActivity extends Activity {
         StringKey errorKey = StringKey.ERROR_CAMERA_UNEXPECTED_FAIL;
         String localizedError = LocalizedStrings.getString(errorKey);
 
-        Log.e(Util.PUBLIC_LOG_TAG,
-                "Unknown exception - please send the stack trace to support@card.io", e);
+        Log.e(Util.PUBLIC_LOG_TAG, "Unknown exception, please post the stack trace as a GitHub issue", e);
         Toast toast = Toast.makeText(this, localizedError, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, TOAST_OFFSET_Y);
         toast.show();
@@ -516,10 +512,6 @@ public final class CardIOActivity extends Activity {
     }
 
     private void doOrientationChange(int orientation) {
-        // This method calls every time the orientation changes by a degree.
-        // Don't enable logging unless doing rotational testing.
-        // Log.d(TAG, "doOrientationChange(" + orientation + ")");
-
         if (orientation < 0 || mCardScanner == null) {
             return;
         }
@@ -549,8 +541,6 @@ public final class CardIOActivity extends Activity {
             mFrameOrientation = ORIENTATION_LANDSCAPE_RIGHT;
         }
         if (degrees >= 0 && degrees != mLastDegrees) {
-            Log.d(TAG, "onOrientationChanged(" + degrees + ") calling setDeviceOrientation("
-                    + mFrameOrientation + ")");
             mCardScanner.setDeviceOrientation(mFrameOrientation);
             setDeviceDegrees(degrees);
             if (degrees == 90) {
@@ -570,7 +560,6 @@ public final class CardIOActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(TAG, "onResume()");
 
         if(!waitingForPermission) {
             if (manualEntryFallbackOrForced) {
@@ -611,7 +600,6 @@ public final class CardIOActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.i(TAG, "onPause()");
 
         if (orientationListener != null) {
             orientationListener.disable();
@@ -625,7 +613,6 @@ public final class CardIOActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "onDestroy()");
         mOverlay = null;
         numActivityAllocations--;
 
@@ -659,8 +646,6 @@ public final class CardIOActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, String.format("onActivityResult(requestCode:%d, resultCode:%d, ...",
-                requestCode, resultCode));
 
         switch (requestCode) {
             case DATA_ENTRY_REQUEST_ID:
@@ -692,8 +677,6 @@ public final class CardIOActivity extends Activity {
      */
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "onBackPressed()");
-
         if (!manualEntryFallbackOrForced && mOverlay.isAnimating()) {
             try {
                 restartPreview();
@@ -766,7 +749,6 @@ public final class CardIOActivity extends Activity {
     // end static
 
     void onFirstFrame(int orientation) {
-        Log.d(TAG, "onFirstFrame(" + orientation + ")");
         SurfaceView sv = mPreview.getSurfaceView();
         if (mOverlay != null) {
             mOverlay.setCameraPreviewRect(new Rect(sv.getLeft(), sv.getTop(), sv.getRight(), sv
@@ -787,8 +769,6 @@ public final class CardIOActivity extends Activity {
     }
 
     void onCardDetected(Bitmap detectedBitmap, DetectionInfo dInfo) {
-        Log.d(TAG, "onCardDetected()");
-
         try {
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(VIBRATE_PATTERN, -1);
@@ -816,7 +796,6 @@ public final class CardIOActivity extends Activity {
         }
 
         Matrix m = new Matrix();
-        Log.d(TAG, "Scale factor: " + sf);
         m.postScale(sf, sf);
 
         Bitmap scaledCard = Bitmap.createBitmap(detectedBitmap, 0, 0, detectedBitmap.getWidth(),
@@ -834,8 +813,6 @@ public final class CardIOActivity extends Activity {
     }
 
     private void nextActivity() {
-        Log.d(TAG, "nextActivity()");
-
         final Intent origIntent = getIntent();
         if (origIntent != null && origIntent.getBooleanExtra(EXTRA_SUPPRESS_CONFIRMATION, false)) {
             Intent dataIntent = new Intent(CardIOActivity.this, DataEntryActivity.class);
@@ -851,8 +828,6 @@ public final class CardIOActivity extends Activity {
             new Handler().post(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d(TAG, "post(Runnable)");
-
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
@@ -900,8 +875,6 @@ public final class CardIOActivity extends Activity {
     }
 
     private boolean restartPreview() {
-        Log.d(TAG, "restartPreview()");
-
         mDetectedCard = null;
         assert mPreview != null;
         boolean success = mCardScanner.resumeScanning(mPreview.getSurfaceHolder());

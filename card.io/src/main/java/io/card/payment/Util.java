@@ -72,8 +72,6 @@ class Util {
     }
 
     private static boolean hardwareSupportCheck() {
-        Log.i(PUBLIC_LOG_TAG, "Checking hardware support...");
-
         if (!CardScanner.processorSupported()) {
             Log.w(PUBLIC_LOG_TAG, "- Processor type is not supported");
             return false;
