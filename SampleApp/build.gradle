@@ -29,20 +29,10 @@ android {
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
 
-    signingConfigs {
-        myConfig {
-            storeFile file("example.keystore")
-            storePassword "abc123"
-            keyAlias "example-alias"
-            keyPassword "abc123"
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled true
             proguardFile getDefaultProguardFile('proguard-android.txt')
-            signingConfig signingConfigs.myConfig
         }
     }
 
