@@ -14,7 +14,3 @@ ext {
     sdkVersion = 25
     buildToolsVersion = '25.0.2'
 }
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.14.1'
-}
