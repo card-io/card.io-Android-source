@@ -6,10 +6,7 @@ package io.card.payment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,7 +15,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DateKeyListener;
 import android.text.method.DigitsKeyListener;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +85,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
 
     private static final String TAG = DataEntryActivity.class.getSimpleName();
 
+    @SuppressWarnings("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -598,6 +595,7 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
 
     }
 
+    @SuppressWarnings("ResourceType")
     private void addCardholderNameIfNeeded(ViewGroup mainLayout) {
         boolean requireCardholderName = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME, false);
         if (requireCardholderName) {
