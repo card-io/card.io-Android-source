@@ -656,7 +656,7 @@ public final class CardIOActivity extends Activity {
                     manualEntryFallbackOrForced = true;
                     // show manual entry - handled in onResume()
                 }
-                onResume();
+                // onResume() will be called as part of the activity lifecycle, no need to call it
             }
         }
     }
