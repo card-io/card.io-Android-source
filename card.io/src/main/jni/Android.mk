@@ -24,6 +24,30 @@ LOCAL_SRC_FILES := lib/$(TARGET_ARCH_ABI)/libopencv_imgproc.so
 LOCAL_SHARED_LIBRARIES := opencv_core 
 include $(PREBUILT_SHARED_LIBRARY)
 
+
+# --- declare tesseract prebuilt static libs ---------------------------------
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := leptonica_core
+LOCAL_SRC_FILES := lib/$(TARGET_ARCH_ABI)/liblept.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := jpg_lib
+LOCAL_SRC_FILES := lib/$(TARGET_ARCH_ABI)/libjpgt.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := png_lib
+LOCAL_SRC_FILES := lib/$(TARGET_ARCH_ABI)/libpngt.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := tesseract_core
+LOCAL_SRC_FILES := lib/$(TARGET_ARCH_ABI)/libtess.so
+LOCAL_SHARED_LIBRARIES := leptonica_core jpg_lib png_lib
+include $(PREBUILT_SHARED_LIBRARY)
+
 endif
 
 # --- libcardioRecognizer.so --------------------------------------------------------
@@ -36,7 +60,7 @@ ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86 arm64-v8a x86_64))
 
 LOCAL_MODULE := cardioRecognizer
 LOCAL_LDLIBS := -llog -L$(SYSROOT)/usr/lib -lz -ljnigraphics
-LOCAL_SHARED_LIBRARIES := cpufeatures opencv_imgproc opencv_core 
+LOCAL_SHARED_LIBRARIES := cpufeatures opencv_imgproc opencv_core tesseract_core
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(LOCAL_DMZ_DIR) $(LOCAL_PATH)/$(LOCAL_DMZ_DIR)/cv
 LOCAL_SRC_FILES := $(LOCAL_DMZ_DIR)/dmz_all.cpp nativeRecognizer.cpp
@@ -67,7 +91,7 @@ ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a x86 arm64-v8a x86_64))
 
 LOCAL_MODULE := cardioRecognizer_tegra2
 LOCAL_LDLIBS := -llog -L$(SYSROOT)/usr/lib -lz -ljnigraphics
-LOCAL_SHARED_LIBRARIES := cpufeatures opencv_imgproc opencv_core 
+LOCAL_SHARED_LIBRARIES := cpufeatures opencv_imgproc opencv_core tesseract_core
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(LOCAL_DMZ_DIR) $(LOCAL_PATH)/$(LOCAL_DMZ_DIR)/cv
 LOCAL_SRC_FILES := $(LOCAL_DMZ_DIR)/dmz_all.cpp nativeRecognizer.cpp
