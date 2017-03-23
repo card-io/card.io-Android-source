@@ -226,6 +226,12 @@ public final class CardIOActivity extends Activity {
      */
     static final String PRIVATE_EXTRA_CAMERA_BYPASS_TEST_MODE = "io.card.payment.cameraBypassTestMode";
 
+    /**
+     * Int extra. Max number of try (card detected but not the numbers)
+     */
+    public static final String EXTRA_MAX_TRY = "io.card.payment.maxTry";
+
+
     private static int lastResult = 0xca8d10; // arbitrary. chosen to be well above
     // Activity.RESULT_FIRST_USER.
     /**
@@ -258,6 +264,11 @@ public final class CardIOActivity extends Activity {
      */
     public static final int RESULT_CONFIRMATION_SUPPRESSED = lastResult++;
 
+    /**
+     * result code indicating that only sample was found.
+     */
+    public static final int RESULT_SAMPLE_ONLY = lastResult++;
+
     private static final String TAG = CardIOActivity.class.getSimpleName();
 
     private static final int DEGREE_DELTA = 15;
@@ -275,7 +286,7 @@ public final class CardIOActivity extends Activity {
 
     private static final float UIBAR_VERTICAL_MARGIN_DP = 15.0f;
 
-    private static final long[] VIBRATE_PATTERN = { 0, 70, 10, 40 };
+    private static final long[] VIBRATE_PATTERN = {0, 70, 10, 40};
 
     private static final int TOAST_OFFSET_Y = -75;
 
@@ -371,13 +382,13 @@ public final class CardIOActivity extends Activity {
         if (clientData.getBooleanExtra(EXTRA_NO_CAMERA, false)) {
             Log.i(Util.PUBLIC_LOG_TAG, "EXTRA_NO_CAMERA set to true. Skipping camera.");
             manualEntryFallbackOrForced = true;
-        } else if (!CardScanner.processorSupported()){
+        } else if (!CardScanner.processorSupported()) {
             Log.i(Util.PUBLIC_LOG_TAG, "Processor not Supported. Skipping camera.");
             manualEntryFallbackOrForced = true;
         } else {
             try {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    if(!waitingForPermission) {
+                    if (!waitingForPermission) {
                         if (checkSelfPermission(Manifest.permission.CAMERA)
                                 == PackageManager.PERMISSION_DENIED) {
 
@@ -478,8 +489,8 @@ public final class CardIOActivity extends Activity {
                 Class<?> testScannerClass = Class.forName("io.card.payment.CardScannerTester");
                 Constructor<?> cons = testScannerClass.getConstructor(this.getClass(),
                         Integer.TYPE);
-                mCardScanner = (CardScanner) cons.newInstance(new Object[] { this,
-                        mFrameOrientation });
+                mCardScanner = (CardScanner) cons.newInstance(new Object[]{this,
+                        mFrameOrientation});
             } else {
                 mCardScanner = new CardScanner(this, mFrameOrientation);
             }
@@ -561,7 +572,7 @@ public final class CardIOActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        if(!waitingForPermission) {
+        if (!waitingForPermission) {
             if (manualEntryFallbackOrForced) {
                 nextActivity();
                 return;
@@ -768,6 +779,32 @@ public final class CardIOActivity extends Activity {
         mOverlay.setDetectionInfo(dInfo);
     }
 
+    public void onSampleDetected(Bitmap detectedBitmap) {
+        mCardScanner.pauseScanning();
+
+        updateOverlay(detectedBitmap);
+        Intent dataIntent = new Intent();
+        Util.writeCapturedCardImageIfNecessary(getIntent(), dataIntent, mOverlay);
+        setResultAndFinish(RESULT_SAMPLE_ONLY, dataIntent);
+    }
+
+    private void updateOverlay(Bitmap detectedBitmap) {
+        float sf;
+        if (mFrameOrientation == ORIENTATION_PORTRAIT
+                || mFrameOrientation == ORIENTATION_PORTRAIT_UPSIDE_DOWN) {
+            sf = mGuideFrame.right / (float) CardScanner.CREDIT_CARD_TARGET_WIDTH * .95f;
+        } else {
+            sf = mGuideFrame.right / (float) CardScanner.CREDIT_CARD_TARGET_WIDTH * 1.15f;
+        }
+
+        Matrix m = new Matrix();
+        m.postScale(sf, sf);
+
+        Bitmap scaledCard = Bitmap.createBitmap(detectedBitmap, 0, 0, detectedBitmap.getWidth(),
+                detectedBitmap.getHeight(), m, false);
+        mOverlay.setBitmap(scaledCard);
+    }
+
     void onCardDetected(Bitmap detectedBitmap, DetectionInfo dInfo) {
         try {
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -786,21 +823,7 @@ public final class CardIOActivity extends Activity {
             mDetectedCard = dInfo.creditCard();
             mOverlay.setDetectedCard(mDetectedCard);
         }
-
-        float sf;
-        if (mFrameOrientation == ORIENTATION_PORTRAIT
-                || mFrameOrientation == ORIENTATION_PORTRAIT_UPSIDE_DOWN) {
-            sf = mGuideFrame.right / (float)CardScanner.CREDIT_CARD_TARGET_WIDTH * .95f;
-        } else {
-            sf = mGuideFrame.right / (float)CardScanner.CREDIT_CARD_TARGET_WIDTH * 1.15f;
-        }
-
-        Matrix m = new Matrix();
-        m.postScale(sf, sf);
-
-        Bitmap scaledCard = Bitmap.createBitmap(detectedBitmap, 0, 0, detectedBitmap.getWidth(),
-                detectedBitmap.getHeight(), m, false);
-        mOverlay.setBitmap(scaledCard);
+        updateOverlay(detectedBitmap);
 
         if (mDetectOnly) {
             Intent dataIntent = new Intent();
@@ -1004,7 +1027,7 @@ public final class CardIOActivity extends Activity {
             });
             mUIBar.addView(keyboardBtn);
             ViewUtil.styleAsButton(keyboardBtn, false, this, useApplicationTheme);
-            if(!useApplicationTheme){
+            if (!useApplicationTheme) {
                 keyboardBtn.setTextSize(Appearance.TEXT_SIZE_SMALL_BUTTON);
             }
             keyboardBtn.setMinimumHeight(ViewUtil.typedDimensionValueToPixelsInt(
