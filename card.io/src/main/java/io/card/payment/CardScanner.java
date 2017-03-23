@@ -86,6 +86,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     // member data
     protected WeakReference<CardIOActivity> mScanActivityRef;
     private boolean mSuppressScan = false;
+    private int mMaxTry = 0;
     private boolean mScanExpiry;
     private int mUnblurDigits = DEFAULT_UNBLUR_DIGITS;
 
@@ -112,6 +113,8 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     private int numAutoRefocus;
     private int numManualTorchChange;
     private int numFramesSkipped;
+    private int numTry = 0;
+
 
     // ------------------------------------------------------------------------
     // STATIC INITIALIZATION
@@ -157,7 +160,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     /**
      * Custom loadLibrary method that first tries to load the libraries from the built-in libs
      * directory and if it fails, tries to use the alternative libs path if one is set.
-     *
+     * <p>
      * No checks are performed to ensure that the native libraries match the cardIO library version.
      * This needs to be handled by the consuming application.
      */
@@ -193,6 +196,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         Intent scanIntent = scanActivity.getIntent();
         if (scanIntent != null) {
             mSuppressScan = scanIntent.getBooleanExtra(CardIOActivity.EXTRA_SUPPRESS_SCAN, false);
+            mMaxTry = scanIntent.getIntExtra(CardIOActivity.EXTRA_MAX_TRY, 0);
             mScanExpiry = scanIntent.getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false)
                     && scanIntent.getBooleanExtra(CardIOActivity.EXTRA_SCAN_EXPIRY, true);
             mUnblurDigits = scanIntent.getIntExtra(CardIOActivity.EXTRA_UNBLUR_DIGITS, DEFAULT_UNBLUR_DIGITS);
@@ -470,6 +474,10 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             triggerAutoFocus(false);
         } else if (dInfo.predicted() || (mSuppressScan && dInfo.detected())) {
             mScanActivityRef.get().onCardDetected(detectedBitmap, dInfo);
+        } else if (mMaxTry > 0 && dInfo.detected()) {
+            if (numTry++ > mMaxTry) {
+                mScanActivityRef.get().onSampleDetected(detectedBitmap);
+            }
         }
         // give the image buffer back to the camera, AFTER we're done reading
         // the image.
