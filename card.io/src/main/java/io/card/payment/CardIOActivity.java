@@ -377,10 +377,9 @@ public final class CardIOActivity extends Activity {
         } else {
             try {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    if(!waitingForPermission) {
-                        if (checkSelfPermission(Manifest.permission.CAMERA)
-                                == PackageManager.PERMISSION_DENIED) {
-
+                    if (!waitingForPermission) {
+                        if (checkSelfPermission(Manifest.permission.CAMERA) ==
+                                PackageManager.PERMISSION_DENIED) {
                             Log.d(TAG, "permission denied to camera - requesting it");
                             String[] permissions = {Manifest.permission.CAMERA};
                             waitingForPermission = true;
@@ -561,10 +560,15 @@ public final class CardIOActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        if(!waitingForPermission) {
+        if (!waitingForPermission) {
             if (manualEntryFallbackOrForced) {
-                nextActivity();
-                return;
+                if (suppressManualEntry) {
+                    finishIfSuppressManualEntry();
+                    return;
+                } else {
+                    nextActivity();
+                    return;
+                }
             }
 
             Util.logNativeMemoryStats();
