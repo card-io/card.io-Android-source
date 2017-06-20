@@ -324,8 +324,6 @@ public final class CardIOActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         numActivityAllocations++;
         // NOTE: java native asserts are disabled by default on Android.
         if (numActivityAllocations != 1) {
@@ -398,6 +396,7 @@ public final class CardIOActivity extends Activity {
             }
         }
 
+        super.onCreate(savedInstanceState);
     }
 
     private void android23AndAboveHandleCamera() {
