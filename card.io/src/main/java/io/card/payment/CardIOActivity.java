@@ -220,6 +220,12 @@ public final class CardIOActivity extends Activity {
      */
     public static final String EXTRA_KEEP_APPLICATION_THEME = "io.card.payment.keepApplicationTheme";
 
+    /**
+     * Boolean extra. Optional. If this value is set to <code>true</code>, the front camera will be opened.
+     * If this value is <code>false</code> (default), the back camera will be opened.
+     */
+    public static final String EXTRA_FRONT_CAMERA = "io.card.payment.frontCamera";
+
 
     /**
      * Boolean extra. Used for testing only.

@@ -113,6 +113,8 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     private int numManualTorchChange;
     private int numFramesSkipped;
 
+    private boolean mFrontCamera = false;
+
     // ------------------------------------------------------------------------
     // STATIC INITIALIZATION
     // ------------------------------------------------------------------------
@@ -196,6 +198,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             mScanExpiry = scanIntent.getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false)
                     && scanIntent.getBooleanExtra(CardIOActivity.EXTRA_SCAN_EXPIRY, true);
             mUnblurDigits = scanIntent.getIntExtra(CardIOActivity.EXTRA_UNBLUR_DIGITS, DEFAULT_UNBLUR_DIGITS);
+            mFrontCamera = scanIntent.getBooleanExtra(CardIOActivity.EXTRA_FRONT_CAMERA, false);
         }
         mScanActivityRef = new WeakReference<>(scanActivity);
         mFrameOrientation = currentFrameOrientation;
@@ -211,9 +214,11 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         if (useCamera) {
             do {
                 try {
-                    // Camera.open() will open the back-facing camera. Front cameras are not
-                    // attempted.
-                    return Camera.open();
+                    if (mFrontCamera) {
+                        return Util.openFrontCamera();
+                    } else {
+                        return Util.openBackCamera();
+                    }
                 } catch (RuntimeException e) {
                     try {
                         Log.w(Util.PUBLIC_LOG_TAG,

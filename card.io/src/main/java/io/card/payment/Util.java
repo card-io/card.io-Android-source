@@ -80,7 +80,8 @@ class Util {
         // Camera needs to open
         Camera c = null;
         try {
-            c = Camera.open();
+            // For checking the hardware, we open the default camera: the back one.
+            c = openBackCamera();
         } catch (RuntimeException e) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 return true;
@@ -111,6 +112,38 @@ class Util {
             }
         }
         return true;
+    }
+
+    /**
+     * Open the back camera
+     * @return the back camera opened
+     */
+    static Camera openBackCamera() {
+        return Camera.open();
+    }
+
+    /**
+     * Open the front camera
+     * Inspired from https://stackoverflow.com/questions/2779002/how-do-i-open-the-front-camera-on-the-android-platform
+     * @return the front camera opened
+     */
+    static Camera openFrontCamera() {
+        int cameraCount = 0;
+        Camera cam = null;
+        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+        cameraCount = Camera.getNumberOfCameras();
+        for (int camIdx = 0; camIdx < cameraCount; camIdx++) {
+            Camera.getCameraInfo(camIdx, cameraInfo);
+            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                try {
+                    cam = Camera.open(camIdx);
+                } catch (RuntimeException e) {
+                    Log.e(TAG, "Camera failed to open: " + e.getLocalizedMessage());
+                }
+            }
+        }
+
+        return cam;
     }
 
     public static String getNativeMemoryStats() {
