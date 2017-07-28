@@ -115,32 +115,69 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
 
     // ------------------------------------------------------------------------
     // STATIC INITIALIZATION
+    //
+    // Loading native libraries.
+    // No checks are performed to ensure that the native libraries match the cardIO library version.
+    // This needs to be handled by the consuming application.
     // ------------------------------------------------------------------------
 
     static {
         Log.i(Util.PUBLIC_LOG_TAG, "card.io " + BuildConfig.PRODUCT_VERSION + " " + BuildConfig.BUILD_TIME);
 
         try {
-            loadLibrary("cardioDecider");
+            // Need to load each library directly with System.loadLibrary() and with parameter as String literal
+            // or constant. Otherwise DexGuard will remove the native libraries (.so files).
+            final String CARDIO_DECIDER = "cardioDecider";
+            try {
+                System.loadLibrary(CARDIO_DECIDER);
+            } catch (UnsatisfiedLinkError e) {
+                loadWithAlternativeLibsPath(CARDIO_DECIDER, e);
+            }
             Log.d(Util.PUBLIC_LOG_TAG, "Loaded card.io decider library.");
             Log.d(Util.PUBLIC_LOG_TAG, "    nUseNeon(): " + nUseNeon());
             Log.d(Util.PUBLIC_LOG_TAG, "    nUseTegra():" + nUseTegra());
             Log.d(Util.PUBLIC_LOG_TAG, "    nUseX86():  " + nUseX86());
 
             if (usesSupportedProcessorArch()) {
-                loadLibrary("opencv_core");
+                final String OPENCV_CORE = "opencv_core";
+                try {
+                    System.loadLibrary(OPENCV_CORE);
+                } catch (UnsatisfiedLinkError e) {
+                    loadWithAlternativeLibsPath(OPENCV_CORE, e);
+                }
                 Log.d(Util.PUBLIC_LOG_TAG, "Loaded opencv core library");
-                loadLibrary("opencv_imgproc");
+
+                final String OPENCV_IMGPROC = "opencv_imgproc";
+                try {
+                    System.loadLibrary(OPENCV_IMGPROC);
+                } catch (UnsatisfiedLinkError e) {
+                    loadWithAlternativeLibsPath(OPENCV_IMGPROC, e);
+                }
                 Log.d(Util.PUBLIC_LOG_TAG, "Loaded opencv imgproc library");
             }
+
+            final String CARDIO_RECOGNIZER = "cardioRecognizer";
             if (nUseNeon()) {
-                loadLibrary("cardioRecognizer");
+                try {
+                    System.loadLibrary(CARDIO_RECOGNIZER);
+                } catch (UnsatisfiedLinkError e) {
+                    loadWithAlternativeLibsPath(CARDIO_RECOGNIZER, e);
+                }
                 Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io NEON library");
             } else if (nUseX86()) {
-                loadLibrary("cardioRecognizer");
+                try {
+                    System.loadLibrary(CARDIO_RECOGNIZER);
+                } catch (UnsatisfiedLinkError e) {
+                    loadWithAlternativeLibsPath(CARDIO_RECOGNIZER, e);
+                }
                 Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io x86 library");
             } else if (nUseTegra()) {
-                loadLibrary("cardioRecognizer_tegra2");
+                final String CARDIO_RECOGNIZER_TEGRA2 = "cardioRecognizer_tegra2";
+                try {
+                    System.loadLibrary(CARDIO_RECOGNIZER_TEGRA2);
+                } catch (UnsatisfiedLinkError e) {
+                    loadWithAlternativeLibsPath(CARDIO_RECOGNIZER_TEGRA2, e);
+                }
                 Log.i(Util.PUBLIC_LOG_TAG, "Loaded card.io Tegra2 library");
             } else {
                 Log.w(Util.PUBLIC_LOG_TAG,
@@ -155,30 +192,22 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     }
 
     /**
-     * Custom loadLibrary method that first tries to load the libraries from the built-in libs
-     * directory and if it fails, tries to use the alternative libs path if one is set.
-     *
-     * No checks are performed to ensure that the native libraries match the cardIO library version.
-     * This needs to be handled by the consuming application.
+     * Tries to use the alternative libs path if one is set, to load a library.
      */
-    private static void loadLibrary(String libraryName) throws UnsatisfiedLinkError {
-        try {
-            System.loadLibrary(libraryName);
-        } catch (UnsatisfiedLinkError e) {
-            String altLibsPath = CardIONativeLibsConfig.getAlternativeLibsPath();
-            if (altLibsPath == null || altLibsPath.length() == 0) {
-                throw e;
-            }
-            if (!File.separator.equals(altLibsPath.charAt(altLibsPath.length() - 1))) {
-                altLibsPath += File.separator;
-            }
-            String fullPath = altLibsPath + Build.CPU_ABI + File.separator +
-                    System.mapLibraryName(libraryName);
-            Log.d(Util.PUBLIC_LOG_TAG, "loadLibrary failed for library " + libraryName + ". Trying " + fullPath);
-            // If we couldn't find the library in the normal places and we have an additional
-            // search path, try loading from there.
-            System.load(fullPath);
+    private static void loadWithAlternativeLibsPath(String libraryName, UnsatisfiedLinkError e) throws UnsatisfiedLinkError {
+        String altLibsPath = CardIONativeLibsConfig.getAlternativeLibsPath();
+        if (altLibsPath == null || altLibsPath.length() == 0) {
+            throw e;
         }
+        if (!File.separator.equals(altLibsPath.charAt(altLibsPath.length() - 1))) {
+            altLibsPath += File.separator;
+        }
+        String fullPath = altLibsPath + Build.CPU_ABI + File.separator +
+            System.mapLibraryName(libraryName);
+        Log.d(Util.PUBLIC_LOG_TAG, "loadLibrary failed for library " + libraryName + ". Trying " + fullPath);
+        // If we couldn't find the library in the normal places and we have an additional
+        // search path, try loading from there.
+        System.load(fullPath);
     }
 
     private static boolean usesSupportedProcessorArch() {
