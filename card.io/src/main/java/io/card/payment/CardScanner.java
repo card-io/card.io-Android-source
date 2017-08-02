@@ -73,7 +73,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     private native void nGetGuideFrame(int orientation, int previewWidth, int previewHeight, Rect r);
 
     private native void nScanFrame(byte[] data, int frameWidth, int frameHeight, int orientation,
-                                   DetectionInfo dinfo, Bitmap resultBitmap, boolean scanExpiry);
+            DetectionInfo dinfo, Bitmap resultBitmap, boolean scanExpiry);
 
     private native int nGetNumFramesScanned();
 
@@ -106,7 +106,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     // accessed by test harness subclass.
     protected boolean useCamera = true;
 
-    private boolean isSurfaceValid;
+    private boolean isPreviewInit;
 
     private int numManualRefocus;
     private int numAutoRefocus;
@@ -318,7 +318,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             mCamera.setPreviewCallbackWithBuffer(this);
         }
 
-        if (isSurfaceValid) {
+        if (holder.getSurface().isValid()) {
             makePreviewGo(holder);
         }
 
@@ -362,10 +362,15 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
      * --------------------------- SurfaceHolder callbacks
      */
 
-    private boolean makePreviewGo(SurfaceHolder holder) {
+    private void makePreviewGo(SurfaceHolder holder) {
         // method name from http://www.youtube.com/watch?v=-WmGvYDLsj4
+        if (isPreviewInit) {
+            return;
+        }
         assert holder != null;
         assert holder.getSurface() != null;
+
+        isPreviewInit = true;
         mFirstPreviewFrame = true;
 
         if (useCamera) {
@@ -373,17 +378,14 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
                 mCamera.setPreviewDisplay(holder);
             } catch (IOException e) {
                 Log.e(Util.PUBLIC_LOG_TAG, "can't set preview display", e);
-                return false;
             }
             try {
                 mCamera.startPreview();
                 mCamera.autoFocus(this);
             } catch (RuntimeException e) {
                 Log.e(Util.PUBLIC_LOG_TAG, "startPreview failed on camera. Error: ", e);
-                return false;
             }
         }
-        return true;
     }
 
     /*
@@ -393,7 +395,6 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, acquire the camera and tell it where to draw.
         if (mCamera != null || !useCamera) {
-            isSurfaceValid = true;
             makePreviewGo(holder);
         } else {
             Log.wtf(Util.PUBLIC_LOG_TAG, "CardScanner.surfaceCreated() - camera is null!");
@@ -423,7 +424,6 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
                 Log.e(Util.PUBLIC_LOG_TAG, "error stopping camera", e);
             }
         }
-        isSurfaceValid = false;
     }
 
     /**
