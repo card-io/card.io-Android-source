@@ -15,7 +15,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DateKeyListener;
 import android.text.method.DigitsKeyListener;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -89,7 +88,6 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate()");
 
         if (null == getIntent().getExtras()) {
             // extras should never be null.  This is some weird android state that we handle by just going back.
@@ -458,7 +456,6 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume()");
 
         getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ActivityHelper.setFlagSecure(this);
@@ -475,8 +472,6 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             getWindow()
                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
-
-        Log.i(TAG, "ready for manual entry"); // used by tests. don't delete.
     }
 
     private EditText advanceToNextEmptyField() {
@@ -497,8 +492,6 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         doneBtn.setEnabled(numberValidator.isValid() && expiryValidator.isValid()
                 && cvvValidator.isValid() && postalCodeValidator.isValid()
                 && cardholderNameValidator.isValid());
-
-        Log.d(TAG, "setting doneBtn.enabled=" + doneBtn.isEnabled());
 
         if (autoAcceptDone && numberValidator.isValid() && expiryValidator.isValid()
                 && cvvValidator.isValid() && postalCodeValidator.isValid()
