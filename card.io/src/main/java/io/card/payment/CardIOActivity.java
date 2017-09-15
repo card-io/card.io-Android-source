@@ -721,16 +721,15 @@ public final class CardIOActivity extends Activity {
      * @return The String version of this SDK
      */
     public static String sdkVersion() {
-        return BuildConfig.PRODUCT_VERSION;
+        return BuildConfig.VERSION_NAME;
     }
 
     /**
-     * Returns the time this SDK was built.
-     *
-     * @return the time this SDK was built
+     * @deprecated Always returns {@code new Date()}.
      */
+    @Deprecated
     public static Date sdkBuildDate() {
-        return new Date(BuildConfig.BUILD_TIME);
+        return new Date();
     }
 
     /**

@@ -7,17 +7,6 @@ repositories {
     mavenCentral()
 }
 
-def getBuildVersion = { ->
-    "git describe --match=*[0-9]*.[0-9]*.*[0-9] --tags --dirty --always".execute().text.trim()
-}
-
-ext {
-    build_time = new Date().format("MM/dd/yyyy HH:mm:ss Z")
-    build_year = new Date().format("yyyy")
-    product_name = "card.io-Android-SDK"
-    product_version = getBuildVersion()
-}
-
 android {
     compileSdkVersion rootProject.ext.sdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -25,10 +14,6 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion rootProject.ext.sdkVersion
-
-        buildConfigField "String", "PRODUCT_NAME", "\"${product_name}\""
-        buildConfigField "String", "PRODUCT_VERSION", "\"${product_version}\""
-        buildConfigField "String", "BUILD_TIME", "\"${build_time}\""
 
         consumerProguardFiles 'release-proguard.cfg'
 
@@ -88,7 +73,7 @@ task javadocs(type: Javadoc) {
     failOnError false
 
     options.docTitle("<h1>card.io Android SDK</h1>")
-    options.bottom("<i>Copyright &#169; 2012-${build_year} PayPal, Inc. All Rights Reserved.</i>")
+    options.bottom("<i>Copyright &#169; 2012 PayPal, Inc. All Rights Reserved.</i>")
     options.windowTitle("card.io Android SDK")
     options.author(true)
     options.version(true)
