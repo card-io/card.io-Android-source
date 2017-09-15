@@ -11,16 +11,13 @@ import android.text.Spanned;
 import java.util.Date;
 
 class ExpiryValidator implements Validator {
-    @SuppressWarnings("unused")
-    private static final String TAG = ExpiryValidator.class.getSimpleName();
 
     public int month;
     public int year;
 
     private boolean fullLength;
 
-    public ExpiryValidator() {
-    }
+    public ExpiryValidator() {}
 
     public ExpiryValidator(int m, int y) {
         month = m;
@@ -96,14 +93,6 @@ class ExpiryValidator implements Validator {
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
                                int dend) {
-
-        // Log.v(TAG, "filter( source:"+source
-        // + " start:" + start
-        // + " end:" + end
-        // + " dest:" + dest
-        // + " dstart:" + dstart
-        // + " dend:" + dend);
-
         // do all in place edits
 
         SpannableStringBuilder result = new SpannableStringBuilder(source);
@@ -149,5 +138,4 @@ class ExpiryValidator implements Validator {
 
         return result;
     }
-
 }

@@ -229,7 +229,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
 
             } while (System.currentTimeMillis() - start < maxTimeout);
         }
-        Log.w(TAG, "camera connect timeout");
+
         return null;
     }
 
@@ -265,9 +265,6 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
                     }
                 }
                 if (previewSize == null) {
-                    Log.w(Util.PUBLIC_LOG_TAG,
-                            "Didn't find a supported 640x480 resolution, so forcing");
-
                     previewSize = supportedPreviewSizes.get(0);
 
                     previewSize.width = mPreviewWidth;
@@ -278,11 +275,8 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             parameters.setPreviewSize(mPreviewWidth, mPreviewHeight);
 
             mCamera.setParameters(parameters);
-        } else if (!useCamera) {
-            Log.w(TAG, "useCamera is false!");
-        } else if (mCamera != null) {
-            Log.v(TAG, "we already have a camera instance: " + mCamera);
         }
+
         if (detectedBitmap == null) {
             detectedBitmap = Bitmap.createBitmap(CREDIT_CARD_TARGET_WIDTH,
                     CREDIT_CARD_TARGET_HEIGHT, Bitmap.Config.ARGB_8888);
@@ -294,9 +288,8 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         if (mCamera == null) {
             prepareScanner();
         }
+
         if (useCamera && mCamera == null) {
-            // prepare failed!
-            Log.i(TAG, "null camera. failure");
             return false;
         }
 
@@ -372,14 +365,12 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             try {
                 mCamera.setPreviewDisplay(holder);
             } catch (IOException e) {
-                Log.e(Util.PUBLIC_LOG_TAG, "can't set preview display", e);
                 return false;
             }
             try {
                 mCamera.startPreview();
                 mCamera.autoFocus(this);
             } catch (RuntimeException e) {
-                Log.e(Util.PUBLIC_LOG_TAG, "startPreview failed on camera. Error: ", e);
                 return false;
             }
         }
@@ -406,10 +397,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
      * int, int)
      */
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.d(TAG, String.format("Preview.surfaceChanged(holder?:%b, f:%d, w:%d, h:%d )",
-                (holder != null), format, width, height));
-    }
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
 
     /*
      * @see android.view.SurfaceHolder.Callback#surfaceDestroyed(android.view. SurfaceHolder)
@@ -437,12 +425,10 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     public void onPreviewFrame(byte[] data, Camera camera) {
 
         if (data == null) {
-            Log.w(TAG, "frame is null! skipping");
             return;
         }
 
         if (processingInProgress) {
-            Log.e(TAG, "processing in progress.... dropping frame");
             // return frame buffer to pool
             numFramesSkipped++;
             if (camera != null) {
@@ -456,7 +442,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         if (mFirstPreviewFrame) {
             mFirstPreviewFrame = false;
             mFrameOrientation = ORIENTATION_PORTRAIT;
-            mScanActivityRef.get().onFirstFrame(ORIENTATION_PORTRAIT);
+            mScanActivityRef.get().onFirstFrame();
         }
 
         DetectionInfo dInfo = new DetectionInfo();

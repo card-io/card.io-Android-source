@@ -10,7 +10,6 @@ import android.text.Spanned;
 import android.text.TextUtils;
 
 class CardNumberValidator implements Validator {
-    // private static final String TAG = CardNumberValidator.class.getSimpleName();
 
     private String numberString;
 
@@ -78,11 +77,11 @@ class CardNumberValidator implements Validator {
         if (!this.hasFullLength()) {
             return false;
         }
+
         if (!CreditCardNumber.passesLuhnChecksum(numberString)) {
             return false;
         }
 
-        // Log.v(TAG,"card number is valid");
         return true;
     }
 
@@ -94,17 +93,12 @@ class CardNumberValidator implements Validator {
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
                                int dend) {
-        // Log.v(TAG, "filter(source:\"" + source + "\" start:" + start + " end:" + end + " dest:"
-        // + dest + " dstart:" + dstart + " dend:" + dend + ")");
-
         String updated = new SpannableStringBuilder(dest).replace(dstart, dend, source, start, end)
                 .toString();
         String updatedDigits = StringHelper.getDigitsOnlyString(updated);
         CardType type = CardType.fromCardNumber(updatedDigits);
         int maxLength = type.numberLength();
 
-        // Log.v(TAG, "updatedDigits:" + updatedDigits + ",cardType:" + type + ",maxLength:"
-        // + maxLength);
         if (updatedDigits.length() > maxLength) {
             return "";
         }
@@ -128,8 +122,6 @@ class CardNumberValidator implements Validator {
                 int loc = spacers[i] - dstart;
                 if (loc == end || (0 <= loc && loc < end && result.charAt(loc) != ' ')) {
                     result.insert(loc, " ");
-                    // Log.v(TAG, "adding space");
-
                     end++;
                 }
             }

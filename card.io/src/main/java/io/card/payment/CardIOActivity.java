@@ -301,8 +301,6 @@ public final class CardIOActivity extends Activity {
     private FrameLayout mMainLayout;
     private boolean useApplicationTheme;
 
-    static private int numActivityAllocations;
-
     private CardScanner mCardScanner;
 
     private boolean manualEntryFallbackOrForced = false;
@@ -325,17 +323,6 @@ public final class CardIOActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        numActivityAllocations++;
-        // NOTE: java native asserts are disabled by default on Android.
-        if (numActivityAllocations != 1) {
-            // it seems that this can happen in the autotest loop, but it doesn't seem to break.
-            // was happening for lemon... (ugh, long story) but we're now protecting the underlying
-            // DMZ/scanner from over-release.
-            Log.i(TAG, String.format(
-                    "INTERNAL WARNING: There are %d (not 1) CardIOActivity allocations!",
-                    numActivityAllocations));
-        }
 
         final Intent clientData = this.getIntent();
 
@@ -369,10 +356,8 @@ public final class CardIOActivity extends Activity {
         }
 
         if (clientData.getBooleanExtra(EXTRA_NO_CAMERA, false)) {
-            Log.i(Util.PUBLIC_LOG_TAG, "EXTRA_NO_CAMERA set to true. Skipping camera.");
             manualEntryFallbackOrForced = true;
         } else if (!CardScanner.processorSupported()){
-            Log.i(Util.PUBLIC_LOG_TAG, "Processor not Supported. Skipping camera.");
             manualEntryFallbackOrForced = true;
         } else {
             try {
@@ -380,7 +365,6 @@ public final class CardIOActivity extends Activity {
                     if (!waitingForPermission) {
                         if (checkSelfPermission(Manifest.permission.CAMERA) ==
                                 PackageManager.PERMISSION_DENIED) {
-                            Log.d(TAG, "permission denied to camera - requesting it");
                             String[] permissions = {Manifest.permission.CAMERA};
                             waitingForPermission = true;
                             requestPermissions(permissions, PERMISSION_REQUEST_ID);
@@ -421,10 +405,8 @@ public final class CardIOActivity extends Activity {
         }
     }
 
-
     private void finishIfSuppressManualEntry() {
         if (suppressManualEntry) {
-            Log.i(Util.PUBLIC_LOG_TAG, "Camera not available and manual entry suppressed.");
             setResultAndFinish(RESULT_SCAN_NOT_AVAILABLE, null);
         }
     }
@@ -581,7 +563,6 @@ public final class CardIOActivity extends Activity {
             orientationListener.enable();
 
             if (!restartPreview()) {
-                Log.e(TAG, "Could not connect to camera.");
                 StringKey error = StringKey.ERROR_CAMERA_UNEXPECTED_FAIL;
                 showErrorMessage(LocalizedStrings.getString(error));
                 nextActivity();
@@ -618,7 +599,6 @@ public final class CardIOActivity extends Activity {
     @Override
     protected void onDestroy() {
         mOverlay = null;
-        numActivityAllocations--;
 
         if (orientationListener != null) {
             orientationListener.disable();
@@ -651,25 +631,15 @@ public final class CardIOActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
-            case DATA_ENTRY_REQUEST_ID:
-                if (resultCode == RESULT_CANCELED) {
-                    Log.d(TAG, "ignoring onActivityResult(RESULT_CANCELED) caused only when Camera Permissions are Denied in Android 23");
-                } else if (resultCode == RESULT_CARD_INFO || resultCode == RESULT_ENTRY_CANCELED
-                        || manualEntryFallbackOrForced) {
-                    if (data != null && data.hasExtra(EXTRA_SCAN_RESULT)) {
-                        Log.v(TAG, "EXTRA_SCAN_RESULT: " + data.getParcelableExtra(EXTRA_SCAN_RESULT));
-                    } else {
-                        Log.d(TAG, "no data in EXTRA_SCAN_RESULT");
-                    }
-                    setResultAndFinish(resultCode, data);
-
-                } else {
-                    if (mUIBar != null) {
-                        mUIBar.setVisibility(View.VISIBLE);
-                    }
+        if (requestCode == DATA_ENTRY_REQUEST_ID) {
+            if (resultCode == RESULT_CARD_INFO || resultCode == RESULT_ENTRY_CANCELED
+                    || manualEntryFallbackOrForced) {
+                setResultAndFinish(resultCode, data);
+            } else {
+                if (mUIBar != null) {
+                    mUIBar.setVisibility(View.VISIBLE);
                 }
-                break;
+            }
         }
     }
 
@@ -751,7 +721,7 @@ public final class CardIOActivity extends Activity {
 
     // end static
 
-    void onFirstFrame(int orientation) {
+    void onFirstFrame() {
         SurfaceView sv = mPreview.getSurfaceView();
         if (mOverlay != null) {
             mOverlay.setCameraPreviewRect(new Rect(sv.getLeft(), sv.getTop(), sv.getRight(), sv
@@ -760,10 +730,6 @@ public final class CardIOActivity extends Activity {
         mFrameOrientation = ORIENTATION_PORTRAIT;
         setDeviceDegrees(0);
 
-        if (orientation != mFrameOrientation) {
-            Log.wtf(Util.PUBLIC_LOG_TAG,
-                    "the orientation of the scanner doesn't match the orientation of the activity");
-        }
         onEdgeUpdate(new DetectionInfo());
     }
 
@@ -894,8 +860,6 @@ public final class CardIOActivity extends Activity {
         sv = mPreview.getSurfaceView();
 
         if (sv == null) {
-            Log.wtf(Util.PUBLIC_LOG_TAG,
-                    "surface view is null.. recovering... rotation might be weird.");
             return;
         }
 
@@ -956,9 +920,6 @@ public final class CardIOActivity extends Activity {
             if (color != 0) {
                 // force 100% opaque guide colors.
                 int alphaRemovedColor = color | 0xFF000000;
-                if (color != alphaRemovedColor) {
-                    Log.w(Util.PUBLIC_LOG_TAG, "Removing transparency from provided guide color.");
-                }
                 mOverlay.setGuideColor(alphaRemovedColor);
             } else {
                 // default to greeeeeen
