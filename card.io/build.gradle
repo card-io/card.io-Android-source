@@ -19,7 +19,7 @@ android {
             moduleName "cardioRecognizer"
         }
 
-        consumerProguardFiles 'release-proguard.cfg'
+        consumerProguardFiles 'proguard.cfg'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -29,16 +29,6 @@ android {
     externalNativeBuild {
         ndkBuild {
             path 'src/main/jni/Android.mk'
-        }
-    }
-
-    buildTypes {
-        debug {
-        }
-
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-build.cfg'
         }
     }
 }
