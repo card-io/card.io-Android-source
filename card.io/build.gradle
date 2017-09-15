@@ -15,6 +15,10 @@ android {
         minSdkVersion 16
         targetSdkVersion rootProject.ext.sdkVersion
 
+        ndk {
+            moduleName "cardioRecognizer"
+        }
+
         consumerProguardFiles 'release-proguard.cfg'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -22,9 +26,10 @@ android {
 
     resourcePrefix 'cio_'
 
-    sourceSets.main {
-        jni.srcDirs = []
-        jniLibs.srcDir 'src/main/libs'
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
     }
 
     buildTypes {
@@ -34,30 +39,6 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-build.cfg'
-        }
-    }
-
-    task cleanNative(type: Exec, description: 'Clean JNI object files') {
-        commandLine "$android.ndkDirectory/ndk-build",
-                '-C', file('src/main/jni').absolutePath,
-                'clean'
-    }
-    clean.dependsOn cleanNative
-
-    task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
-        commandLine "$android.ndkDirectory/ndk-build",
-                '-C', file('src/main/jni').absolutePath,
-                '-j', Runtime.runtime.availableProcessors(),
-                'all'
-    }
-    tasks.withType(JavaCompile) {
-        compileTask -> compileTask.dependsOn buildNative
-    }
-
-    tasks.whenTaskAdded { theTask ->
-        if (theTask.name == "packageReleaseJniLibs"
-                || theTask.name == "packageDebugJniLibs") {
-            theTask.dependsOn(buildNative)
         }
     }
 }
