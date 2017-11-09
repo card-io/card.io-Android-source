@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:3.0.0'
     }
 }
 
@@ -17,13 +17,13 @@ repositories {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "io.card.development"
         minSdkVersion 18
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
@@ -36,14 +36,14 @@ android {
         }
     }
 
-    android.applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                output.outputFile = new File(outputFile.parent, "card.io-sample-app-${variant.name}.apk")
-            }
-        }
-    }
+//    android.applicationVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            def outputFile = output.outputFile
+//            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//                output.outputFile = new File(outputFile.parent, "card.io-sample-app-${variant.name}.apk")
+//            }
+//        }
+//    }
 }
 
 dependencies {
