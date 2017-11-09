@@ -1,7 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
-apply plugin: 'signing'
 apply plugin: 'io.codearte.nexus-staging'
+if (project.hasProperty("signing.keyId")) {
+    apply plugin: 'signing'
+}
 
 repositories {
     mavenCentral()
@@ -72,8 +74,10 @@ artifacts {
     archives sourcesJar
 }
 
-signing {
-    sign configurations.archives
+if (project.hasProperty("signing.keyId")) {
+    signing {
+        sign configurations.archives
+    }
 }
 
 
@@ -86,7 +90,7 @@ nexusStaging {
 
 uploadArchives {
     doFirst {
-        assert sonatypeUsername != null && sonatypePassword != null : "Specify SONATYPE_USERNAME and SONATYPE_PASSWORD as environment variables"
+        assert sonatypeUsername != null && sonatypePassword != null: "Specify SONATYPE_USERNAME and SONATYPE_PASSWORD as environment variables"
     }
 
     repositories {
