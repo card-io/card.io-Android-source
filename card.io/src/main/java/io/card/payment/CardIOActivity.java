@@ -176,6 +176,12 @@ public final class CardIOActivity extends Activity {
     public static final String EXTRA_HIDE_CARDIO_LOGO = "io.card.payment.hideLogo";
 
     /**
+     * Boolean extra. Optional. Defaults to <code>false</code>. When set to <code>true</code> the
+     * flash camera toggle button will not be shown overlaid on the camera.
+     */
+    public static final String EXTRA_HIDE_TORCH_BUTTON = "io.card.payment.hideCameraFlashButton";
+
+    /**
      * String extra. Optional. Used to display instructions to the user while they are scanning
      * their card.
      */
@@ -275,7 +281,7 @@ public final class CardIOActivity extends Activity {
 
     private static final float UIBAR_VERTICAL_MARGIN_DP = 15.0f;
 
-    private static final long[] VIBRATE_PATTERN = { 0, 70, 10, 40 };
+    private static final long[] VIBRATE_PATTERN = {0, 70, 10, 40};
 
     private static final int TOAST_OFFSET_Y = -75;
 
@@ -290,19 +296,18 @@ public final class CardIOActivity extends Activity {
 
     private CreditCard mDetectedCard;
     private Rect mGuideFrame;
+    private LinearLayout customOverlayLayout;
+    private RelativeLayout mUIBar;
+    private FrameLayout mMainLayout;
+    private CardScanner mCardScanner;
+
     private int mLastDegrees;
     private int mFrameOrientation;
     private boolean suppressManualEntry;
     private boolean mDetectOnly;
-    private LinearLayout customOverlayLayout;
+    private boolean mHideTorchButton;
     private boolean waitingForPermission;
-
-    private RelativeLayout mUIBar;
-    private FrameLayout mMainLayout;
     private boolean useApplicationTheme;
-
-    private CardScanner mCardScanner;
-
     private boolean manualEntryFallbackOrForced = false;
 
     /**
@@ -337,6 +342,8 @@ public final class CardIOActivity extends Activity {
         ResolveInfo resolveInfo;
         String errorMsg;
 
+        mHideTorchButton = clientData.getBooleanExtra(EXTRA_HIDE_TORCH_BUTTON, false);
+
         // Check for DataEntryActivity's portrait orientation
 
         // Check for CardIOActivity's orientation config in manifest
@@ -357,7 +364,7 @@ public final class CardIOActivity extends Activity {
 
         if (clientData.getBooleanExtra(EXTRA_NO_CAMERA, false)) {
             manualEntryFallbackOrForced = true;
-        } else if (!CardScanner.processorSupported()){
+        } else if (!CardScanner.processorSupported()) {
             manualEntryFallbackOrForced = true;
         } else {
             try {
@@ -381,7 +388,27 @@ public final class CardIOActivity extends Activity {
                 handleGeneralExceptionError(e);
             }
         }
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+//        suppressManualEntry = savedInstanceState.getBoolean(EXTRA_SUPPRESS_MANUAL_ENTRY);
+//        mDetectOnly = savedInstanceState.getBoolean(EXTRA_SUPPRESS_SCAN);
+//        mHideTorchButton = savedInstanceState.getBoolean(EXTRA_HIDE_TORCH_BUTTON);
+//        useApplicationTheme = savedInstanceState.getBoolean(EXTRA_KEEP_APPLICATION_THEME);
+//        manualEntryFallbackOrForced = savedInstanceState.getBoolean(EXTRA_MANUAL_ENTRY_RESULT);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(BUNDLE_WAITING_FOR_PERMISSION, waitingForPermission);
+//        outState.putBoolean(EXTRA_SUPPRESS_MANUAL_ENTRY, suppressManualEntry);
+//        outState.putBoolean(EXTRA_SUPPRESS_SCAN, mDetectOnly);
+//        outState.putBoolean(EXTRA_HIDE_TORCH_BUTTON, mHideTorchButton);
+//        outState.putBoolean(EXTRA_KEEP_APPLICATION_THEME, useApplicationTheme);
+//        outState.putBoolean(EXTRA_MANUAL_ENTRY_RESULT, manualEntryFallbackOrForced);
     }
 
     private void android23AndAboveHandleCamera() {
@@ -392,7 +419,6 @@ public final class CardIOActivity extends Activity {
             showCameraScannerOverlay();
         }
     }
-
 
     private void android22AndBelowHandleCamera() {
         if (manualEntryFallbackOrForced) {
@@ -459,8 +485,8 @@ public final class CardIOActivity extends Activity {
                 Class<?> testScannerClass = Class.forName("io.card.payment.CardScannerTester");
                 Constructor<?> cons = testScannerClass.getConstructor(this.getClass(),
                         Integer.TYPE);
-                mCardScanner = (CardScanner) cons.newInstance(new Object[] { this,
-                        mFrameOrientation });
+                mCardScanner = (CardScanner) cons.newInstance(new Object[]{this,
+                        mFrameOrientation});
             } else {
                 mCardScanner = new CardScanner(this, mFrameOrientation);
             }
@@ -573,13 +599,6 @@ public final class CardIOActivity extends Activity {
 
             doOrientationChange(mLastDegrees);
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putBoolean(BUNDLE_WAITING_FOR_PERMISSION, waitingForPermission);
     }
 
     @Override
@@ -759,9 +778,9 @@ public final class CardIOActivity extends Activity {
         float sf;
         if (mFrameOrientation == ORIENTATION_PORTRAIT
                 || mFrameOrientation == ORIENTATION_PORTRAIT_UPSIDE_DOWN) {
-            sf = mGuideFrame.right / (float)CardScanner.CREDIT_CARD_TARGET_WIDTH * .95f;
+            sf = mGuideFrame.right / (float) CardScanner.CREDIT_CARD_TARGET_WIDTH * .95f;
         } else {
-            sf = mGuideFrame.right / (float)CardScanner.CREDIT_CARD_TARGET_WIDTH * 1.15f;
+            sf = mGuideFrame.right / (float) CardScanner.CREDIT_CARD_TARGET_WIDTH * 1.15f;
         }
 
         Matrix m = new Matrix();
@@ -908,7 +927,8 @@ public final class CardIOActivity extends Activity {
                 LayoutParams.MATCH_PARENT, Gravity.TOP));
         previewFrame.addView(mPreview);
 
-        mOverlay = new OverlayView(this, null, Util.deviceSupportsTorch(this));
+        boolean showTorch = Util.deviceSupportsTorch(this) && !mHideTorchButton;
+        mOverlay = new OverlayView(this, null, showTorch);
         mOverlay.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
         if (getIntent() != null) {
@@ -968,7 +988,7 @@ public final class CardIOActivity extends Activity {
             });
             mUIBar.addView(keyboardBtn);
             ViewUtil.styleAsButton(keyboardBtn, false, this, useApplicationTheme);
-            if(!useApplicationTheme){
+            if (!useApplicationTheme) {
                 keyboardBtn.setTextSize(Appearance.TEXT_SIZE_SMALL_BUTTON);
             }
             keyboardBtn.setMinimumHeight(ViewUtil.typedDimensionValueToPixelsInt(

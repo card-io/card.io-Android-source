@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:3.0.0'
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
     }
 }
@@ -11,6 +11,6 @@ buildscript {
 task assemble {}
 
 ext {
-    sdkVersion = 25
-    buildToolsVersion = '25.0.2'
+    sdkVersion = 26
+    buildToolsVersion = '26.0.2'
 }

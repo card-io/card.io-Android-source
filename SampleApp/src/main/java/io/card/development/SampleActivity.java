@@ -30,7 +30,6 @@ import io.card.payment.i18n.SupportedLocale;
 import io.card.payment.i18n.locales.LocalizedStringsList;
 
 public class SampleActivity extends Activity {
-
     protected static final String TAG = SampleActivity.class.getSimpleName();
 
     private static final int REQUEST_SCAN = 100;
@@ -56,6 +55,7 @@ public class SampleActivity extends Activity {
     private CheckBox mUseCardIOLogoToggle;
     private CheckBox mShowPayPalActionBarIconToggle;
     private CheckBox mKeepApplicationThemeToggle;
+    private CheckBox mHideTorchButtonToggle;
     private Spinner mLanguageSpinner;
     private EditText mUnblurEdit;
 
@@ -64,32 +64,29 @@ public class SampleActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sample_activity);
 
-        mManualToggle = (CheckBox) findViewById(R.id.force_manual);
-        mEnableExpiryToggle = (CheckBox) findViewById(R.id.gather_expiry);
-        mScanExpiryToggle = (CheckBox) findViewById(R.id.scan_expiry);
-        mCvvToggle = (CheckBox) findViewById(R.id.gather_cvv);
-        mPostalCodeToggle = (CheckBox) findViewById(R.id.gather_postal_code);
-        mPostalCodeNumericOnlyToggle = (CheckBox) findViewById(R.id.postal_code_numeric_only);
-        mCardholderNameToggle = (CheckBox) findViewById(R.id.gather_cardholder_name);
-        mSuppressManualToggle = (CheckBox) findViewById(R.id.suppress_manual);
-        mSuppressConfirmationToggle = (CheckBox) findViewById(R.id.suppress_confirmation);
-        mSuppressScanToggle = (CheckBox) findViewById(R.id.detect_only);
+        mManualToggle = findViewById(R.id.force_manual);
+        mEnableExpiryToggle = findViewById(R.id.gather_expiry);
+        mScanExpiryToggle = findViewById(R.id.scan_expiry);
+        mCvvToggle = findViewById(R.id.gather_cvv);
+        mPostalCodeToggle = findViewById(R.id.gather_postal_code);
+        mPostalCodeNumericOnlyToggle = findViewById(R.id.postal_code_numeric_only);
+        mCardholderNameToggle = findViewById(R.id.gather_cardholder_name);
+        mSuppressManualToggle = findViewById(R.id.suppress_manual);
+        mSuppressConfirmationToggle = findViewById(R.id.suppress_confirmation);
+        mSuppressScanToggle = findViewById(R.id.detect_only);
+        mUseCardIOLogoToggle = findViewById(R.id.use_card_io_logo);
+        mShowPayPalActionBarIconToggle = findViewById(R.id.show_paypal_action_bar_icon);
+        mKeepApplicationThemeToggle = findViewById(R.id.keep_application_theme);
+        mHideTorchButtonToggle = findViewById(R.id.hide_torch_button);
+        mLanguageSpinner = findViewById(R.id.language);
+        mUnblurEdit = findViewById(R.id.unblur);
+        mResultLabel = findViewById(R.id.result);
+        mResultImage = findViewById(R.id.result_image);
+        mResultCardTypeImage = findViewById(R.id.result_card_type_image);
 
-        mUseCardIOLogoToggle = (CheckBox) findViewById(R.id.use_card_io_logo);
-        mShowPayPalActionBarIconToggle = (CheckBox) findViewById(R.id.show_paypal_action_bar_icon);
-        mKeepApplicationThemeToggle = (CheckBox) findViewById(R.id.keep_application_theme);
-
-        mLanguageSpinner = (Spinner) findViewById(R.id.language);
-        mUnblurEdit = (EditText) findViewById(R.id.unblur);
-
-        mResultLabel = (TextView) findViewById(R.id.result);
-        mResultImage = (ImageView) findViewById(R.id.result_image);
-        mResultCardTypeImage = (ImageView) findViewById(R.id.result_card_type_image);
-
-        TextView version = (TextView) findViewById(R.id.version);
+        TextView version = findViewById(R.id.version);
         version.setText("card.io library: " + CardIOActivity.sdkVersion() + "\n" +
                 "Build date: " + CardIOActivity.sdkBuildDate());
-
         setScanExpiryEnabled();
         setupLanguageList();
     }
@@ -116,39 +113,35 @@ public class SampleActivity extends Activity {
                 .putExtra(CardIOActivity.EXTRA_LANGUAGE_OR_LOCALE, (String) mLanguageSpinner.getSelectedItem())
                 .putExtra(CardIOActivity.EXTRA_USE_PAYPAL_ACTIONBAR_ICON, mShowPayPalActionBarIconToggle.isChecked())
                 .putExtra(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME, mKeepApplicationThemeToggle.isChecked())
+                .putExtra(CardIOActivity.EXTRA_HIDE_TORCH_BUTTON, mHideTorchButtonToggle.isChecked())
                 .putExtra(CardIOActivity.EXTRA_GUIDE_COLOR, Color.GREEN)
                 .putExtra(CardIOActivity.EXTRA_SUPPRESS_CONFIRMATION, mSuppressConfirmationToggle.isChecked())
                 .putExtra(CardIOActivity.EXTRA_SUPPRESS_SCAN, mSuppressScanToggle.isChecked())
                 .putExtra(CardIOActivity.EXTRA_RETURN_CARD_IMAGE, true);
-
         try {
             int unblurDigits = Integer.parseInt(mUnblurEdit.getText().toString());
             intent.putExtra(CardIOActivity.EXTRA_UNBLUR_DIGITS, unblurDigits);
-        } catch(NumberFormatException ignored) {}
-
+        } catch (NumberFormatException ignored) {
+        }
         startActivityForResult(intent, REQUEST_SCAN);
     }
 
     public void onAutotest(View v) {
         Log.i(TAG, "\n\n\n ============================== \n" + "successfully completed "
                 + numAutotestsPassed + " tests\n" + "beginning new test run\n");
-
         Intent intent = new Intent(this, CardIOActivity.class)
                 .putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false)
                 .putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, false)
                 .putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false)
                 .putExtra(CardIOActivity.EXTRA_REQUIRE_CARDHOLDER_NAME, false)
                 .putExtra("debug_autoAcceptResult", true);
-
         startActivityForResult(intent, REQUEST_AUTOTEST);
-
         autotestMode = true;
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
         mResultLabel.setText("");
     }
 
@@ -157,7 +150,7 @@ public class SampleActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.v(TAG, "onActivityResult(" + requestCode + ", " + resultCode + ", " + data + ")");
 
-        String outStr = new String();
+        String outStr = "";
         Bitmap cardTypeImage = null;
 
         if ((requestCode == REQUEST_SCAN || requestCode == REQUEST_AUTOTEST) && data != null
@@ -204,9 +197,7 @@ public class SampleActivity extends Activity {
         Bitmap card = CardIOActivity.getCapturedCardImage(data);
         mResultImage.setImageBitmap(card);
         mResultCardTypeImage.setImageBitmap(cardTypeImage);
-
         Log.i(TAG, "Set result: " + outStr);
-
         mResultLabel.setText(outStr);
     }
 
