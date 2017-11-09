@@ -1,9 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'io.codearte.nexus-staging'
-if (project.hasProperty("signing.keyId")) {
-    apply plugin: 'signing'
-}
 
 repositories {
     mavenCentral()
@@ -74,13 +71,6 @@ artifacts {
     archives sourcesJar
 }
 
-if (project.hasProperty("signing.keyId")) {
-    signing {
-        sign configurations.archives
-    }
-}
-
-
 def sonatypeUsername = System.env['SONATYPE_USERNAME']
 def sonatypePassword = System.env['SONATYPE_PASSWORD']
 
@@ -88,49 +78,57 @@ nexusStaging {
     packageGroup = "io.card"
 }
 
-uploadArchives {
-    doFirst {
-        assert sonatypeUsername != null && sonatypePassword != null: "Specify SONATYPE_USERNAME and SONATYPE_PASSWORD as environment variables"
-    }
+if (project.hasProperty("signing.keyId")) {
+    uploadArchives {
+        apply plugin: 'signing'
 
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+        signing {
+            sign configurations.archives
+        }
 
-            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
+        doFirst {
+            assert sonatypeUsername != null && sonatypePassword != null: "Specify SONATYPE_USERNAME and SONATYPE_PASSWORD as environment variables"
+        }
 
-            pom.setArtifactId 'android-sdk'
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            pom.project {
-                name 'android-sdk'
-                groupId = 'io.card'
-                version = "${android.defaultConfig.versionName}"
-                packaging 'aar'
-                description 'This is card.io\'s SDK for Android.'
-                url 'https://github.com/card-io/card.io-Android-source'
-
-                scm {
-                    url 'scm:git@github.com:card-io/card.io-Android-source.git'
-                    connection 'scm:git@github.com:card-io/card.io-Android-source.git'
-                    developerConnection 'scm:git@github.com:card-io/card.io-Android-source.git'
+                repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+                    authentication(userName: sonatypeUsername, password: sonatypePassword)
                 }
 
-                developers {
+                pom.setArtifactId 'android-sdk'
+
+                pom.project {
+                    name 'android-sdk'
+                    groupId = 'io.card'
+                    version = "${android.defaultConfig.versionName}"
+                    packaging 'aar'
+                    description 'This is card.io\'s SDK for Android.'
+                    url 'https://github.com/card-io/card.io-Android-source'
+
+                    scm {
+                        url 'scm:git@github.com:card-io/card.io-Android-source.git'
+                        connection 'scm:git@github.com:card-io/card.io-Android-source.git'
+                        developerConnection 'scm:git@github.com:card-io/card.io-Android-source.git'
+                    }
+
                     developers {
-                        developer {
-                            id 'devs'
-                            name 'Braintree Payments'
+                        developers {
+                            developer {
+                                id 'devs'
+                                name 'Braintree Payments'
+                            }
                         }
                     }
-                }
 
-                licenses {
-                    license {
-                        name 'MIT'
-                        url 'http://opensource.org/licenses/MIT'
-                        distribution 'repo'
+                    licenses {
+                        license {
+                            name 'MIT'
+                            url 'http://opensource.org/licenses/MIT'
+                            distribution 'repo'
+                        }
                     }
                 }
             }
