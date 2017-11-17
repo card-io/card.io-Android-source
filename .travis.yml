@@ -31,10 +31,4 @@ before_script:
   - android-wait-for-emulator
   - sleep 60
   - adb shell input keyevent 82
-script: ./gradlew clean test connectedAndroidTest :card.io:assembleRelease releaseDoc
-notifications:
-  webhooks:
-    urls:
-      - secure: A1YKQ32CBvm6s0gfwb+UKZuniYdb5ZUENvSpSt/k7nQmyZ9U0p4Sn8qqSSKfRyYVRLT3C3za53aoqFwSqFj6mZ82YO6HbKl/RqhGQLmdIPpyhXKUE5xKlyMbgmAYRBDh41+eQ1i22mkT+jiqVW06VFSB0YyeDKAZjXxk8hfyIUA=
-    on_success: change
-    on_failure: always
+script: ./gradlew clean test connectedAndroidTest :card.io:assembleRelease javadoc

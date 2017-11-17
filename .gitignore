@@ -1,26 +1,10 @@
-# Built application files
-*.apk
-*.ap_
-
-# Files for the dex VM
-*.dex
-
-# Java class files
-*.class
-
-# Generated files
-bin/
-gen/
-
 # Gradle files
-.gradle/
-build/
+.gradle
+build
+.externalNativeBuild
 
 # Local configuration file (sdk path, etc)
 local.properties
-
-# Eclipse settings files
-.settings/
 
 # IntelliJ project files
 *.iml
@@ -35,9 +19,6 @@ local.properties
 gdb.setup
 gdbserver
 .cproject
-card.io/proguard-data/card.io-android-*-g*
-card.io/proguard-data/card.io-android-*-dirty
-card.io/proguard-data/card.io-android-WL*
 opencv/build-*
 opencv/OpenCV-*
 /out/

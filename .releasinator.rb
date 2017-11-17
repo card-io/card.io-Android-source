@@ -31,7 +31,7 @@ configatron.release_to_github = false
 
 def build_cardio()
   CommandProcessor.command("rm -rf card.io/src/main/libs/* card.io/src/main/obj/*")
-  CommandProcessor.command("./gradlew clean :card.io:assembleRelease releaseDoc", live_output=true)
+  CommandProcessor.command("./gradlew clean :card.io:assembleRelease javadoc", live_output=true)
 end
 
 # The method that builds the sdk.  Required.
@@ -124,11 +124,11 @@ configatron.downstream_repos = [
 ]
 
 def build_docs()
-  CommandProcessor.command("./gradlew releaseDoc", live_output=true)
+  CommandProcessor.command("./gradlew javadoc", live_output=true)
 end
 
 configatron.doc_build_method = method(:build_docs)
 configatron.doc_target_dir = "downstream_repos/card.io-Android-SDK"
 configatron.doc_files_to_copy = [
-  CopyFile.new("card.io/build/docs/javadoc/release/*", ".", ".")
+  CopyFile.new("card.io/build/docs/javadoc/*", ".", ".")
 ]
