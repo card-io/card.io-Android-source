@@ -83,6 +83,10 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
     private int defaultTextColor;
 
     private static final String TAG = DataEntryActivity.class.getSimpleName();
+    
+    boolean requireExpiry;
+    boolean requireCVV;
+    boolean requirePostalCode;
 
     @SuppressWarnings("ResourceType")
     @Override
@@ -199,9 +203,9 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
         ViewUtil.setPadding(optionLayout, null, PADDING_DIP, null, PADDING_DIP);
         optionLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        boolean requireExpiry = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false);
-        boolean requireCVV = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_CVV, false);
-        boolean requirePostalCode = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false);
+        requireExpiry       = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false);
+        requireCVV          = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_CVV, false);
+        requirePostalCode   = getIntent().getBooleanExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false);
 
         if (requireExpiry) {
             LinearLayout expiryLayout = new LinearLayout(this);
@@ -514,13 +518,14 @@ public final class DataEntryActivity extends Activity implements TextWatcher {
             } else {
                 setDefaultColor(numberEdit);
             }
-
-            if (cvvEdit != null) {
-                CardType type = CardType.fromCardNumber(numberValidator.getValue().toString());
-                FixedLengthValidator v = (FixedLengthValidator) cvvValidator;
-                int length = type.cvvLength();
-                v.requiredLength = length;
-                cvvEdit.setHint(length == 4 ? "1234" : "123");
+            if (requireCVV) {
+                if (cvvEdit != null) {
+                    CardType type = CardType.fromCardNumber(numberValidator.getValue().toString());
+                    FixedLengthValidator v = (FixedLengthValidator) cvvValidator;
+                    int length = type.cvvLength();
+                    v.requiredLength = length;
+                    cvvEdit.setHint(length == 4 ? "1234" : "123");
+                }
             }
         } else if (expiryEdit != null && et == expiryEdit.getText()) {
             if (expiryValidator.hasFullLength()) {
