@@ -104,6 +104,7 @@ class OverlayView extends View {
     private GradientDrawable mGradientDrawable;
     private final Paint mGuidePaint;
     private final Paint mLockedBackgroundPaint;
+    private final TextPaint mGuideTextPaint;
     private Path mLockedBackgroundPath;
     private Rect mCameraPreviewRect;
     private final Torch mTorch;
@@ -133,6 +134,11 @@ class OverlayView extends View {
         mLockedBackgroundPaint.clearShadowLayer();
         mLockedBackgroundPaint.setStyle(Paint.Style.FILL);
         mLockedBackgroundPaint.setColor(0xbb000000); // 75% black
+        
+        // Set up paint attributes
+        mGuideTextPaint = new TextPaint();
+        Util.setupTextPaintStyle(mGuideTextPaint);
+        mGuideTextPaint.setTextAlign(Align.CENTER);
 
         scanInstructions = LocalizedStrings.getString(StringKey.SCAN_GUIDE);
     }
@@ -338,26 +344,27 @@ class OverlayView extends View {
 
             if (mDInfo.numVisibleEdges() < 3) {
                 // Draw guide text
-                // Set up paint attributes
-                float guideHeight = GUIDE_LINE_HEIGHT * mScale;
                 float guideFontSize = GUIDE_FONT_SIZE * mScale;
 
-                Util.setupTextPaintStyle(mGuidePaint);
-                mGuidePaint.setTextAlign(Align.CENTER);
-                mGuidePaint.setTextSize(guideFontSize);
+                mGuideTextPaint.setTextSize(guideFontSize);
 
-                // Translate and rotate text
-                canvas.translate(mGuide.left + mGuide.width() / 2, mGuide.top + mGuide.height() / 2);
-                canvas.rotate(mRotationFlip * mRotation);
-
+                int textWidth = mRotationFlip == 1 ? mGuide.width() : mGuide.height();
                 if (scanInstructions != null && scanInstructions != "") {
-                    String[] lines = scanInstructions.split("\n");
-                    float y = -(((guideHeight * (lines.length - 1)) - guideFontSize) / 2) - 3;
+                    StaticLayout sl = new StaticLayout(scanInstructions, mGuideTextPaint, textWidth, Layout.Alignment.ALIGN_NORMAL, 1, 0, false);
 
-                    for (int i = 0; i < lines.length; i++) {
-                        canvas.drawText(lines[i], 0, y, mGuidePaint);
-                        y += guideHeight;
+                    int dx = mGuide.left + (mGuide.width() / 2);
+                    int dy = mGuide.top + (mGuide.height() / 2);
+
+                    int moveToCenter = mRotation / 90 > 1 ? 1 : -1;
+
+                    if (mRotationFlip == 1) {
+                        canvas.translate(dx, dy + (sl.getHeight() / 2) * moveToCenter);
+                    }else {
+                        canvas.translate(dx + (sl.getHeight() / 2) * moveToCenter, dy);
                     }
+
+                    canvas.rotate(mRotationFlip * mRotation);
+                    sl.draw(canvas);
                 }
             }
         }
