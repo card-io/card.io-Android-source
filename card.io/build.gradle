@@ -25,7 +25,7 @@ ext {
     libraryVersion = LIB_VERSION
 
     developerId = 'rainai'
-    developerName = 'Rex M. Torre'
+    developerName = 'Rex M. Torres'
     developerEmail = 'rexmtorres@gmail.com'
 
     licenseName = 'MIT'
