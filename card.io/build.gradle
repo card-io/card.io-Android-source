@@ -10,7 +10,7 @@ repositories {
 }
 
 ext {
-    bintrayRepo = 'card.io'
+    bintrayRepo = 'maven'
     bintrayName = 'card.io'
 
     publishedGroupId = 'com.rmt.android'
