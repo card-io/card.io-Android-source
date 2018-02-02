@@ -56,6 +56,8 @@ public class SampleActivity extends Activity {
     private CheckBox mUseCardIOLogoToggle;
     private CheckBox mShowPayPalActionBarIconToggle;
     private CheckBox mKeepApplicationThemeToggle;
+    private CheckBox mLockOrientationToggle;
+    private CheckBox mAddOverlayToggle;
     private Spinner mLanguageSpinner;
     private EditText mUnblurEdit;
 
@@ -64,29 +66,32 @@ public class SampleActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sample_activity);
 
-        mManualToggle = (CheckBox) findViewById(R.id.force_manual);
-        mEnableExpiryToggle = (CheckBox) findViewById(R.id.gather_expiry);
-        mScanExpiryToggle = (CheckBox) findViewById(R.id.scan_expiry);
-        mCvvToggle = (CheckBox) findViewById(R.id.gather_cvv);
-        mPostalCodeToggle = (CheckBox) findViewById(R.id.gather_postal_code);
-        mPostalCodeNumericOnlyToggle = (CheckBox) findViewById(R.id.postal_code_numeric_only);
-        mCardholderNameToggle = (CheckBox) findViewById(R.id.gather_cardholder_name);
-        mSuppressManualToggle = (CheckBox) findViewById(R.id.suppress_manual);
-        mSuppressConfirmationToggle = (CheckBox) findViewById(R.id.suppress_confirmation);
-        mSuppressScanToggle = (CheckBox) findViewById(R.id.detect_only);
+        mManualToggle = findViewById(R.id.force_manual);
+        mEnableExpiryToggle = findViewById(R.id.gather_expiry);
+        mScanExpiryToggle = findViewById(R.id.scan_expiry);
+        mCvvToggle = findViewById(R.id.gather_cvv);
+        mPostalCodeToggle = findViewById(R.id.gather_postal_code);
+        mPostalCodeNumericOnlyToggle = findViewById(R.id.postal_code_numeric_only);
+        mCardholderNameToggle = findViewById(R.id.gather_cardholder_name);
+        mSuppressManualToggle = findViewById(R.id.suppress_manual);
+        mSuppressConfirmationToggle = findViewById(R.id.suppress_confirmation);
+        mSuppressScanToggle = findViewById(R.id.detect_only);
 
-        mUseCardIOLogoToggle = (CheckBox) findViewById(R.id.use_card_io_logo);
-        mShowPayPalActionBarIconToggle = (CheckBox) findViewById(R.id.show_paypal_action_bar_icon);
-        mKeepApplicationThemeToggle = (CheckBox) findViewById(R.id.keep_application_theme);
+        mUseCardIOLogoToggle = findViewById(R.id.use_card_io_logo);
+        mShowPayPalActionBarIconToggle = findViewById(R.id.show_paypal_action_bar_icon);
+        mKeepApplicationThemeToggle = findViewById(R.id.keep_application_theme);
 
-        mLanguageSpinner = (Spinner) findViewById(R.id.language);
-        mUnblurEdit = (EditText) findViewById(R.id.unblur);
+        mLockOrientationToggle = findViewById(R.id.lock_orientation);
+        mAddOverlayToggle = findViewById(R.id.add_overlay);
 
-        mResultLabel = (TextView) findViewById(R.id.result);
-        mResultImage = (ImageView) findViewById(R.id.result_image);
-        mResultCardTypeImage = (ImageView) findViewById(R.id.result_card_type_image);
+        mLanguageSpinner = findViewById(R.id.language);
+        mUnblurEdit = findViewById(R.id.unblur);
 
-        TextView version = (TextView) findViewById(R.id.version);
+        mResultLabel = findViewById(R.id.result);
+        mResultImage = findViewById(R.id.result_image);
+        mResultCardTypeImage = findViewById(R.id.result_card_type_image);
+
+        TextView version = findViewById(R.id.version);
         version.setText("card.io library: " + CardIOActivity.sdkVersion() + "\n" +
                 "Build date: " + CardIOActivity.sdkBuildDate());
 
@@ -116,10 +121,15 @@ public class SampleActivity extends Activity {
                 .putExtra(CardIOActivity.EXTRA_LANGUAGE_OR_LOCALE, (String) mLanguageSpinner.getSelectedItem())
                 .putExtra(CardIOActivity.EXTRA_USE_PAYPAL_ACTIONBAR_ICON, mShowPayPalActionBarIconToggle.isChecked())
                 .putExtra(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME, mKeepApplicationThemeToggle.isChecked())
+                .putExtra(CardIOActivity.EXTRA_LOCK_ORIENTATION, mLockOrientationToggle.isChecked())
                 .putExtra(CardIOActivity.EXTRA_GUIDE_COLOR, Color.GREEN)
                 .putExtra(CardIOActivity.EXTRA_SUPPRESS_CONFIRMATION, mSuppressConfirmationToggle.isChecked())
                 .putExtra(CardIOActivity.EXTRA_SUPPRESS_SCAN, mSuppressScanToggle.isChecked())
                 .putExtra(CardIOActivity.EXTRA_RETURN_CARD_IMAGE, true);
+
+        if (mAddOverlayToggle.isChecked()) {
+            intent.putExtra(CardIOActivity.EXTRA_SCAN_OVERLAY_LAYOUT_ID, R.layout.overlay_layout);
+        }
 
         try {
             int unblurDigits = Integer.parseInt(mUnblurEdit.getText().toString());

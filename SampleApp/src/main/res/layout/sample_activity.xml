@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".SampleActivity">
+    android:padding="16dp">
+    <!--tools:context=".SampleActivity">-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -109,6 +109,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Keep application theme"/>
+
+        <CheckBox
+            android:id="@+id/lock_orientation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lock orientation"/>
+
+        <CheckBox
+            android:id="@+id/add_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show sample overlay layout"/>
 
         <LinearLayout
             android:layout_width="match_parent"

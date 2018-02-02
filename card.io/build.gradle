@@ -1,10 +1,33 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
-apply plugin: 'signing'
-apply plugin: 'io.codearte.nexus-staging'
+
+def LIB_VERSION = "5.5.2"
 
 repositories {
     mavenCentral()
+}
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'card.io'
+
+    publishedGroupId = 'com.rmt.android'
+    libraryName = 'card.io'
+    artifact = 'card.io'
+
+    libraryDescription = 'Fork of card.io Android SDK.'
+
+    siteUrl = 'https://github.com/rexmtorres/card.io-Android-source'
+    gitUrl = 'https://github.com/rexmtorres/card.io-Android-source.git'
+
+    libraryVersion = LIB_VERSION
+
+    developerId = 'rainai'
+    developerName = 'Rex M. Torres'
+    developerEmail = 'rexmtorres@gmail.com'
+
+    licenseName = 'MIT'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
 }
 
 android {
@@ -14,6 +37,7 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion rootProject.ext.sdkVersion
+        versionName LIB_VERSION
 
         ndk {
             moduleName "cardioRecognizer"
@@ -38,98 +62,81 @@ dependencies {
     testCompile "org.robolectric:robolectric:3.1.2"
 }
 
-task javadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    failOnError false
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
 
-    options.docTitle("<h1>card.io Android SDK</h1>")
-    options.bottom("<i>Copyright &#169; 2012 PayPal, Inc. All Rights Reserved.</i>")
-    options.windowTitle("card.io Android SDK")
-    options.author(true)
-    options.version(true)
-    options.use(true)
-    options.setMemberLevel(JavadocMemberLevel.PUBLIC)
+// [START] apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+apply plugin: 'com.jfrog.bintray'
 
-    // enables links to Java 7 docs
-    options.links("http://docs.oracle.com/javase/7/docs/api/")
-    // enables links to Android docs.
-    options.linksOffline("http://d.android.com/reference", "${android.sdkDirectory}/docs/reference")
+version = libraryVersion
+
+if (project.hasProperty("android")) { // Android libraries
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+
+    task javadoc(type: Javadoc) {
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        failOnError false
+
+        options.docTitle("<h1>card.io Android SDK</h1>")
+        options.bottom("<i>Copyright &#169; 2012 PayPal, Inc. All Rights Reserved.</i>")
+        options.windowTitle("card.io Android SDK")
+        options.author(true)
+        options.version(true)
+        options.use(true)
+        options.setMemberLevel(JavadocMemberLevel.PUBLIC)
+        options.encoding = 'UTF-8'
+
+        // enables links to Java 7 docs
+        options.links("http://docs.oracle.com/javase/7/docs/api/")
+        // enables links to Android docs.
+        options.linksOffline("http://d.android.com/reference", "${android.sdkDirectory}/docs/reference")
+    }
+} else { // Java libraries
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
 }
 
-task javadocsJar(type: Jar, dependsOn: javadocs) {
+task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
-    from javadocs.destinationDir
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.srcDirs
+    from javadoc.destinationDir
 }
 
 artifacts {
-    archives javadocsJar
+    archives javadocJar
     archives sourcesJar
 }
 
-signing {
-    sign configurations.archives
-}
+// Bintray
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
 
-def sonatypeUsername = System.env['SONATYPE_USERNAME']
-def sonatypePassword = System.env['SONATYPE_PASSWORD']
-
-nexusStaging {
-    packageGroup = "io.card"
-}
-
-uploadArchives {
-    doFirst {
-        assert sonatypeUsername != null && sonatypePassword != null : "Specify SONATYPE_USERNAME and SONATYPE_PASSWORD as environment variables"
-    }
-
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-
-            pom.setArtifactId 'android-sdk'
-
-            pom.project {
-                name 'android-sdk'
-                groupId = 'io.card'
-                version = "${android.defaultConfig.versionName}"
-                packaging 'aar'
-                description 'This is card.io\'s SDK for Android.'
-                url 'https://github.com/card-io/card.io-Android-source'
-
-                scm {
-                    url 'scm:git@github.com:card-io/card.io-Android-source.git'
-                    connection 'scm:git@github.com:card-io/card.io-Android-source.git'
-                    developerConnection 'scm:git@github.com:card-io/card.io-Android-source.git'
-                }
-
-                developers {
-                    developers {
-                        developer {
-                            id 'devs'
-                            name 'Braintree Payments'
-                        }
-                    }
-                }
-
-                licenses {
-                    license {
-                        name 'MIT'
-                        url 'http://opensource.org/licenses/MIT'
-                        distribution 'repo'
-                    }
-                }
+    configurations = ['archives']
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            desc = libraryDescription
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password")
+                //Optional. The passphrase for GPG signing'
             }
         }
     }
 }
+// [END] apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

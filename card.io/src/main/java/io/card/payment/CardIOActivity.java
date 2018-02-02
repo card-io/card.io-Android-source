@@ -220,6 +220,12 @@ public final class CardIOActivity extends Activity {
      */
     public static final String EXTRA_KEEP_APPLICATION_THEME = "io.card.payment.keepApplicationTheme";
 
+    /**
+     * Boolean extra. Optional. If this value is set to <code>true</code>, the scanner view will not rotate
+     * along with the device.  Default value is {@code false}.
+     */
+    public static final String EXTRA_LOCK_ORIENTATION = "io.card.payment.lockOrientation";
+
 
     /**
      * Boolean extra. Used for testing only.
@@ -305,6 +311,8 @@ public final class CardIOActivity extends Activity {
 
     private boolean manualEntryFallbackOrForced = false;
 
+    private boolean mOrientationLocked;
+
     /**
      * Static variable for the decorated card image. This is ugly, but works. Parceling and
      * unparceling card image data to pass to the next {@link android.app.Activity} does not work because the image
@@ -325,6 +333,8 @@ public final class CardIOActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         final Intent clientData = this.getIntent();
+
+        mOrientationLocked = clientData.getBooleanExtra(EXTRA_LOCK_ORIENTATION, false);
 
         useApplicationTheme = getIntent().getBooleanExtra(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME, false);
         ActivityHelper.setActivityTheme(this, useApplicationTheme);
@@ -468,13 +478,15 @@ public final class CardIOActivity extends Activity {
 
             setPreviewLayout();
 
-            orientationListener = new OrientationEventListener(this,
-                    SensorManager.SENSOR_DELAY_UI) {
-                @Override
-                public void onOrientationChanged(int orientation) {
-                    doOrientationChange(orientation);
-                }
-            };
+            if (!mOrientationLocked) {
+                orientationListener = new OrientationEventListener(this,
+                        SensorManager.SENSOR_DELAY_UI) {
+                    @Override
+                    public void onOrientationChanged(int orientation) {
+                        doOrientationChange(orientation);
+                    }
+                };
+            }
 
         } catch (Exception e) {
             handleGeneralExceptionError(e);
@@ -497,7 +509,7 @@ public final class CardIOActivity extends Activity {
             return;
         }
 
-        orientation += mCardScanner.getRotationalOffset();
+        orientation += mOrientationLocked ? 0 : mCardScanner.getRotationalOffset();
 
         // Check if we have gone too far forward with
         // rotation adjustment, keep the result between 0-360
@@ -560,7 +572,10 @@ public final class CardIOActivity extends Activity {
             ActivityHelper.setFlagSecure(this);
 
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            orientationListener.enable();
+
+            if (orientationListener != null && !mOrientationLocked) {
+                orientationListener.enable();
+            }
 
             if (!restartPreview()) {
                 StringKey error = StringKey.ERROR_CAMERA_UNEXPECTED_FAIL;
@@ -571,7 +586,7 @@ public final class CardIOActivity extends Activity {
                 setFlashOn(false);
             }
 
-            doOrientationChange(mLastDegrees);
+            doOrientationChange(mOrientationLocked ? 0 : mLastDegrees);
         }
     }
 
@@ -976,6 +991,7 @@ public final class CardIOActivity extends Activity {
             RelativeLayout.LayoutParams keyboardParams = (RelativeLayout.LayoutParams) keyboardBtn
                     .getLayoutParams();
             keyboardParams.width = LayoutParams.WRAP_CONTENT;
+
             keyboardParams.height = LayoutParams.WRAP_CONTENT;
             keyboardParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             ViewUtil.setPadding(keyboardBtn, Appearance.CONTAINER_MARGIN_HORIZONTAL, null,
