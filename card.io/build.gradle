@@ -1,7 +1,4 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'maven'
-//apply plugin: 'signing'
-//apply plugin: 'io.codearte.nexus-staging'
 
 def LIB_VERSION = "5.5.2"
 
