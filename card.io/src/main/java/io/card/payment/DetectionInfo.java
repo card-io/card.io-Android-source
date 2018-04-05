@@ -9,7 +9,7 @@ package io.card.payment;
  * java and native code/
  */
 
-class DetectionInfo {
+public class DetectionInfo {
     public boolean complete;
     public boolean topEdge;
     public boolean bottomEdge;
