@@ -149,4 +149,5 @@ public class CardIOConstants {
      * */
     public static final String CARD_IO_VIEW = "CARD_IO_VIEW";
     public static final String CARD_EXPIRY = "CARD_EXPIRY";
+    public static final String CARD_IO_OVERLAY_COLOUR = "CARD_IO_OVERLAY_COLOUR";
 }

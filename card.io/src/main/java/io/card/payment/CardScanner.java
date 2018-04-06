@@ -206,7 +206,7 @@ public class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCall
     }
 
     /**
-    * Commented out due to fragment integration. See constructor above
+    * Commented out due to integratioin for fragment. See constructor above
     * */
     /*CardScanner(CardIOActivity scanActivity, int currentFrameOrientation) {
         Intent scanIntent = scanActivity.getIntent();

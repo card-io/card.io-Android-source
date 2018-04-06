@@ -101,9 +101,10 @@ public class CardIOFragment extends Fragment implements CardScanRecognition, Car
 
     private RelativeLayout previewFrame;
     private Intent clientData;
-    private boolean isPortraitOrientationLocked = false, includeExpiry = false;
+    private boolean isPortraitOrientationLocked = false, includeExpiry = false, hideCardIOLogo = true, useCardIOLogo = false;
     private CardScanListener cardScanListener;
-    private int cardIOViewHolder;
+    private int cardIOViewHolder, overlayGuideColour;
+    private String scanInstructions;
 
     public CardIOFragment() {
     }
@@ -117,6 +118,10 @@ public class CardIOFragment extends Fragment implements CardScanRecognition, Car
             cardIOViewHolder = bundle.getInt(CardIOConstants.CARD_IO_VIEW);
             isPortraitOrientationLocked = bundle.getBoolean(CardIOConstants.PORTRAIT_ORIENTATION_LOCK);
             includeExpiry = bundle.getBoolean(CardIOConstants.CARD_EXPIRY);
+            overlayGuideColour = bundle.getInt(CardIOConstants.CARD_IO_OVERLAY_COLOUR);
+            hideCardIOLogo = bundle.getBoolean(CardIOConstants.EXTRA_HIDE_CARDIO_LOGO);
+            scanInstructions = bundle.getString(CardIOConstants.EXTRA_SCAN_INSTRUCTIONS);
+            useCardIOLogo = bundle.getBoolean(CardIOConstants.EXTRA_USE_CARDIO_LOGO);
         }
 
         clientData = getActivity().getIntent();
@@ -536,29 +541,23 @@ public class CardIOFragment extends Fragment implements CardScanRecognition, Car
         //setup scancard overlay view
         mOverlay = new OverlayView(getActivity(), this,null, Util.deviceSupportsTorch(getActivity()));
         mOverlay.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        if (getActivity().getIntent() != null) {
-            boolean useCardIOLogo = getActivity().getIntent().getBooleanExtra(CardIOConstants.EXTRA_USE_CARDIO_LOGO, false);
-            mOverlay.setUseCardIOLogo(useCardIOLogo);
+        mOverlay.setUseCardIOLogo(useCardIOLogo);
 
-            int color = getActivity().getIntent().getIntExtra(CardIOConstants.EXTRA_GUIDE_COLOR, 0);
+        //int color = getActivity().getIntent().getIntExtra(CardIOConstants.EXTRA_GUIDE_COLOR, 0);
 
-            if (color != 0) {
-                // force 100% opaque guide colors.
-                int alphaRemovedColor = color | 0xFF000000;
-                mOverlay.setGuideColor(alphaRemovedColor);
-            } else {
-                // default to greeeeen << geez, that guys is loud
-                mOverlay.setGuideColor(Color.GREEN);
-            }
+        if (overlayGuideColour != 0) {
+            // force 100% opaque guide colors.
+            int alphaRemovedColor = overlayGuideColour | 0xFF000000;
+            mOverlay.setGuideColor(alphaRemovedColor);
+        } else {
+            // default to greeeeen << geez, that guys is loud
+            mOverlay.setGuideColor(Color.GREEN);
+        }
 
-            boolean hideCardIOLogo = getActivity().getIntent().getBooleanExtra(CardIOConstants.EXTRA_HIDE_CARDIO_LOGO, false);
-            mOverlay.setHideCardIOLogo(hideCardIOLogo);
+        mOverlay.setHideCardIOLogo(hideCardIOLogo);
 
-            String scanInstructions = getActivity().getIntent().getStringExtra(CardIOConstants.EXTRA_SCAN_INSTRUCTIONS);
-            if (scanInstructions != null) {
-                mOverlay.setScanInstructions(scanInstructions);
-            }
-
+        if (scanInstructions != null) {
+            mOverlay.setScanInstructions(scanInstructions);
         }
 
         previewFrame.addView(mOverlay);
