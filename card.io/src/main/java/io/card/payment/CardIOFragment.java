@@ -1,6 +1,7 @@
 package io.card.payment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +21,6 @@ import android.view.Gravity;
 import android.view.OrientationEventListener;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -239,6 +239,13 @@ public class CardIOFragment extends Fragment implements CardScanRecognition, Car
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof CardScanListener)
+            cardScanListener = (CardScanListener) activity;
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
 
@@ -308,8 +315,6 @@ public class CardIOFragment extends Fragment implements CardScanRecognition, Car
             finishIfSuppressManualEntry();
         } else {
             // guaranteed to be called in onCreate on API < 22, so it's ok that we're removing the window feature here
-            getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
-
             showCameraScannerOverlay();
         }
     }
