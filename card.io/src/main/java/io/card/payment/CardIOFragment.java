@@ -48,8 +48,11 @@ import io.card.payment.interfaces.*;
  *    //arguments setup for Card.io
  *    Bundle args = new Bundle();
  *    args.putBoolean(CardIOConstants.PORTRAIT_ORIENTATION_LOCK, true);
+ *    args.putInt(CardIOConstants.CARD_IO_VIEW, cardIOViewHolder.getId());
+ *    args.putInt(CardIOConstants.CARD_IO_OVERLAY_COLOUR, null);
+ *    args.putString(CardIOConstants.EXTRA_SCAN_INSTRUCTIONS, "");
  *    args.putBoolean(CardIOConstants.CARD_EXPIRY, true); //not working
- *    args.putInt(CardIOConstants.CARD_IO_VIEW, containerPreview.getId());
+ *
  *
  *    //adding Card.io as fragment
  *    cardFragment = new CardIOFragment();
