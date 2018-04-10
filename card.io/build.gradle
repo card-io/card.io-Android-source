@@ -39,6 +39,14 @@ dependencies {
     testCompile "org.robolectric:robolectric:3.1.2"
 }
 
+task ndkClean(type: Delete) {
+    // remove unused archs from build cache
+    delete fileTree('.externalNativeBuild') {
+        exclude android.defaultConfig.ndk.abiFilters.collect { '/**' + it }
+    }
+}
+tasks.findByPath(':clean').dependsOn ndkClean
+
 task javadocs(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
