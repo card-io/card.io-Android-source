@@ -7,6 +7,17 @@ repositories {
     mavenCentral()
 }
 
+def getBuildVersion = { ->
+    "git describe --match=*[0-9]*.[0-9]*.*[0-9] --tags --dirty --always".execute().text.trim()
+}
+
+ext {
+    build_time = new Date().format("MM/dd/yyyy HH:mm:ss Z")
+    build_year = new Date().format("yyyy")
+    product_name = "card.io-Android-SDK"
+    product_version = getBuildVersion()
+}
+
 android {
     compileSdkVersion rootProject.ext.sdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -15,20 +26,53 @@ android {
         minSdkVersion 16
         targetSdkVersion rootProject.ext.sdkVersion
 
-        ndk {
-            moduleName "cardioRecognizer"
-        }
+        buildConfigField "String", "PRODUCT_NAME", "\"${product_name}\""
+        buildConfigField "String", "PRODUCT_VERSION", "\"${product_version}\""
+        buildConfigField "String", "BUILD_TIME", "\"${build_time}\""
 
-        consumerProguardFiles 'proguard.cfg'
+        consumerProguardFiles 'release-proguard.cfg'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     resourcePrefix 'cio_'
 
-    externalNativeBuild {
-        ndkBuild {
-            path 'src/main/jni/Android.mk'
+    sourceSets.main {
+        jni.srcDirs = []
+        jniLibs.srcDir 'src/main/libs'
+    }
+
+    buildTypes {
+        debug {
+        }
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-build.cfg'
+        }
+    }
+
+    task cleanNative(type: Exec, description: 'Clean JNI object files') {
+        commandLine "$android.ndkDirectory/ndk-build",
+                '-C', file('src/main/jni').absolutePath,
+                'clean'
+    }
+    clean.dependsOn cleanNative
+
+    task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
+        commandLine "$android.ndkDirectory/ndk-build",
+                '-C', file('src/main/jni').absolutePath,
+                '-j', Runtime.runtime.availableProcessors(),
+                'all'
+    }
+    tasks.withType(JavaCompile) {
+        compileTask -> compileTask.dependsOn buildNative
+    }
+
+    tasks.whenTaskAdded { theTask ->
+        if (theTask.name == "packageReleaseJniLibs"
+                || theTask.name == "packageDebugJniLibs") {
+            theTask.dependsOn(buildNative)
         }
     }
 }
@@ -38,98 +82,133 @@ dependencies {
     testCompile "org.robolectric:robolectric:3.1.2"
 }
 
-task javadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    failOnError false
+// TODO remove the variant specific stuff from below - card.io doesn't have flavors
 
-    options.docTitle("<h1>card.io Android SDK</h1>")
-    options.bottom("<i>Copyright &#169; 2012 PayPal, Inc. All Rights Reserved.</i>")
-    options.windowTitle("card.io Android SDK")
-    options.author(true)
-    options.version(true)
-    options.use(true)
-    options.setMemberLevel(JavadocMemberLevel.PUBLIC)
+// ----------------  Javadocs ---------------
 
-    // enables links to Java 7 docs
-    options.links("http://docs.oracle.com/javase/7/docs/api/")
-    // enables links to Android docs.
-    options.linksOffline("http://d.android.com/reference", "${android.sdkDirectory}/docs/reference")
-}
-
-task javadocsJar(type: Jar, dependsOn: javadocs) {
-    classifier = 'javadoc'
-    from javadocs.destinationDir
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.srcDirs
-}
-
-artifacts {
-    archives javadocsJar
-    archives sourcesJar
-}
-
-signing {
-    sign configurations.archives
-}
+// More info here: http://www.gradle.org/docs/current/dsl/org.gradle.api.tasks.javadoc.Javadoc.html
+android.libraryVariants.all { variant ->
+    def buildType = variant.buildType.name
+    def variantName = variant.baseName
 
 
-def sonatypeUsername = System.env['SONATYPE_USERNAME']
-def sonatypePassword = System.env['SONATYPE_PASSWORD']
-
-nexusStaging {
-    packageGroup = "io.card"
-}
-
-uploadArchives {
-    doFirst {
-        assert sonatypeUsername != null && sonatypePassword != null : "Specify SONATYPE_USERNAME and SONATYPE_PASSWORD as environment variables"
+    if (buildType.equalsIgnoreCase("debug")) {
+        return;
     }
 
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+    task "${variantName}Doc"(dependsOn: "compile${variantName.capitalize()}JavaWithJavac", type: Javadoc) {
+        description = "Generates javadoc for build $name"
+        destinationDir = new File(destinationDir, variantName)
+        source = variant.javaCompile.source
+        def variantCompiledClassesDir = file("${buildDir}/intermediates/classes/${variant.dirName}/")
+        classpath = files(
+                variant.javaCompile.classpath,
+                variantCompiledClassesDir,
+                android.bootClasspath
+        )
 
-            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
+        include 'io/card/payment/*.java'
 
-            pom.setArtifactId 'android-sdk'
+        // More info on options here: http://www.gradle.org/docs/current/javadoc/org/gradle/external/javadoc/StandardJavadocDocletOptions.html
+        // all of these options were copied from the ant build.  I don't know what half these options actually do.
+        options.docTitle("<h1>card.io Android SDK</h1>")
+        options.bottom("<i>Copyright &#169; 2012-${build_year} PayPal, Inc. All Rights Reserved.</i>")
+        options.windowTitle("card.io Android SDK")
+        options.author(true)
+        options.version(true)
+        options.use(true)
+        options.setMemberLevel(JavadocMemberLevel.PUBLIC)
 
-            pom.project {
-                name 'android-sdk'
-                groupId = 'io.card'
-                version = "${android.defaultConfig.versionName}"
-                packaging 'aar'
-                description 'This is card.io\'s SDK for Android.'
-                url 'https://github.com/card-io/card.io-Android-source'
+        // enables links to Java 7 docs
+        options.links("http://docs.oracle.com/javase/7/docs/api/")
+        // enables links to Android docs.
+        options.linksOffline("http://d.android.com/reference", "${android.sdkDirectory}/docs/reference")
+    }
 
-                scm {
-                    url 'scm:git@github.com:card-io/card.io-Android-source.git'
-                    connection 'scm:git@github.com:card-io/card.io-Android-source.git'
-                    developerConnection 'scm:git@github.com:card-io/card.io-Android-source.git'
+    task javadocJar(type: Jar, dependsOn: "${variantName}Doc") {
+        classifier = 'javadoc'
+        from releaseDoc.destinationDir
+    }
+
+    // ------- MavenCentral publishing
+
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+
+    artifacts {
+        archives javadocJar, sourcesJar
+    }
+
+    signing {
+        sign configurations.archives
+    }
+
+    // these should be specified in the local.properties file as:
+    // sonatypeUsername=xxxxxxx
+    // sonatypePassword=yyyyyyy
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def sonatypeUsername = properties.getProperty('sonatypeUsername')
+    def sonatypePassword = properties.getProperty('sonatypePassword')
+
+    nexusStaging {
+        packageGroup = "io.card"
+        username = sonatypeUsername
+        password = sonatypePassword
+    }
+
+    uploadArchives {
+        doFirst {
+            assert sonatypeUsername != null && sonatypePassword != null : "Please set sonatypeUsername and sonatypePassword in local.properties"
+            println "***"
+            println "uploading archives using username: '" + sonatypeUsername + "'"
+            println "***"
+        }
+
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+                    authentication(userName: sonatypeUsername, password: sonatypePassword)
                 }
 
-                developers {
+                pom.setArtifactId 'android-sdk'
+
+                pom.project {
+                    name 'android-sdk'
+                    groupId = 'io.card'
+                    version = "${product_version}"
+                    packaging 'aar'
+                    description 'This is card.io\'s SDK for Android.'
+                    url 'https://github.com/card-io/card.io-Android-source/'
+
+                    scm {
+                        url 'scm:git@github.com:card-io/card.io-Android-source.git'
+                        connection 'scm:git@github.com:card-io/card.io-Android-source.git'
+                        developerConnection 'scm:git@github.com:card-io/card.io-Android-source.git'
+                    }
+
                     developers {
                         developer {
-                            id 'devs'
-                            name 'Braintree Payments'
+                            id 'brateman'
+                            name 'Jeff Brateman'
                         }
                     }
-                }
 
-                licenses {
-                    license {
-                        name 'MIT'
-                        url 'http://opensource.org/licenses/MIT'
-                        distribution 'repo'
+                    licenses {
+                        license {
+                            name 'MIT'
+                            url 'http://opensource.org/licenses/MIT'
+                            distribution 'repo'
+                        }
                     }
                 }
             }
         }
+
     }
 }

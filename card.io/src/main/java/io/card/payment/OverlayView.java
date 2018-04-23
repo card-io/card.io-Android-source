@@ -19,6 +19,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -404,8 +405,8 @@ class OverlayView extends View {
         } catch (NullPointerException e) {
             // Un-reproducible NPE reported on device without flash where flash detected and flash
             // button pressed (see https://github.com/paypal/PayPal-Android-SDK/issues/27)
+            Log.d(TAG, "NullPointerException caught in onTouchEvent method");
         }
-
         return false;
     }
 

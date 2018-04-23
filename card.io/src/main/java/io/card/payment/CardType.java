@@ -222,6 +222,9 @@ public enum CardType {
      */
     private static boolean isNumberInInterval(String number, String intervalStart,
                                               String intervalEnd) {
+        // Log.d("CardType", "numberInInterval(number:" + number + ",intervalStart:" + intervalStart
+        // + ",intervalEnd:" + intervalEnd + ")");
+
         int numCompareStart = Math.min(number.length(), intervalStart.length());
         int numCompareEnd = Math.min(number.length(), intervalEnd.length());
 
@@ -242,7 +245,7 @@ public enum CardType {
 
     static {
         // initialize
-        intervalLookup = new HashMap<>();
+        intervalLookup = new HashMap<Pair<String, String>, CardType>();
         intervalLookup.put(getNewPair("2221", "2720"), CardType.MASTERCARD);    // MasterCard 2-series
         intervalLookup.put(getNewPair("300", "305"), CardType.DINERSCLUB);      // Diners Club (Discover)
         intervalLookup.put(getNewPair("309", null), CardType.DINERSCLUB);       // Diners Club (Discover)
