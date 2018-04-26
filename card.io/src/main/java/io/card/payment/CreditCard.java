@@ -21,8 +21,6 @@ public class CreditCard implements Parcelable {
      */
     public static final int EXPIRY_MAX_FUTURE_YEARS = 15;
 
-    private static final String TAG = CreditCard.class.getSimpleName();
-
     /**
      * 15 or 16 digit card number. All numbers, no spaces.
      */
