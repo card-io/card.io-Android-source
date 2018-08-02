@@ -9,7 +9,6 @@ repositories {
 
 android {
     compileSdkVersion rootProject.ext.sdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion 16
@@ -31,11 +30,12 @@ android {
             path 'src/main/jni/Android.mk'
         }
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
-    testCompile "junit:junit:4.12"
-    testCompile "org.robolectric:robolectric:3.1.2"
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.robolectric:robolectric:3.1.2"
 }
 
 task javadocs(type: Javadoc) {
