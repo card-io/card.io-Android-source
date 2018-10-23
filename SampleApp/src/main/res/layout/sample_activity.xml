@@ -110,6 +110,12 @@
             android:layout_height="wrap_content"
             android:text="Keep application theme"/>
 
+        <CheckBox
+            android:id="@+id/front_camera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Open front camera"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

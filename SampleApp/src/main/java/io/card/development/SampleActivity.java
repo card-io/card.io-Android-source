@@ -56,6 +56,7 @@ public class SampleActivity extends Activity {
     private CheckBox mUseCardIOLogoToggle;
     private CheckBox mShowPayPalActionBarIconToggle;
     private CheckBox mKeepApplicationThemeToggle;
+    private CheckBox mFontCameraToggle;
     private Spinner mLanguageSpinner;
     private EditText mUnblurEdit;
 
@@ -78,6 +79,8 @@ public class SampleActivity extends Activity {
         mUseCardIOLogoToggle = (CheckBox) findViewById(R.id.use_card_io_logo);
         mShowPayPalActionBarIconToggle = (CheckBox) findViewById(R.id.show_paypal_action_bar_icon);
         mKeepApplicationThemeToggle = (CheckBox) findViewById(R.id.keep_application_theme);
+
+        mFontCameraToggle = (CheckBox) findViewById(R.id.front_camera);
 
         mLanguageSpinner = (Spinner) findViewById(R.id.language);
         mUnblurEdit = (EditText) findViewById(R.id.unblur);
@@ -116,6 +119,7 @@ public class SampleActivity extends Activity {
                 .putExtra(CardIOActivity.EXTRA_LANGUAGE_OR_LOCALE, (String) mLanguageSpinner.getSelectedItem())
                 .putExtra(CardIOActivity.EXTRA_USE_PAYPAL_ACTIONBAR_ICON, mShowPayPalActionBarIconToggle.isChecked())
                 .putExtra(CardIOActivity.EXTRA_KEEP_APPLICATION_THEME, mKeepApplicationThemeToggle.isChecked())
+                .putExtra(CardIOActivity.EXTRA_FRONT_CAMERA, mFontCameraToggle.isChecked())
                 .putExtra(CardIOActivity.EXTRA_GUIDE_COLOR, Color.GREEN)
                 .putExtra(CardIOActivity.EXTRA_SUPPRESS_CONFIRMATION, mSuppressConfirmationToggle.isChecked())
                 .putExtra(CardIOActivity.EXTRA_SUPPRESS_SCAN, mSuppressScanToggle.isChecked())
