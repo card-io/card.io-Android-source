@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.card.payment.interfaces.CardScanRecognition;
+
 /**
  * Encapsulates the core image scanning.
  * <p/>
@@ -38,7 +40,7 @@ import java.util.Map;
  * <p/>
  * HOWEVER, at the moment, the CardScanner is directly communicating with the Preview.
  */
-class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
+public class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         SurfaceHolder.Callback {
     private static final String TAG = CardScanner.class.getSimpleName();
 
@@ -84,7 +86,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     private static boolean manualFallbackForError;
 
     // member data
-    protected WeakReference<CardIOActivity> mScanActivityRef;
+    protected WeakReference<CardScanRecognition> mScanActivityRef;
     private boolean mSuppressScan = false;
     private boolean mScanExpiry;
     private int mUnblurDigits = DEFAULT_UNBLUR_DIGITS;
@@ -189,7 +191,24 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         return (!manualFallbackForError && (usesSupportedProcessorArch()));
     }
 
-    CardScanner(CardIOActivity scanActivity, int currentFrameOrientation) {
+    /**
+     *  Modified to support fragments. No longer coupled with CardIOActivity only (non-monogamous class)
+     */
+    public CardScanner(CardScanRecognition cardScanRecognition, int currentFrameOrientation, boolean suppressScan) {
+        this.mSuppressScan = suppressScan;
+
+        setScanExpiry(false);
+        setUnblurDigits(DEFAULT_UNBLUR_DIGITS);
+
+        mScanActivityRef = new WeakReference<>(cardScanRecognition);
+        mFrameOrientation = currentFrameOrientation;
+        nSetup(mSuppressScan, MIN_FOCUS_SCORE, mUnblurDigits);
+    }
+
+    /**
+    * Commented out due to integration for fragment. See constructor above
+    * */
+    /*CardScanner(CardIOActivity scanActivity, int currentFrameOrientation) {
         Intent scanIntent = scanActivity.getIntent();
         if (scanIntent != null) {
             mSuppressScan = scanIntent.getBooleanExtra(CardIOActivity.EXTRA_SUPPRESS_SCAN, false);
@@ -200,7 +219,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         mScanActivityRef = new WeakReference<>(scanActivity);
         mFrameOrientation = currentFrameOrientation;
         nSetup(mSuppressScan, MIN_FOCUS_SCORE, mUnblurDigits);
-    }
+    }*/
 
     /**
      * Connect or reconnect to camera. If fails, sleeps and tries again. Returns <code>true</code> if successful,
@@ -442,7 +461,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
         if (mFirstPreviewFrame) {
             mFirstPreviewFrame = false;
             mFrameOrientation = ORIENTATION_PORTRAIT;
-            mScanActivityRef.get().onFirstFrame();
+            mScanActivityRef.get().onFirstFrame(mFrameOrientation);
         }
 
         DetectionInfo dInfo = new DetectionInfo();
@@ -625,7 +644,7 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
     int getRotationalOffset() {
         final int rotationOffset;
         // Check "normal" screen orientation and adjust accordingly
-        int naturalOrientation = ((WindowManager) mScanActivityRef.get().getSystemService(Context.WINDOW_SERVICE))
+        int naturalOrientation = ((WindowManager) mScanActivityRef.get().getActivity().getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay().getRotation();
         if (naturalOrientation == Surface.ROTATION_0) {
             rotationOffset = 0;
@@ -640,5 +659,17 @@ class CardScanner implements Camera.PreviewCallback, Camera.AutoFocusCallback,
             rotationOffset = 0;
         }
         return rotationOffset;
+    }
+
+    public void setScanExpiry(boolean scanExpiry){
+        this.mScanExpiry = scanExpiry;
+    }
+
+    public void setUnblurDigits(int unblurDigits){
+        this.mUnblurDigits = unblurDigits;
+    }
+
+    public void takePicture(Camera.PictureCallback callback){
+        mCamera.takePicture(null, callback, callback);
     }
 }

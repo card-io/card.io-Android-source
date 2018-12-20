@@ -17,6 +17,7 @@ android {
 
         ndk {
             moduleName "cardioRecognizer"
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
 
         consumerProguardFiles 'proguard.cfg'
@@ -34,9 +35,17 @@ android {
 }
 
 dependencies {
-    testCompile "junit:junit:4.12"
-    testCompile "org.robolectric:robolectric:3.1.2"
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.robolectric:robolectric:3.1.2"
 }
+
+task ndkClean(type: Delete) {
+    // remove unused archs from build cache
+    delete fileTree('.externalNativeBuild') {
+        exclude android.defaultConfig.ndk.abiFilters.collect { '/**' + it }
+    }
+}
+tasks.findByPath(':clean').dependsOn ndkClean
 
 task javadocs(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs

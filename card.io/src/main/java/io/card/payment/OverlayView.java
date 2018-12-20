@@ -4,6 +4,7 @@ package io.card.payment;
  * See the file "LICENSE.md" for the full license governing this code.
  */
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import java.lang.ref.WeakReference;
 
 import io.card.payment.i18n.LocalizedStrings;
 import io.card.payment.i18n.StringKey;
+import io.card.payment.interfaces.CardIOCameraControl;
 
 /**
  * This class implements a transparent overlay that is drawn over the raw camera capture frames.
@@ -64,7 +66,7 @@ import io.card.payment.i18n.StringKey;
  * independent of screen scale.
  * <p/>
  */
-class OverlayView extends View {
+public class OverlayView extends View {
     private static final String TAG = OverlayView.class.getSimpleName();
 
     private static final float GUIDE_FONT_SIZE = 26.0f;
@@ -87,7 +89,7 @@ class OverlayView extends View {
 
     private static final int BUTTON_TOUCH_TOLERANCE = 20;
 
-    private final WeakReference<CardIOActivity> mScanActivityRef;
+    private final WeakReference<CardIOCameraControl> mScanActivityRef;
     private DetectionInfo mDInfo;
     private Bitmap mBitmap;
     GradientDrawable mScanLineDrawable;
@@ -113,11 +115,11 @@ class OverlayView extends View {
     private int mRotationFlip;
     private float mScale = 1;
 
-    public OverlayView(CardIOActivity captureActivity, AttributeSet attributeSet, boolean showTorch) {
-        super(captureActivity, attributeSet);
+    public OverlayView(Activity activity, CardIOCameraControl cameraControl, AttributeSet attributeSet, boolean showTorch) {
+        super(activity, attributeSet);
 
         mShowTorch = showTorch;
-        mScanActivityRef = new WeakReference<CardIOActivity>(captureActivity);
+        mScanActivityRef = new WeakReference(cameraControl);
 
         mRotationFlip = 1;
 
@@ -125,7 +127,7 @@ class OverlayView extends View {
         mScale = getResources().getDisplayMetrics().density / 1.5f;
 
         mTorch = new Torch(TORCH_WIDTH * mScale, TORCH_HEIGHT * mScale);
-        mLogo = new Logo(captureActivity);
+        mLogo = new Logo(activity);
 
         mGuidePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
